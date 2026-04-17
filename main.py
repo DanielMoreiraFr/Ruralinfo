@@ -4,6 +4,7 @@ from time import sleep
 
 while True:
     escolha = menu('RURALINFO' ,['Login', 'Cadastrar', 'Entrar como visitante', 'Sair'])
+
     if escolha == 1:
         tipoLogin = menu('TIPO DE LOGIN', ['Usuário comum', 'Administrador'])
         if tipoLogin == 1:
@@ -12,9 +13,17 @@ while True:
             print('Entrando como administrador')
         else:
             print(f'{cores('vermelho')}ERRO: Digite um número válido!{cores()}')   
+
     elif escolha == 2:
         cabeçalho('Cadastrar')
-        inserirUsuario('Luck', 'meufilho@gmail.com', 'teamo', 1)
+
+        nome = str(input(f'{cores('verde')}Nome: {cores()}'))
+        email = str(input(f'{cores('verde')}Email: {cores()}'))
+        senha = str(input(f'{cores('verde')}Senha: {cores()}'))
+        tipoLogin = menu('TIPO DE CADASTRO', ['Usuário comum', 'Administrador'])
+
+        inserir_usuario(nome, email, senha, tipoLogin)
+
     elif escolha == 3:
         cabeçalho('Entrando como visitante')
     elif escolha == 4 or escolha == 0:

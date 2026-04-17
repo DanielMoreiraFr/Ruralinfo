@@ -49,7 +49,7 @@ def menu(nome = '', lista = []):
     :param lista: Uma lista de strings contendo as opções do menu.
     :return: Um número inteiro correspondente à opção escolhida pelo usuário.
     """
-    cabeçalho(nome)
+    cabeçalho(nome.upper())
     for cont, item in enumerate(lista):
         print(f'{cores('amarelo')}{cont+1}{cores()} - {cores('azul')}{item}{cores()}')
     linha()
