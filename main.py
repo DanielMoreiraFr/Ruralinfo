@@ -1,4 +1,5 @@
-from lib.texto import *
+from banco.bancoSQLite import *
+from pacote.texto import *
 from time import sleep
 
 while True:
@@ -13,6 +14,7 @@ while True:
             print(f'{cores('vermelho')}ERRO: Digite um número válido!{cores()}')   
     elif escolha == 2:
         cabeçalho('Cadastrar')
+        inserirUsuario('Luck', 'meufilho@gmail.com', 'teamo', 1)
     elif escolha == 3:
         cabeçalho('Entrando como visitante')
     elif escolha == 4 or escolha == 0:
