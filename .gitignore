@@ -13,8 +13,9 @@ venv/
 **/__pycache__/
 
 # Banco de dados local (Recomendado)
-# Geralmente não subimos o .db para evitar conflitos de dados entre devs
-banco/banco.db
+# Ignorar o banco de dados SQLite local
+banco/*.db
+banco/*.sqlite3
 
 # Configurações de ambiente do VS Code ou Python
 pyvenv.cfg
