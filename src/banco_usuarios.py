@@ -114,13 +114,30 @@ def atualizar_usuario(coluna, valor, id_usuario):
         print(f"Erro ao atualizar: {erro}")
 
 def validação_login(email, senha, tipo_conta):
-    query = f'SELECT * FROM contas_usuarios WHERE tipoConta = {tipo_conta}'
+    """
+    Verifica se as credenciais de login são válidas no banco de dados.
+
+    A função filtra os usuários pelo tipo de conta diretamente na query SQL e, 
+    em seguida, percorre os resultados para validar o e-mail e a senha.
+
+    Args:
+        email (str): O endereço de e-mail fornecido pelo usuário.
+        senha (str): A senha fornecida pelo usuário.
+        tipo_conta (int): O nível de acesso (ex: 1 para comum, 2 para administrador).
+
+    Returns:
+        list: Uma lista contendo dois elementos:
+            - [0] (bool): True se o login for bem-sucedido, False caso contrário.
+            - [1] (dict|bool): Dicionário com dados do usuário (id, nome, tipo) 
+              em caso de sucesso, ou False em caso de falha.
+    """
+    query = 'SELECT * FROM contas_usuarios WHERE tipoConta = ?' # lembrar de usar placeholder '?' no lugar de fstring
     
     usuario_encontrado = None 
     
     try:
         with gerenciar_db() as cursor:
-            cursor.execute(query)
+            cursor.execute(query, (tipo_conta,))
             contas = cursor.fetchall()
 
             for id_db, nome_db, email_db, senha_db, tipo_db in contas:
@@ -138,4 +155,5 @@ def validação_login(email, senha, tipo_conta):
             return [False, False]
 
     except sqlite3.Error as erro:
-        print(f"Erro: {erro}")
+        print(f"Erro no banco de dados: {erro}")
+        return [False, False]
