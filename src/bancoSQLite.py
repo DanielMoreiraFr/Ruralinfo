@@ -1,11 +1,11 @@
 import sqlite3
 from contextlib import contextmanager
 try:
-    from pacote.texto import cores
+    from texto import cores
 except ImportError:
     def cores(cor=None): return ""
 
-DB_PATH = 'banco/banco.db'
+DB_PATH = 'src/banco.db'
 
 @contextmanager
 def gerenciar_db():
@@ -33,22 +33,22 @@ def gerenciar_db():
     finally:
         conexao.close()
 
-def criar_db():
-    """
+"""
     Cria a tabela 'contasUsuarios' caso ela não exista no banco de dados.
     
     A tabela contém os campos: id (PK), nome, email, senha e tipoConta.
     """
-    query = """
-    CREATE TABLE IF NOT EXISTS contasUsuarios (
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        email TEXT NOT NULL,
-        senha TEXT NOT NULL,
-        tipoConta INTEGER NOT NULL
-    )"""
-    with gerenciar_db() as cursor:
-        cursor.execute(query)
+query_criar = """
+CREATE TABLE IF NOT EXISTS contasUsuarios (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL,
+    senha TEXT NOT NULL,
+    tipoConta INTEGER NOT NULL
+)"""
+with gerenciar_db() as cursor:
+    cursor.execute(query_criar)
+
 
 def inserir_usuario(nome, email, senha, tipo_c):
     """
@@ -117,3 +117,34 @@ def atualizar_usuario(coluna, valor, id_usuario):
         print(f'Coluna "{coluna}" atualizada com sucesso para o ID {id_usuario}!')
     except sqlite3.Error as erro:
         print(f"Erro ao atualizar: {erro}")
+
+def validação_login(email, senha):
+    query = 'SELECT * FROM contasUsuarios'
+    
+    # 1. Definimos variáveis de controle antes do loop
+    usuario_encontrado = None 
+    
+    try:
+        with gerenciar_db() as cursor:
+            cursor.execute(query)
+            contas = cursor.fetchall()
+
+            for id_db, nome_db, email_db, senha_db, tipo_db in contas:
+                if email_db == email and senha_db == senha:
+                    # 2. "CAPTURAMOS" o objeto ou os dados que queremos
+                    usuario_encontrado = {
+                        'id': id_db,
+                        'nome': nome_db,
+                        'tipo': tipo_db
+                    }
+                    break # Para o loop agora. As variáveis id_db, etc., ainda existem, 
+                          # mas usar o dicionário acima é muito mais organizado.
+
+        # 3. Agora usamos os dados FORA do loop
+        if usuario_encontrado:
+            print(f"Bem-vindo, {usuario_encontrado['nome']} (ID: {usuario_encontrado['id']})")
+        else:
+            print("Email não encontrado ou senha incorreta.")
+
+    except sqlite3.Error as erro:
+        print(f"Erro: {erro}")

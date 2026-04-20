@@ -20,3 +20,5 @@ banco/*.sqlite3
 # Configurações de ambiente do VS Code ou Python
 pyvenv.cfg
 .vscode/
+
+teste.py    
