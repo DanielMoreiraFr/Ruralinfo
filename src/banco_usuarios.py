@@ -35,20 +35,19 @@ def gerenciar_db():
 
 
 query_criar_usuarios = """
-CREATE TABLE IF NOT EXISTS contasUsuarios (
+CREATE TABLE IF NOT EXISTS contas_usuarios (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     email TEXT NOT NULL,
     senha TEXT NOT NULL,
     tipoConta INTEGER NOT NULL
 )"""
-
 with gerenciar_db() as cursor:
     cursor.execute(query_criar_usuarios)
 
 def inserir_usuario(nome, email, senha, tipo_c):
     """
-    Insere um novo registro de usuário na tabela 'contasUsuarios'.
+    Insere um novo registro de usuário na tabela 'contas_usuarios'.
 
     Args:
         nome (str): O nome completo do usuário.
@@ -56,7 +55,7 @@ def inserir_usuario(nome, email, senha, tipo_c):
         senha (str): A senha (preferencialmente já criptografada).
         tipo_c (int): O nível de acesso ou tipo da conta.
     """
-    query = "INSERT INTO contasUsuarios (nome, email, senha, tipoConta) VALUES (?, ?, ?, ?)"
+    query = "INSERT INTO contas_usuarios (nome, email, senha, tipoConta) VALUES (?, ?, ?, ?)"
     try:
         with gerenciar_db() as cursor:
             cursor.execute(query, (nome, email, senha, tipo_c))
@@ -70,7 +69,7 @@ def obter_dados():
     
     Lista ID, Nome, Email e Tipo de Conta. A senha é omitida por segurança.
     """
-    query = "SELECT id, nome, email, tipoConta FROM contasUsuarios"
+    query = "SELECT id, nome, email, tipoConta FROM contas_usuarios"
     try:
         with gerenciar_db() as cursor:
             cursor.execute(query)
@@ -88,7 +87,7 @@ def deletar_usuario(id_usuario):
     Args:
         id_usuario (int): O identificador único do usuário a ser removido.
     """
-    query = "DELETE FROM contasUsuarios WHERE id = ?"
+    query = "DELETE FROM contas_usuarios WHERE id = ?"
     try:
         with gerenciar_db() as cursor:
             cursor.execute(query, (id_usuario))
@@ -105,7 +104,7 @@ def atualizar_usuario(coluna, valor, id_usuario):
         valor (any): O novo valor a ser inserido no campo.
         id_usuario (int): O ID do usuário que sofrerá a alteração.
     """
-    query = f'UPDATE contasUsuarios SET {coluna} = ? WHERE id = ?'
+    query = f'UPDATE contas_usuarios SET {coluna} = ? WHERE id = ?'
     
     try:
         with gerenciar_db() as cursor:
@@ -114,10 +113,9 @@ def atualizar_usuario(coluna, valor, id_usuario):
     except sqlite3.Error as erro:
         print(f"Erro ao atualizar: {erro}")
 
-def validação_login(email, senha):
-    query = 'SELECT * FROM contasUsuarios'
+def validação_login(email, senha, tipo_conta):
+    query = f'SELECT * FROM contas_usuarios WHERE tipoConta = {tipo_conta}'
     
-    # 1. Definimos variáveis de controle antes do loop
     usuario_encontrado = None 
     
     try:
@@ -127,20 +125,17 @@ def validação_login(email, senha):
 
             for id_db, nome_db, email_db, senha_db, tipo_db in contas:
                 if email_db == email and senha_db == senha:
-                    # 2. "CAPTURAMOS" o objeto ou os dados que queremos
                     usuario_encontrado = {
                         'id': id_db,
                         'nome': nome_db,
                         'tipo': tipo_db
                     }
-                    break # Para o loop agora. As variáveis id_db, etc., ainda existem, 
-                          # mas usar o dicionário acima é muito mais organizado.
+                    break
 
-        # 3. Agora usamos os dados FORA do loop
         if usuario_encontrado:
-            print(f"Bem-vindo, {usuario_encontrado['nome']} (ID: {usuario_encontrado['id']})")
+            return [True, usuario_encontrado]
         else:
-            print("Email não encontrado ou senha incorreta.")
+            return [False, False]
 
     except sqlite3.Error as erro:
         print(f"Erro: {erro}")
