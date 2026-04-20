@@ -33,12 +33,8 @@ def gerenciar_db():
     finally:
         conexao.close()
 
-"""
-    Cria a tabela 'contasUsuarios' caso ela não exista no banco de dados.
-    
-    A tabela contém os campos: id (PK), nome, email, senha e tipoConta.
-    """
-query_criar = """
+
+query_criar_usuarios = """
 CREATE TABLE IF NOT EXISTS contasUsuarios (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
@@ -46,9 +42,9 @@ CREATE TABLE IF NOT EXISTS contasUsuarios (
     senha TEXT NOT NULL,
     tipoConta INTEGER NOT NULL
 )"""
-with gerenciar_db() as cursor:
-    cursor.execute(query_criar)
 
+with gerenciar_db() as cursor:
+    cursor.execute(query_criar_usuarios)
 
 def inserir_usuario(nome, email, senha, tipo_c):
     """

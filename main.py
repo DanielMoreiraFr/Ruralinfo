@@ -1,4 +1,4 @@
-from src.bancoSQLite import *
+from src.banco_usuarios import *
 from src.texto import *
 from time import sleep
 
