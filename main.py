@@ -1,5 +1,5 @@
-from bancoSQLite import *
-from texto import *
+from src.bancoSQLite import *
+from src.texto import *
 from time import sleep
 
 while True:

@@ -12,10 +12,10 @@ venv/
 # Caches do Python (Obrigatório)
 **/__pycache__/
 
-# Banco de dados local (Recomendado)
-# Ignorar o banco de dados SQLite local
-banco/*.db
-banco/*.sqlite3
+# Banco de dados Local
+src/banco.db
+src/banco/banco.db
+*.db
 
 # Configurações de ambiente do VS Code ou Python
 pyvenv.cfg
