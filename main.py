@@ -1,4 +1,5 @@
 from src.banco_usuarios import *
+from src.banco_infos import *
 from src.texto import *
 from time import sleep
 
@@ -15,7 +16,8 @@ while True:
                 print('Entrando como administrador...')
                 break
             else:
-                print(f'{cores('vermelho')}ERRO: Digite um número válido!{cores()}')   
+                print(f'{cores('vermelho')}ERRO: Digite um número válido!{cores()}')
+                sleep(1)   
 
         email = str(input(f'{cores('verde')}Email: {cores()}'))
         senha = str(input(f'{cores('verde')}Senha: {cores()}'))
@@ -23,6 +25,7 @@ while True:
 
         if valid:
             print(f"Bem-vindo, {objeto['nome']} (ID: {objeto['id']})")
+            # postagem('mensagem de teste 1', None, None)
         else:
             print(f'{cores('vermelho')}ERRO: Email não encontrado, senha incorreta ou tipo de conta errado!{cores()}')
 
