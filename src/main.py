@@ -1,7 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton
+import tkinter.messagebox
+from Interface import cadastro_usuario
 
+# desculpa, esqueci dos comentários
+
+# cria frame para a tela inicial, onde o usuário pode escolher entre visitante, login ou cadastro
 class TelaInicial(CTk):
     def __init__(self):
         super().__init__()
@@ -22,15 +27,19 @@ class TelaInicial(CTk):
         
         self.button = CTkButton(self.frame, text="Cadastrar", command=self.cadastrar)
         self.button.pack(pady=10)
-        
+ 
+# cria botões para cada opção, que por enquanto só imprimem uma mensagem no console
+# mas futuramente podem ser conectados a outras telas ou funcionalidades do programa       
     def visitante(self):
-        print("Botão 'Visitante' pressionado")
+        tkinter.messagebox.showinfo("Visitante", "Botão 'Visitante' pressionado")
     
     def login(self):
-        print("Botão 'Login' pressionado")
+        tkinter.messagebox.showinfo("Login", "Botão 'Login' pressionado")
         
     def cadastrar(self):
-        print("Botão 'Cadastrar' pressionado")
+        print("Cadastrar", "Botão 'Cadastrar' pressionado")
+        cadastro = cadastro_usuario.CadastroUsuario()
+        cadastro.mainloop()
 
 if __name__ == "__main__":
     app = TelaInicial()
