@@ -1,9 +1,9 @@
 import sqlite3
 from datetime import datetime
 from contextlib import *
-from src.banco_usuarios import gerenciar_db
+from banco import banco_usuarios
 try:
-    from src.texto import cores
+    from pacote import texto
 except ImportError:
     def cores(cor=None): return ""
 
@@ -19,12 +19,12 @@ CREATE TABLE IF NOT EXISTS infos (
     estado INTEGER NOT NULL)"""
 
 
-with gerenciar_db() as cursor:
+with banco_usuarios.gerenciar_db() as cursor:
     cursor.execute(query_criar_infos)
 
 def postagem(msg = '', img_url = '', alt = ''):
     query = 'INSERT INTO infos (mensagem, img_url, alt, data, estado) VALUES (?,?,?,?,?)'
-    with gerenciar_db() as cursor:
+    with banco_usuarios.gerenciar_db() as cursor:
         agora = datetime.now()
         cursor.execute(query, (msg, img_url, alt, agora, 1))
 
@@ -33,7 +33,7 @@ def postagem(msg = '', img_url = '', alt = ''):
 def atualizar_posatagem(id_postagem, coluna = 'estado', estado_postagem = 0):
     query = f'UPDATE infos SET {coluna} = ? WHERE id = ?'
 
-    with gerenciar_db() as cursor:
+    with banco_usuarios.gerenciar_db() as cursor:
         try:
             cursor.execute(query, (estado_postagem, id_postagem))
         except:
@@ -45,7 +45,7 @@ def atualizar_posatagem(id_postagem, coluna = 'estado', estado_postagem = 0):
 def apagar_postagem(id_postagem):
     query = 'DELETE FROM infos WHERE id = ?'
 
-    with gerenciar_db() as cursor:
+    with banco_usuarios.gerenciar_db() as cursor:
         try:
             cursor.execute(query, (id_postagem, ))
         except:

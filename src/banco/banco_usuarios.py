@@ -1,7 +1,8 @@
 import sqlite3
 from contextlib import contextmanager
+from pacote import texto
 try:
-    from texto import cores
+    from pacote import texto
 except ImportError:
     def cores(cor=None): return ""
 
