@@ -3,7 +3,7 @@ from datetime import datetime
 from contextlib import *
 from banco.banco_usuarios import gerenciar_db
 try:
-    from pacote import texto
+    from utils import texto
 except ImportError:
     def cores(cor=None): return ""
 
