@@ -15,6 +15,7 @@ venv/
 # Banco de dados Local
 src/banco.db
 src/banco/banco.db
+src/**.db
 *.db
 
 # Configurações de ambiente do VS Code ou Python

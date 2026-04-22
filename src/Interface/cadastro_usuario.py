@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu
-from banco import bancoSQLite
+from banco.banco_usuarios import *
 
 # cria frame para a tela de cadastro, onde o usuário pode escolher o tipo de conta, inserir email e senha
 class CadastroUsuario(CTk):
@@ -87,11 +87,11 @@ class CadastroUsuario(CTk):
             tkinter.messagebox.showerror("Erro", "Por favor, selecione um tipo de conta válido!")
             return
         
-        if bancoSQLite.usuarioExiste(email, tipoC):
+        if usuario_existe(email, tipoC):
             tkinter.messagebox.showerror("Erro", "Este email já está cadastrado para este tipo de conta!")
             return
         else:
-            bancoSQLite.inserirUsuario(nome, email, senha, tipoC)
+            inserir_usuario(nome, email, senha, tipoC)
             tkinter.messagebox.showinfo("Sucesso", "Cadastro realizado com sucesso!")
             
         self.destroy()

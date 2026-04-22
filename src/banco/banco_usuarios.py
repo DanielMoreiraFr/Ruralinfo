@@ -1,12 +1,12 @@
 import sqlite3
 from contextlib import contextmanager
-from pacote import texto
+from pacote.texto import *
 try:
-    from pacote import texto
+    from pacote.texto import *
 except ImportError:
     def cores(cor=None): return ""
 
-DB_PATH = 'src/banco.db'
+DB_PATH = 'src/banco/banco.db'
 
 @contextmanager
 def gerenciar_db():
@@ -91,7 +91,7 @@ def deletar_usuario(id_usuario):
     query = "DELETE FROM contas_usuarios WHERE id = ?"
     try:
         with gerenciar_db() as cursor:
-            cursor.execute(query, (id_usuario))
+            cursor.execute(query, (id_usuario,))
         print(f'Usuário {id_usuario} deletado com sucesso')
     except sqlite3.Error as erro:
         print(f"Erro ao deletar: {erro}")
@@ -158,3 +158,15 @@ def validação_login(email, senha, tipo_conta):
     except sqlite3.Error as erro:
         print(f"Erro no banco de dados: {erro}")
         return [False, False]
+
+
+# função para verificar se um usuário já existe no banco de dados
+def usuario_existe(email, tipoC):
+    query = "SELECT email FROM contasUsuarios WHERE email = ? AND tipoConta = ?"
+    with gerenciar_db() as cursor:
+        try:
+            cursor.execute(query, (email, tipoC))
+            resultado = cursor.fetchone() # Tenta buscar uma linha
+            return resultado is not None # Retorna True se achar algo, False se não
+        except sqlite3.Error as erro:
+            print(f'ERRO ao procurar usuário: {erro}')
