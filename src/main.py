@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton
 import tkinter.messagebox
-from Interface import cadastro_usuario
+from src.Interface.entidades import usuarios
 
 # desculpa, esqueci dos comentários
 
@@ -38,7 +38,7 @@ class TelaInicial(CTk):
         
     def cadastrar(self):
         print("Cadastrar", "Botão 'Cadastrar' pressionado")
-        cadastro = cadastro_usuario.CadastroUsuario()
+        cadastro = usuarios.CadastroUsuario()
         cadastro.mainloop()
 
 if __name__ == "__main__":
