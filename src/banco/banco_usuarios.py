@@ -34,17 +34,17 @@ def gerenciar_db():
     finally:
         conexao.close()
 
-
-query_criar_usuarios = """
-CREATE TABLE IF NOT EXISTS contas_usuarios (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    email TEXT NOT NULL,
-    senha TEXT NOT NULL,
-    tipoConta INTEGER NOT NULL
-)"""
-with gerenciar_db() as cursor:
-    cursor.execute(query_criar_usuarios)
+def criar_table_contas_usuarios():
+    query_criar_usuarios = """
+    CREATE TABLE IF NOT EXISTS contas_usuarios (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        email TEXT NOT NULL,
+        senha TEXT NOT NULL,
+        tipoConta INTEGER NOT NULL
+    )"""
+    with gerenciar_db() as cursor:
+        cursor.execute(query_criar_usuarios)
 
 def inserir_usuario(nome, email, senha, tipo_c):
     """
@@ -56,6 +56,8 @@ def inserir_usuario(nome, email, senha, tipo_c):
         senha (str): A senha (preferencialmente já criptografada).
         tipo_c (int): O nível de acesso ou tipo da conta.
     """
+    criar_table_contas_usuarios()
+
     query = "INSERT INTO contas_usuarios (nome, email, senha, tipoConta) VALUES (?, ?, ?, ?)"
     try:
         with gerenciar_db() as cursor:
@@ -70,6 +72,8 @@ def obter_dados():
     
     Lista ID, Nome, Email e Tipo de Conta. A senha é omitida por segurança.
     """
+    criar_table_contas_usuarios()
+
     query = "SELECT id, nome, email, tipoConta FROM contas_usuarios"
     try:
         with gerenciar_db() as cursor:
@@ -88,6 +92,8 @@ def deletar_usuario(id_usuario):
     Args:
         id_usuario (int): O identificador único do usuário a ser removido.
     """
+    criar_table_contas_usuarios()
+
     query = "DELETE FROM contas_usuarios WHERE id = ?"
     try:
         with gerenciar_db() as cursor:
@@ -105,6 +111,8 @@ def atualizar_usuario(coluna, valor, id_usuario):
         valor (any): O novo valor a ser inserido no campo.
         id_usuario (int): O ID do usuário que sofrerá a alteração.
     """
+    criar_table_contas_usuarios()
+
     query = f'UPDATE contas_usuarios SET {coluna} = ? WHERE id = ?'
     
     try:
@@ -132,6 +140,8 @@ def validação_login(email, senha, tipo_conta):
             - [1] (dict|bool): Dicionário com dados do usuário (id, nome, tipo) 
               em caso de sucesso, ou False em caso de falha.
     """
+    criar_table_contas_usuarios()
+
     query = 'SELECT id, email, senha, tipoConta FROM contas_usuarios WHERE tipoConta = ?' # lembrar de usar placeholder '?' no lugar de fstring
     
     usuario_encontrado = None 
@@ -163,6 +173,8 @@ def validação_login(email, senha, tipo_conta):
 
 # função para verificar se um usuário já existe no banco de dados
 def usuario_existe(email, tipoC):
+    criar_table_contas_usuarios()
+    
     query = "SELECT email FROM contasUsuarios WHERE email = ? AND tipoConta = ?"
     with gerenciar_db() as cursor:
         try:

@@ -9,20 +9,22 @@ except ImportError:
 
 DB_PATH = 'src/banco/banco.db'
 
-query_criar_infos = """
-CREATE TABLE IF NOT EXISTS infos (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    mensagem TEXT NOT NULL,
-    img_url TEXT,
-    alt TEXT,
-    data DATETIME NOT NULL,
-    estado INTEGER NOT NULL)"""
+def criar_table_criar_infos():
+    query_criar_infos = """
+    CREATE TABLE IF NOT EXISTS infos (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        mensagem TEXT NOT NULL,
+        img_url TEXT,
+        alt TEXT,
+        data DATETIME NOT NULL,
+        estado INTEGER NOT NULL)"""
 
-
-with gerenciar_db() as cursor:
-    cursor.execute(query_criar_infos)
+    with gerenciar_db() as cursor:
+        cursor.execute(query_criar_infos)
 
 def postagem(msg = '', img_url = '', alt = ''):
+    criar_table_criar_infos()
+
     query = 'INSERT INTO infos (mensagem, img_url, alt, data, estado) VALUES (?,?,?,?,?)'
     with gerenciar_db() as cursor:
         agora = datetime.now()
@@ -31,6 +33,8 @@ def postagem(msg = '', img_url = '', alt = ''):
 
 
 def atualizar_posatagem(id_postagem, coluna = 'estado', estado_postagem = 0):
+    criar_table_criar_infos()
+
     query = f'UPDATE infos SET {coluna} = ? WHERE id = ?'
 
     with gerenciar_db() as cursor:
@@ -43,6 +47,8 @@ def atualizar_posatagem(id_postagem, coluna = 'estado', estado_postagem = 0):
 
 
 def apagar_postagem(id_postagem):
+    criar_table_criar_infos()
+    
     query = 'DELETE FROM infos WHERE id = ?'
 
     with gerenciar_db() as cursor:
