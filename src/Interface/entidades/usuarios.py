@@ -5,11 +5,11 @@ from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptio
 from banco.banco_usuarios import *
 
 # cria frame para a tela de cadastro, onde o usuário pode escolher o tipo de conta, inserir email e senha
-class cadastro_usuario(CTk):
+class CadastroUsuario(CTk):
     def __init__(self):
         super().__init__()
         self.title("Cadastro")
-        self.geometry("400x500")
+        self.geometry("300x400")
 
         self.frame = CTkFrame(self)
         self.frame.pack(pady=20, padx=20, fill="both", expand=True)
@@ -17,7 +17,7 @@ class cadastro_usuario(CTk):
         self.label = CTkLabel(self.frame, text="Cadastro")
         self.label.pack(pady=10)
 
-        self.Menu_tipoConta = CTkOptionMenu(self.frame, values=["Administrador", "Comum"])
+        self.Menu_tipoConta = CTkOptionMenu(self.frame, values=["Comum", "Administrador"])
         self.Menu_tipoConta.pack(pady=10)
         
         self.Entry_nome = CTkEntry(self.frame, placeholder_text="insira seu nome completo")
@@ -45,7 +45,7 @@ class cadastro_usuario(CTk):
         nome = self.Entry_nome.get()
         tipoC = self.Menu_tipoConta.get()
         
-# tratamentos de erro
+#tratamentos de erro
         if not email.endswith("@ufrpe.br"):
             tkinter.messagebox.showerror("Erro", "O email deve terminar com '@ufrpe.br'!")
             return
@@ -53,6 +53,7 @@ class cadastro_usuario(CTk):
         if email == "":
             tkinter.messagebox.showerror("Erro", "O email não pode ser vazio!")
             return
+        
         
         if senha != confirma_senha:
             tkinter.messagebox.showerror("Erro", "As senhas não coincidem!")
@@ -89,12 +90,11 @@ class cadastro_usuario(CTk):
         if usuario_existe(email, tipoC):
             tkinter.messagebox.showerror("Erro", "Este email já está cadastrado para este tipo de conta!")
             return
-        
         else:
             inserir_usuario(nome, email, senha, tipoC)
             tkinter.messagebox.showinfo("Sucesso", "Cadastro realizado com sucesso!")
-            self.destroy()
             
+        self.destroy()
             
     def voltar(self):
         self.destroy()
@@ -112,7 +112,7 @@ class login_usuario(CTk):
         self.label = CTkLabel(self.frame, text="Login")
         self.label.pack(pady=10)
 
-        self.Menu_tipoConta = CTkOptionMenu(self.frame, values=["Administrador", "Comum"])
+        self.Menu_tipoConta = CTkOptionMenu(self.frame, values=["Comum", "Administrador"])
         self.Menu_tipoConta.pack(pady=10)
         
         self.Entry_email = CTkEntry(self.frame, placeholder_text="Insira seu e-mail")
@@ -132,14 +132,15 @@ class login_usuario(CTk):
         email = self.Entry_email.get()
         senha = self.Entry_senha.get()
         tipoC = self.Menu_tipoConta.get()
+
         valid = validação_login(email, senha, tipoC)
 
-        if valid:
-            tkinter.messagebox.showinfo('Erro', "Email, senha ou tipo de conta incorreto!")
-            return
-        else:
+        if valid[0]:
             tkinter.messagebox.showinfo("Sucesso", "Login realizado com sucesso!")
             self.destroy()
+        else:
+            tkinter.messagebox.showinfo('Erro', "Email, senha ou tipo de conta incorreto!")
+            return
 
 
     def voltar(self):
