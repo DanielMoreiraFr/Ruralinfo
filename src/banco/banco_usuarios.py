@@ -142,7 +142,7 @@ def validação_login(email, senha, tipo_conta):
     """
     criar_table_contas_usuarios()
 
-    query = 'SELECT id, email, senha, tipoConta FROM contas_usuarios WHERE tipoConta = ?' # lembrar de usar placeholder '?' no lugar de fstring
+    query = 'SELECT id, nome, email, senha, tipoConta FROM contas_usuarios WHERE tipoConta = ?' # lembrar de usar placeholder '?' no lugar de fstring
     
     usuario_encontrado = None 
     
@@ -151,10 +151,11 @@ def validação_login(email, senha, tipo_conta):
             cursor.execute(query, (tipo_conta,))
             contas = cursor.fetchall()
 
-            for id_db, email_db, senha_db, tipo_db in contas:
+            for id_db, nome_db, email_db, senha_db, tipo_db in contas:
                 if email_db == email and senha_db == senha:
                     usuario_encontrado = {
                         'id': id_db,
+                        'nome': nome_db,
                         'email': email_db,
                         'senha': senha_db,
                         'tipo': tipo_db
@@ -175,7 +176,7 @@ def validação_login(email, senha, tipo_conta):
 def usuario_existe(email, tipoC):
     criar_table_contas_usuarios()
     
-    query = "SELECT email FROM contasUsuarios WHERE email = ? AND tipoConta = ?"
+    query = "SELECT email FROM contas_usuarios WHERE email = ? AND tipoConta = ?"
     with gerenciar_db() as cursor:
         try:
             cursor.execute(query, (email, tipoC))

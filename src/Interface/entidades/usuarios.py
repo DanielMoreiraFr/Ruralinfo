@@ -4,144 +4,116 @@ import tkinter
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu
 from banco.banco_usuarios import *
 
-# cria frame para a tela de cadastro, onde o usuário pode escolher o tipo de conta, inserir email e senha
-class CadastroUsuario(CTk):
-    def __init__(self):
+# Classe que gerencia tanto a tela de Login quanto a de Cadastro de forma dinâmica
+class TelaUsuario(CTk):
+    def __init__(self, modo="login"): # O parâmetro 'modo' define o comportamento da tela
         super().__init__()
-        self.title("Cadastro")
-        self.geometry("300x400")
+        self.modo = modo
+        self.title(f"{self.modo.capitalize()}")
+        self.geometry("700x500")
 
+        # Frame principal que serve como plano de fundo
         self.frame = CTkFrame(self)
-        self.frame.pack(pady=20, padx=20, fill="both", expand=True)
+        self.frame.pack(fill="both", expand=True)
 
-        self.label = CTkLabel(self.frame, text="Cadastro")
+        # Container centralizador: mantém todos os campos agrupados no meio da janela
+        self.container = CTkFrame(self.frame, fg_color="transparent")
+        self.container.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Título dinâmico (exibe "Login" ou "Cadastro")
+        self.label = CTkLabel(self.container, text=self.modo.capitalize(), font=("Arial", 20))
         self.label.pack(pady=10)
 
-        self.Menu_tipoConta = CTkOptionMenu(self.frame, values=["Comum", "Administrador"])
+        # --- Campos Comuns (aparecem em ambos os modos) ---
+        self.Menu_tipoConta = CTkOptionMenu(self.container, values=["Comum", "Administrador"])
         self.Menu_tipoConta.pack(pady=10)
-        
-        self.Entry_nome = CTkEntry(self.frame, placeholder_text="insira seu nome completo")
-        self.Entry_nome.pack(pady=10)
-        
-        self.Entry_email = CTkEntry(self.frame, placeholder_text="insira seu e-mail '@ufrpe.br'")
+
+        # Campo NOME: aparece apenas se o modo for "cadastro"
+        if self.modo == "cadastro":
+            self.Entry_nome = CTkEntry(self.container, placeholder_text="Nome completo")
+            self.Entry_nome.pack(pady=10)
+
+        self.Entry_email = CTkEntry(self.container, placeholder_text="E-mail '@ufrpe.br'")
         self.Entry_email.pack(pady=10)
-        
-        self.Entry_senha = CTkEntry(self.frame, placeholder_text="crie uma senha", show="*")
+
+        self.Entry_senha = CTkEntry(self.container, placeholder_text="Senha", show="*")
         self.Entry_senha.pack(pady=10)
+
+        # Campo CONFIRMAR SENHA: aparece apenas se o modo for "cadastro"
+        if self.modo == "cadastro":
+            self.Entry_confirma_senha = CTkEntry(self.container, placeholder_text="Confirme a senha", show="*")
+            self.Entry_confirma_senha.pack(pady=10)
+
+        # --- Definição do Botão Principal ---
+        # Escolhe o texto e a função (comando) com base no modo da tela
+        texto_botao = "Cadastrar" if self.modo == "cadastro" else "Entrar" # vê o tipo da ação 
+        comando_botao = self.cadastrar_usuario if self.modo == "cadastro" else self.login_usuario # ao descobri qual a ação seleciona o metodo para o botão
         
-        self.Entry_confirma_senha = CTkEntry(self.frame, placeholder_text="confirme a senha", show="*")
-        self.Entry_confirma_senha.pack(pady=10)
+        self.button_principal = CTkButton(self.container, text=texto_botao, command=comando_botao)
+        self.button_principal.pack(pady=20)
         
-        self.button_cadastrar = CTkButton(self.frame, text="Cadastrar", command=self.cadastrar)
-        self.button_cadastrar.pack(pady=10)
-        
-        self.button_voltar = CTkButton(self.frame, text="Voltar", command=self.voltar)
+        # Botão para fechar a janela atual
+        self.button_voltar = CTkButton(self.container, text="Voltar", command=self.destroy, fg_color="red", hover_color="#8B0000")
         self.button_voltar.pack(pady=10)
-    
-    def cadastrar(self):
+
+    # Lógica de validação e execução de Login
+    def login_usuario(self):
+        email = self.Entry_email.get()
+        senha = self.Entry_senha.get()
+        tipoC = self.Menu_tipoConta.get()
+
+        # Chama a função do banco para validar as credenciais
+        valid = validação_login(email, senha, tipoC)
+        if valid[0]:
+            tkinter.messagebox.showinfo("Sucesso", f"Bem-vindo, {valid[1]['nome']}!")
+            self.destroy() # Fecha a tela de login após o sucesso
+        else:
+            tkinter.messagebox.showerror("Erro", "Credenciais incorretas!")
+
+    # Lógica de validação e execução de Cadastro
+    def cadastrar_usuario(self):
+        nome = self.Entry_nome.get()
         email = self.Entry_email.get()
         senha = self.Entry_senha.get()
         confirma_senha = self.Entry_confirma_senha.get()
-        nome = self.Entry_nome.get()
         tipoC = self.Menu_tipoConta.get()
-        
-#tratamentos de erro
-        if not email.endswith("@ufrpe.br"):
-            tkinter.messagebox.showerror("Erro", "O email deve terminar com '@ufrpe.br'!")
-            return
-        
+
+        # --- Validações de Segurança e Formato ---
         if email == "":
             tkinter.messagebox.showerror("Erro", "O email não pode ser vazio!")
             return
-        
-        
-        if senha != confirma_senha:
+        elif not email.endswith("@ufrpe.br"):
+            tkinter.messagebox.showerror("Erro", "O email deve terminar com '@ufrpe.br'!")
+            return
+
+        elif senha != confirma_senha:
             tkinter.messagebox.showerror("Erro", "As senhas não coincidem!")
             return
-        
-        if senha == "":
+        elif senha == "":
             tkinter.messagebox.showerror("Erro", "A senha não pode ser vazia!")
             return
-        
-        if len(senha) < 10:
+        elif len(senha) < 10:
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos 10 caracteres!")
             return
-        
-        if not any(char.isdigit() for char in senha):
+        elif not any(char.isdigit() for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos um número!")
             return
-        
-        if not any(char.isalpha() for char in senha):
+        elif not any(char.isalpha() for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos uma letra!")
             return
-        
-        if not any(char in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/" for char in senha):
+        elif not any(char in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/" for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos um caractere especial!")
             return
-        
-        if not any(char.isupper() for char in senha):
+        elif not any(char.isupper() for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos uma letra maiúscula!")
             return
-        
-        if tipoC not in ["Administrador", "Comum"]:
+        elif tipoC not in ["Administrador", "Comum"]:
             tkinter.messagebox.showerror("Erro", "Por favor, selecione um tipo de conta válido!")
             return
-        
-        if usuario_existe(email, tipoC):
-            tkinter.messagebox.showerror("Erro", "Este email já está cadastrado para este tipo de conta!")
-            return
-        else:
+        # Verifica se o usuário já existe antes de inserir no banco
+        if not usuario_existe(email, tipoC):
             inserir_usuario(nome, email, senha, tipoC)
-            tkinter.messagebox.showinfo("Sucesso", "Cadastro realizado com sucesso!")
-            
-        self.destroy()
-            
-    def voltar(self):
-        self.destroy()
-
-
-class login_usuario(CTk):
-    def __init__(self):
-        super().__init__()
-        self.title("Login")
-        self.geometry("400x500")
-
-        self.frame = CTkFrame(self)
-        self.frame.pack(pady=20, padx=20, fill="both", expand=True)
-
-        self.label = CTkLabel(self.frame, text="Login")
-        self.label.pack(pady=10)
-
-        self.Menu_tipoConta = CTkOptionMenu(self.frame, values=["Comum", "Administrador"])
-        self.Menu_tipoConta.pack(pady=10)
-        
-        self.Entry_email = CTkEntry(self.frame, placeholder_text="Insira seu e-mail")
-        self.Entry_email.pack(pady=10)
-        
-        self.Entry_senha = CTkEntry(self.frame, placeholder_text="Insira sua senha", show="*")
-        self.Entry_senha.pack(pady=10)
-        
-        self.button_login = CTkButton(self.frame, text="Login", command=self.login)
-        self.button_login.pack(pady=10)
-        
-        self.button_voltar = CTkButton(self.frame, text="Voltar", command=self.voltar)
-        self.button_voltar.pack(pady=10)
-    
-
-    def login(self):
-        email = self.Entry_email.get()
-        senha = self.Entry_senha.get()
-        tipoC = self.Menu_tipoConta.get()
-
-        valid = validação_login(email, senha, tipoC)
-
-        if valid[0]:
-            tkinter.messagebox.showinfo("Sucesso", "Login realizado com sucesso!")
+            tkinter.messagebox.showinfo("Sucesso", "Usuário criado!")
             self.destroy()
         else:
-            tkinter.messagebox.showinfo('Erro', "Email, senha ou tipo de conta incorreto!")
-            return
-
-
-    def voltar(self):
-        self.destroy()
+            tkinter.messagebox.showerror("Erro", "Usuário já existe!")
