@@ -58,3 +58,19 @@ def apagar_postagem(id_postagem):
             print('ERRO ao deletar linha da tabela')
         else:
             print('Linha deletada com sucesso!')
+
+def exibir_postagem():
+    criar_table_criar_infos()
+
+    query = 'SELECT * from infos'
+    try:
+        with gerenciar_db() as cursor:
+            cursor.execute(query)
+            informacoes = cursor.fetchall()
+
+            for msg, img, alt, data, estado in informacoes:
+                print(msg, img, alt, data, estado)
+    except sqlite3.Error as erro:
+        print(f'ERRO: {erro}')
+        
+

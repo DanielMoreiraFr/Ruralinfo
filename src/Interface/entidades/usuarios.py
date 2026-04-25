@@ -117,3 +117,6 @@ class TelaUsuario(CTk):
             self.destroy()
         else:
             tkinter.messagebox.showerror("Erro", "Usuário já existe!")
+            self.destroy()
+            janela_login = TelaUsuario(modo="login")
+            janela_login.mainloop()
