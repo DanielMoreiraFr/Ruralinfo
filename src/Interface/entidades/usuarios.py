@@ -110,7 +110,7 @@ class TelaUsuario(CTk):
         elif tipoC not in ["Administrador", "Comum"]:
             tkinter.messagebox.showerror("Erro", "Por favor, selecione um tipo de conta válido!")
             return
-        # Verifica se o usuário já existe antes de inserir no banco
+         # Verifica se o usuário já existe antes de inserir no banco
         if not usuario_existe(email, tipoC):
             inserir_usuario(nome, email, senha, tipoC)
             tkinter.messagebox.showinfo("Sucesso", "Usuário criado!")
