@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkinter
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu
 from banco.banco_usuarios import *
+from Interface.entidades.infos import MuralInformativo
 
 # Classe que gerencia tanto a tela de Login quanto a de Cadastro de forma dinâmica
 class TelaUsuario(CTk):
@@ -67,6 +68,13 @@ class TelaUsuario(CTk):
         if valid[0]:
             tkinter.messagebox.showinfo("Sucesso", f"Bem-vindo, {valid[1]['nome']}!")
             self.destroy() # Fecha a tela de login após o sucesso
+            
+            # 2. Abre a tela do Mural passando o tipo de conta
+            # Convertemos para minúsculo para bater com a lógica da classe Mural
+            app_mural = MuralInformativo(tipo_usuario=tipoC.lower())
+            
+            # 3. Inicia o loop da nova janela
+            app_mural.mainloop()
         else:
             tkinter.messagebox.showerror("Erro", "Credenciais incorretas!")
 
