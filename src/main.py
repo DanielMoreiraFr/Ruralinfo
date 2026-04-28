@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton
 import tkinter.messagebox
-from Interface.entidades import usuarios
+from Interface.entidades import usuarios, infos
 
 # cria frame para a tela inicial, onde o usuário pode escolher entre visitante, login ou cadastro
 class TelaInicial(CTk):
@@ -44,9 +44,9 @@ class TelaInicial(CTk):
     def visitante(self):
         print('Botão "Visitante" pressionado')
         # Criamos a instância da tela de usuário configurada para o modo visitante
-        janela_cad = usuarios.TelaUsuario(modo="visitante")
-        janela_cad.mainloop()
-    
+        app_mural = infos.MuralInformativo(tipo_usuario="visitante")
+        app_mural.mainloop()
+
     def login(self):
         print('Botão "Login" pressionado')
         # Criamos a instância da tela de usuário configurada para o modo login

@@ -2,10 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu
+
 from banco.banco_usuarios import *
 from Interface.entidades.infos import MuralInformativo
 
-# Classe que gerencia tanto a tela de Login quanto a de Cadastro de forma dinâmica
+# Classe que gerencia tanto a tela de Login quanto a de Cadastro
 class TelaUsuario(CTk):
     def __init__(self, modo="login"): # O parâmetro 'modo' define o comportamento da tela
         super().__init__()
@@ -17,19 +18,19 @@ class TelaUsuario(CTk):
         self.frame = CTkFrame(self)
         self.frame.pack(fill="both", expand=True)
 
-        # Container centralizador: mantém todos os campos agrupados no meio da janela
+        # Container que mantém todos os campos agrupados no meio da janela
         self.container = CTkFrame(self.frame, fg_color="transparent")
         self.container.place(relx=0.5, rely=0.5, anchor="center")
 
-        # Título dinâmico (exibe "Login" ou "Cadastro")
+        # Título dinâmico (login ou cadastro)
         self.label = CTkLabel(self.container, text=self.modo.capitalize(), font=("Arial", 20))
         self.label.pack(pady=10)
 
-        # --- Campos Comuns (aparecem em ambos os modos) ---
+        # campos para ambos os modos
         self.Menu_tipoConta = CTkOptionMenu(self.container, values=["Comum", "Administrador"])
         self.Menu_tipoConta.pack(pady=10)
 
-        # Campo NOME: aparece apenas se o modo for "cadastro"
+        # Campo NOME para "cadastro"
         if self.modo == "cadastro":
             self.Entry_nome = CTkEntry(self.container, placeholder_text="Nome completo")
             self.Entry_nome.pack(pady=10)
@@ -40,45 +41,43 @@ class TelaUsuario(CTk):
         self.Entry_senha = CTkEntry(self.container, placeholder_text="Senha", show="*")
         self.Entry_senha.pack(pady=10)
 
-        # Campo CONFIRMAR SENHA: aparece apenas se o modo for "cadastro"
+        # Campo CONFIRMAR SENHA para "cadastro"
         if self.modo == "cadastro":
             self.Entry_confirma_senha = CTkEntry(self.container, placeholder_text="Confirme a senha", show="*")
             self.Entry_confirma_senha.pack(pady=10)
 
-        # --- Definição do Botão Principal ---
+        # cria botão principal com texto e função baseados no modo (login ou cadastro)
         # Escolhe o texto e a função (comando) com base no modo da tela
-        texto_botao = "Cadastrar" if self.modo == "cadastro" else "Entrar" # vê o tipo da ação 
+        texto_botao = "Cadastrar" if self.modo == "cadastro" else "Entrar"
         comando_botao = self.cadastrar_usuario if self.modo == "cadastro" else self.login_usuario # ao descobri qual a ação seleciona o metodo para o botão
         
         self.button_principal = CTkButton(self.container, text=texto_botao, command=comando_botao)
         self.button_principal.pack(pady=20)
         
-        # Botão para fechar a janela atual
+        # botão para fechar a janela atual
         self.button_voltar = CTkButton(self.container, text="Voltar", command=self.destroy, fg_color="red", hover_color="#8B0000")
         self.button_voltar.pack(pady=10)
 
-    # Lógica de validação e execução de Login
+    # validação e execução de Login
     def login_usuario(self):
         email = self.Entry_email.get()
         senha = self.Entry_senha.get()
         tipoC = self.Menu_tipoConta.get()
 
-        # Chama a função do banco para validar as credenciais
+        # chama a função do banco para validar as credenciais
         valid = validação_login(email, senha, tipoC)
         if valid[0]:
             tkinter.messagebox.showinfo("Sucesso", f"Bem-vindo, {valid[1]['nome']}!")
-            self.destroy() # Fecha a tela de login após o sucesso
+            self.destroy()
             
-            # 2. Abre a tela do Mural passando o tipo de conta
             # Convertemos para minúsculo para bater com a lógica da classe Mural
             app_mural = MuralInformativo(tipo_usuario=tipoC.lower())
-            
-            # 3. Inicia o loop da nova janela
+
             app_mural.mainloop()
         else:
             tkinter.messagebox.showerror("Erro", "Credenciais incorretas!")
 
-    # Lógica de validação e execução de Cadastro
+    # validação e execução de Cadastro
     def cadastrar_usuario(self):
         nome = self.Entry_nome.get()
         email = self.Entry_email.get()
@@ -86,7 +85,7 @@ class TelaUsuario(CTk):
         confirma_senha = self.Entry_confirma_senha.get()
         tipoC = self.Menu_tipoConta.get()
 
-        # --- Validações de Segurança e Formato ---
+        # validações de Segurança e Formato // tratamento de erro
         if email == "":
             tkinter.messagebox.showerror("Erro", "O email não pode ser vazio!")
             return
