@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter
-from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu
+from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu, CTkScrollableFrame, CTkTextbox
+
 from banco.banco_usuarios import *
 from banco.banco_infos import *
 from banco.banco_usuarios import *
-from customtkinter import CTk, CTkFrame, CTkLabel, CTkButton, CTkScrollableFrame
 
 class MuralInformativo(CTk):
     def __init__(self, tipo_usuario="comum"): # Pode ser 'administrador', 'comum' ou 'visitante'
@@ -117,21 +117,42 @@ class MuralInformativo(CTk):
                                            height=20,
                                            corner_radius=5,
                                            
-                                           command=lambda escolha, id_p=id_postagem: self.opcoes_aviso(escolha, id_p))
+                                           command=lambda escolha, id_p=id_postagem, txt=msg: self.opcoes_aviso(escolha, id_p, txt))
                 btn_opcoes.pack(padx=15, pady=(0, 10), anchor="ne")
                 btn_opcoes.set("⋮") # Ícone de opções (três pontinhos)
                 
-    def opcoes_aviso(self, escolha, id_p):
+    def opcoes_aviso(self, escolha, id_p, texto_antigo):
         if escolha == "Editar":
-            atualizar_posatagem(id_p, coluna='estado', estado_postagem=1) # Exemplo: reativa o aviso (pode ser editado para abrir um modal de edição)
-            self.carregar_avisos_no_mural() # Atualiza o mural após edição
+            
+            janela_editar = tk.Toplevel(self)
+            janela_editar.title("Editar Aviso")
+            janela_editar.geometry("400x300")
+            janela_editar.attributes = ("-topmost", True)
+            
+            campo_editar = CTkTextbox(janela_editar, width=350, height=200)
+            campo_editar.pack(pady=20, padx=20)
+            campo_editar.insert("0.0", texto_antigo)
+            
+            def confirmar():
+                novo_texto = campo_editar.get("1.0", "end-1c")
+                if novo_texto.strip() != "":
+                    atualizar_posatagem(id_p, coluna='mensagem', estado_postagem=novo_texto)
+                    janela_editar.destroy()
+                    self.carregar_avisos_no_mural() # Atualiza o mural após edição
+                else:
+                    print("O aviso editado não pode estar vazio!")
+        
+            btn_salvar = CTkButton(janela_editar, text="Salvar Edição", command=confirmar)
+            btn_salvar.pack(pady=10)
+            
         elif escolha == "Excluir":
             apagar_postagem(id_p) 
             self.carregar_avisos_no_mural() # Atualiza o mural após exclusão
-
+            
     def abrir_menu(self):
         # Aqui você chamará a classe do Menu passando o tipo_usuario
         print(f"Abrindo menu para nível: {self.tipo_usuario}")
+        
 
 if __name__ == "__main__":
     # Teste mudando para 'administrador', 'comum' ou 'visitante'
