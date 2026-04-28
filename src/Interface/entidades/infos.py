@@ -3,8 +3,8 @@ from tkinter import ttk
 import tkinter
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu
 from banco.banco_usuarios import *
-from banco.banco_infos import postagem
-from banco.banco_usuarios import gerenciar_db
+from banco.banco_infos import *
+from banco.banco_usuarios import *
 from customtkinter import CTk, CTkFrame, CTkLabel, CTkButton, CTkScrollableFrame
 
 class MuralInformativo(CTk):
@@ -71,15 +71,15 @@ class MuralInformativo(CTk):
                 postagem(msg=mensagem)
                 
                 self.entry_novo_aviso.delete(0, 'end')
-                sucesso = print("Postado com sucesso!")
+                print("Postado com sucesso!")
                 
                 # self.carregar_avisos_no_mural() # Criaremos essa para ler o banco e exibir
             except Exception as e:
                 print(f"Erro ao postar: {e}")
         else:
             print("O aviso não pode estar vazio!")
-        if sucesso:
-            self.carregar_avisos_no_mural()
+
+        self.carregar_avisos_no_mural()
             
     def carregar_avisos_no_mural(self):
     # 1. Limpa o mural antes de carregar (para não duplicar ao atualizar)
@@ -87,20 +87,18 @@ class MuralInformativo(CTk):
             widget.destroy()
 
         # 2. Busca os dados no banco (ordenando pelo ID mais recente primeiro)
-        query = "SELECT mensagem, data FROM infos WHERE estado = 1 ORDER BY id DESC"
+        query = "SELECT id, mensagem, data FROM infos WHERE estado = 1 ORDER BY id DESC"
         
         with gerenciar_db() as cursor:
             cursor.execute(query)
             avisos = cursor.fetchall()
 
         # 3. Cria os "Cards" de aviso na tela
-        for msg, data in avisos:
+        for id_postagem, msg, data in avisos:
             # Criamos um frame para cada aviso (o "container")
             card = CTkFrame(self.mural_scrolling, fg_color="#333333", corner_radius=10)
             card.pack(fill="x", padx=10, pady=5)
 
-            # O texto do aviso (Não editável)
-            # O wraplength faz o texto quebrar linha automaticamente
             label_msg = CTkLabel(card, text=msg, 
                                 wraplength=500, 
                                 justify="left",
@@ -112,12 +110,28 @@ class MuralInformativo(CTk):
                                 font=("Arial", 10), 
                                 text_color="gray")
             label_data.pack(padx=15, pady=(0, 10), anchor="e")
+            
+            if self.tipo_usuario.lower() == "administrador":
+                btn_opcoes = CTkOptionMenu(card, values=["Opções", "Editar", "Excluir"],
+                                           width=80,
+                                           height=20,
+                                           corner_radius=5,
+                                           
+                                           command=lambda escolha, id_p=id_postagem: self.opcoes_aviso(escolha, id_p))
+                btn_opcoes.pack(padx=15, pady=(0, 10), anchor="ne")
+                btn_opcoes.set("⋮") # Ícone de opções (três pontinhos)
+                
+    def opcoes_aviso(self, escolha, id_p):
+        if escolha == "Editar":
+            atualizar_posatagem(id_p, coluna='estado', estado_postagem=1) # Exemplo: reativa o aviso (pode ser editado para abrir um modal de edição)
+            self.carregar_avisos_no_mural() # Atualiza o mural após edição
+        elif escolha == "Excluir":
+            apagar_postagem(id_p) 
+            self.carregar_avisos_no_mural() # Atualiza o mural após exclusão
 
     def abrir_menu(self):
         # Aqui você chamará a classe do Menu passando o tipo_usuario
         print(f"Abrindo menu para nível: {self.tipo_usuario}")
-        
-    
 
 if __name__ == "__main__":
     # Teste mudando para 'administrador', 'comum' ou 'visitante'

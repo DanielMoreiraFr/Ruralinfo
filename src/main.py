@@ -42,8 +42,10 @@ class TelaInicial(CTk):
 
 # Métodos que definem o comportamento de cada botão
     def visitante(self):
-        # Exibe uma caixa de mensagem informativa
-        tkinter.messagebox.showinfo("Visitante", "Botão 'Visitante' pressionado")
+        print('Botão "Visitante" pressionado')
+        # Criamos a instância da tela de usuário configurada para o modo visitante
+        janela_cad = usuarios.TelaUsuario(modo="visitante")
+        janela_cad.mainloop()
     
     def login(self):
         print('Botão "Login" pressionado')
