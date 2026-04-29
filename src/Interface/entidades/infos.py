@@ -153,6 +153,7 @@ class MuralInformativo(CTk):
         elif escolha == "Excluir":
             apagar_postagem(id_p) 
             self.carregar_avisos_no_mural() # Atualiza o mural após exclusão
+            
     # função para abrir o menu (ainda sem implementação)       
     def abrir_menu(self):
         # chamar a classe menu aqui, passando o tipo usuário
