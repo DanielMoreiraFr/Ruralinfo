@@ -10,7 +10,7 @@
 <p>O Ruralinfo é uma aplicação desktop desenvolvida para centralizar o fluxo de informações no Campus Dois Irmãos da UFRPE. O sistema funciona como um mural digital onde a administração pode gerenciar comunicados, horários de transporte e avisos gerais, garantindo que o corpo discente tenha acesso rápido e seguro aos dados institucionais.</p>
 
 <p align="center">
-  <img src="imagens/home_projeto.png" width="250" height="250" alt="Demonstração do projeto Ruralinfo">
+  <img src="imagens/home_projeto.png" width="1600" height="900" alt="Demonstração do projeto Ruralinfo">
 </p>
 
 <h2>Ferramentas Utilizadas</h2>
