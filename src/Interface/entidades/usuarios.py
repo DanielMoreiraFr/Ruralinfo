@@ -88,7 +88,6 @@ class TelaUsuario(CTk):
             janela_login = TelaUsuario(modo="login")
             janela_login.mainloop()
 
-
     # validação e execução de Cadastro
     def cadastrar_usuario(self):
         nome = self.Entry_nome.get()
@@ -96,67 +95,53 @@ class TelaUsuario(CTk):
         senha = self.Entry_senha.get()
         confirma_senha = self.Entry_confirma_senha.get()
         tipoC = self.Menu_tipoConta.get()
-
+        def reiniciar():
+            self.destroy()
+            janela_cadastro = TelaUsuario(modo="cadastro")
+            janela_cadastro.mainloop()
+    
         # validações de Segurança e Formato // tratamento de erro
         if email == "":
             tkinter.messagebox.showerror("Erro", "O email não pode ser vazio!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif not email.endswith("@ufrpe.br"):
             tkinter.messagebox.showerror("Erro", "O email deve terminar com '@ufrpe.br'!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif senha != confirma_senha:
             tkinter.messagebox.showerror("Erro", "As senhas não coincidem!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif senha == "":
             tkinter.messagebox.showerror("Erro", "A senha não pode ser vazia!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
+            reiniciar()
+            return
             janela_cadastro.mainloop()
             return
         elif len(senha) < 10:
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos 10 caracteres!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif not any(char.isdigit() for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos um número!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif not any(char.isalpha() for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos uma letra!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif not any(char in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/" for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos um caractere especial!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif not any(char.isupper() for char in senha):
             tkinter.messagebox.showerror("Erro", "A senha deve conter pelo menos uma letra maiúscula!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
         elif tipoC not in ["Administrador", "Comum"]:
             tkinter.messagebox.showerror("Erro", "Por favor, selecione um tipo de conta válido!")
-            self.destroy()
-            janela_cadastro = TelaUsuario(modo="cadastro")
-            janela_cadastro.mainloop()
+            reiniciar()
             return
          # Verifica se o usuário já existe antes de inserir no banco
         if not usuario_existe(email, tipoC):

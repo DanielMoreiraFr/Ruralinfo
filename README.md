@@ -67,7 +67,7 @@
 </table>
 
 <h2>Instalação e Execução</h2>
-<p>O projeto utiliza a biblioteca <strong>CustomTkinter</strong>, que deve ser instalada previamente.</p>
+<p>O projeto utiliza a biblioteca <strong>CustomTkinter</strong> e a <strong>Messagebox</strong>, que deve ser instalada previamente.</p>
 
 <pre><code>pip install customtkinter</code></pre>
 
@@ -87,6 +87,11 @@
 
 <h2>Estrutura do Projeto</h2>
 
+<h1>Link para o drive com os fluxogramas do projeto</h1>
+<p><a href="https://drive.google.com/drive/folders/1mM4qqK3J-SPdMHgQSI99EP3JTfQxVX9q?usp=drive_link"> link drive</a></p>
+
+<h1>Arquitetura do projeto</h1>
+
 ```bash
 Ruralinfo/
 ├── src/
@@ -103,3 +108,4 @@ Ruralinfo/
 │   └── main.py             # Ponto de entrada do sistema
 ├── .gitignore              # Arquivos ignorados pelo Git (venv, .db)
 └── README.md
+```
