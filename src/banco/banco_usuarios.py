@@ -70,24 +70,15 @@ def inserir_usuario(nome, email, senha, tipo_c):
         print(f'{cores("vermelho")}ERRO ao inserir: {erro}{cores()}')
 
 # retorna os dados de todos os usuários cadastrados
-def obter_dados():
-    """
-    Recupera e exibe no terminal todos os usuários cadastrados.
-    
-    Lista ID, Nome, Email e Tipo de Conta. A senha é omitida por segurança.
-    """
-    criar_table_contas_usuarios()
-
-    query = "SELECT id, nome, email, tipoConta FROM contas_usuarios"
+def obter_dados_usuario(id_usuario):
+    query = "SELECT nome, email, tipoConta FROM contas_usuarios WHERE id = ?"
     try:
         with gerenciar_db() as cursor:
-            cursor.execute(query)
-            contas = cursor.fetchall()
-            
-            for id, nome, email, tipo in contas:
-                print(f"ID: {id} | Nome: {nome} | Email: {email} | Tipo: {tipo}")
+            cursor.execute(query, (id_usuario,))
+            return cursor.fetchone() # Retorna uma tupla (nome, email, tipo)
     except sqlite3.Error as erro:
         print(f"Erro ao buscar dados: {erro}")
+        return None
 
 # dele um usuário da tabela, com base no ID
 def deletar_usuario(id_usuario):

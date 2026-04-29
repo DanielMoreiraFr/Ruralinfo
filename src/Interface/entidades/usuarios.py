@@ -64,14 +64,22 @@ class TelaUsuario(CTk):
         senha = self.Entry_senha.get()
         tipoC = self.Menu_tipoConta.get()
 
-        # chama a função do banco para validar as credenciais
         valid = validação_login(email, senha, tipoC)
+        
         if valid[0]:
-            tkinter.messagebox.showinfo("Sucesso", f"Bem-vindo, {valid[1]['nome']}!")
-            self.destroy()
+            dados_usuario = valid[1] 
             
-            # Convertemos para minúsculo para bater com a lógica da classe Mural
-            app_mural = MuralInformativo(tipo_usuario=tipoC.lower())
+            tkinter.messagebox.showinfo("Sucesso", f"Bem-vindo, {dados_usuario['nome']}!")
+            
+            id_do_usuario = dados_usuario['id'] 
+            tipo_do_usuario = tipoC.lower()
+
+            self.destroy() # Fecha a tela de login
+            
+            app_mural = MuralInformativo(
+                tipo_usuario=tipo_do_usuario, 
+                id_usuario=id_do_usuario
+            )
 
             app_mural.mainloop()
         else:

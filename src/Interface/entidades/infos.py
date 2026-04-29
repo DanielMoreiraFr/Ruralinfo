@@ -1,17 +1,20 @@
 import tkinter as tk
 from tkinter import *
-from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu, CTkScrollableFrame, CTkTextbox
+from customtkinter import CTk, CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu, CTkScrollableFrame, CTkTextbox, CTkToplevel
+from tkinter import messagebox
 
 from banco.banco_usuarios import *
 from banco.banco_infos import *
+from Interface.entidades import usuarios
 
 # Cria classe do Mural Informativo
 # A Interfce que exibe os avisos para os usuários
 # Tem diferentes níveis de acesso a funcionalidades.
 class MuralInformativo(CTk):
-    def __init__(self, tipo_usuario="comum"):
+    def __init__(self, tipo_usuario="comum", id_usuario=None):
         super().__init__()
         self.tipo_usuario = tipo_usuario
+        self.id_usuario_logado = id_usuario
         self.title(f"Ruralinfo - Mural ({self.tipo_usuario.capitalize()})")
         self.geometry("800x600")
 
@@ -32,6 +35,11 @@ class MuralInformativo(CTk):
         # Botão de menu (todos veem)
         self.btn_menu = CTkButton(self.sidebar, text="Acessar Menu", command=self.abrir_menu)
         self.btn_menu.pack(pady=20, padx=10)
+        
+        self.btn_perfil = CTkButton(self.sidebar, text="👤 Meu Perfil", 
+                            fg_color="transparent", border_width=1,
+                            command=self.abrir_perfil)
+        self.btn_perfil.pack(pady=10, padx=10)
 
         # Lógica de permissões
         self.montar_ferramentas_especificas()
@@ -128,10 +136,10 @@ class MuralInformativo(CTk):
     def opcoes_aviso(self, escolha, id_p, texto_antigo):
         if escolha == "Editar":
             
-            janela_editar = tk.Toplevel(self)
+            janela_editar = CTkToplevel(self)
             janela_editar.title("Editar Aviso")
             janela_editar.geometry("400x300")
-            janela_editar.attributes = ("-topmost", True)
+            janela_editar.attributes("-topmost", True)
             
             campo_editar = CTkTextbox(janela_editar, width=350, height=200)
             campo_editar.pack(pady=20, padx=20)
@@ -153,7 +161,66 @@ class MuralInformativo(CTk):
         elif escolha == "Excluir":
             apagar_postagem(id_p) 
             self.carregar_avisos_no_mural() # Atualiza o mural após exclusão
-            
+
+    #cria a função para abrir o perfil do usuário logado, onde ele pode ver seus dados e alterar a senha ou excluir a conta
+    def abrir_perfil(self):
+    # busca dados do banco
+        dados = obter_dados_usuario(self.id_usuario_logado)
+        
+        if dados:
+            nome_db, email_db, tipo_db = dados
+        else:
+            nome_db, email_db, tipo_db = "Erro", "Erro", "Erro"
+
+        janela_perfil = CTkToplevel(self)
+        janela_perfil.title("Meu Perfil - Ruralinfo")
+        janela_perfil.geometry("400x520")
+        janela_perfil.attributes("-topmost", True)
+
+        CTkLabel(janela_perfil, text="Informações do Usuário", font=("Arial", 18, "bold")).pack(pady=20)
+
+        # Exibição de Dados (Usando as variáveis vindas do banco)
+        CTkLabel(janela_perfil, text=f"Nome: {nome_db}", anchor="w").pack(fill="x", padx=30)
+        CTkLabel(janela_perfil, text=f"E-mail: {email_db}", anchor="w").pack(fill="x", padx=30)
+        CTkLabel(janela_perfil, text=f"Tipo: {tipo_db.capitalize()}", anchor="w", text_color="gray").pack(fill="x", padx=30)
+
+        # Troca de Senha
+        CTkLabel(janela_perfil, text="\nAlterar Senha", font=("Arial", 14, "bold")).pack(pady=10)
+        nova_senha = CTkEntry(janela_perfil, placeholder_text="Nova senha", show="*")
+        nova_senha.pack(pady=5, padx=30, fill="x")
+        confirmar_senha = CTkEntry(janela_perfil, placeholder_text="Confirme a nova senha", show="*")
+        confirmar_senha.pack(pady=5, padx=30, fill="x")
+
+        def salvar_senha():
+            s1 = nova_senha.get()
+            s2 = confirmar_senha.get()
+
+            if s1 == s2 and len(s1) >= 4:
+                atualizar_usuario(coluna="senha", valor=s1, id_usuario=self.id_usuario_logado)
+                print("Senha alterada com sucesso!")
+                janela_perfil.destroy()
+            else:
+                print("As senhas não coincidem ou são muito curtas!")
+
+        btn_salvar = CTkButton(janela_perfil, text="Salvar Nova Senha", fg_color="green", command=salvar_senha)
+        btn_salvar.pack(pady=20)
+
+        # função para solicitar exclusão da conta
+        def solicitar_exclusao_propria():
+            if messagebox.askyesno("Confirmar Exclusão", "Tem certeza que deseja excluir sua conta? Esta ação é permanente."):
+                deletar_usuario(self.id_usuario_logado)
+                janela_perfil.destroy()
+                self.destroy() # Fecha o Mural
+                
+                #reinicia login
+                janela_login = usuarios.TelaUsuario() 
+                janela_login.mainloop()
+
+        btn_excluir_conta = CTkButton(janela_perfil, text="Excluir Conta", 
+                                    fg_color="red", hover_color="#8b0000",
+                                    command=solicitar_exclusao_propria)
+        btn_excluir_conta.pack(pady=20)
+    
     # função para abrir o menu (ainda sem implementação)       
     def abrir_menu(self):
         # chamar a classe menu aqui, passando o tipo usuário
