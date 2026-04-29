@@ -1,24 +1,14 @@
-Pela imagem da sua estrutura de arquivos, você tem alguns itens que precisam ser ignorados e outros que estão acidentalmente ocultos (cinza).
-
-Aqui está a lista exata do que deve estar no seu .gitignore:
-1. O que DEVE ir para o .gitignore
-
-Copie e cole isso dentro do seu arquivo .gitignore:
 Plaintext
 
-# Ambiente Virtual (Obrigatório)
 venv/
 
-# Caches do Python (Obrigatório)
 **/__pycache__/
 
-# Banco de dados Local
 src/banco.db
 src/banco/banco.db
 src/**.db
 *.db
 
-# Configurações de ambiente do VS Code ou Python
 pyvenv.cfg
 .vscode/
 
