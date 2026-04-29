@@ -107,3 +107,4 @@ Ruralinfo/
 │   └── main.py             # Ponto de entrada do sistema
 ├── .gitignore              # Arquivos ignorados pelo Git (venv, .db)
 └── README.md
+```bash
