@@ -20,7 +20,7 @@ class TelaInicial(CTk):
         self.container = CTkFrame(self.frame, fg_color="transparent")
         self.container.place(relx=0.5, rely=0.5, anchor="center")
 
-        # Todos os widgets agora são empacotados (pack) dentro do self.container
+        # wmpacotamento para cpntainer
         self.label = CTkLabel(self.container, text="Bem Vinda(o) ao Ruralinfo!")
         self.label.pack(pady=10)
 
