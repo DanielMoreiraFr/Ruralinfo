@@ -1,6 +1,6 @@
 <p align="center">
     <strong>Nome da Aplicação:</strong> Ruralinfo<br>
-    <strong>Integrantes:</strong> <a href="https://github.com/DanielMoreiraFr">Daniel Moreira</a><br> <a href="https://github.com/kauefreitasR">Kaue Freitas</a><br>
+    <strong>Integrantes:</strong> <a href="https://github.com/DanielMoreiraFr">Daniel Moreira</a>,  <a href="https://github.com/kauefreitasR">Kaue Freitas</a><br>
     <strong>Professor:</strong> [Cleyton Vanut]<br>
     <strong>Disciplina:</strong> Projeto Interdisciplinar para Sistemas de Informação<br>
     <strong>Curso:</strong> Bacharelado em Sistemas de Informação<br>
