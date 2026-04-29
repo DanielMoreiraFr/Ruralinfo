@@ -84,6 +84,9 @@ class TelaUsuario(CTk):
             app_mural.mainloop()
         else:
             tkinter.messagebox.showerror("Erro", "Credenciais incorretas!")
+            self.destroy()
+            janela_login = TelaUsuario(modo="login")
+            janela_login.mainloop()
 
 
     # validação e execução de Cadastro
