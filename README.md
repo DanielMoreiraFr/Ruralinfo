@@ -60,5 +60,5 @@ python src/main.py
 * **Segurança**: O sistema implementa verificações de segurança no lado do cliente para garantir que as senhas atendam aos requisitos mínimos de complexidade e que os e-mails pertençam ao domínio institucional.
 * **Integridade de Dados**: As operações de banco de dados utilizam o decorador `@contextmanager`, garantindo que transações sejam finalizadas corretamente com `commit` ou revertidas com `rollback` em caso de exceções.
 
-## Desenvolvedor
-Projeto desenvolvido por Daniel, acadêmico da Universidade Federal Rural de Pernambuco (UFRPE).
+## Desenvolvedores
+Projeto desenvolvido por Daniel Moreira e Kaue Freitas, acadêmicos da Universidade Federal Rural de Pernambuco (UFRPE).
