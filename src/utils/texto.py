@@ -1,3 +1,4 @@
+#  funções para coloração de texto no terminal ( qualidade de vida para o programador )
 def cores(cor='reset'):
     """
     Retorna o código ANSI de uma cor ou estilo para formatação de texto no terminal.
@@ -22,6 +23,7 @@ def cores(cor='reset'):
     selecionada = opcoes.get(cor.lower())
     return selecionada
 
+# printa uma linha horizontal
 def linha(valor = 42):
     """
     Imprime uma linha horizontal composta por hífens no terminal.
@@ -30,6 +32,7 @@ def linha(valor = 42):
     """
     print(f'-' * valor)
 
+# cria um cabeçalho com uma mensagem centralizada
 def cabeçalho(msg = ''):
     """
     Exibe um cabeçalho visual com uma mensagem centralizada entre duas linhas.
@@ -40,6 +43,7 @@ def cabeçalho(msg = ''):
     print(f'{cores('negrito')}{msg.center(42)}{cores()}')
     linha()
 
+#  função para criar um menu interativo
 def menu(nome = '', lista = []):
     """
     Gera um menu interativo numerado com um título personalizável e 
@@ -56,6 +60,7 @@ def menu(nome = '', lista = []):
     opc = leiaInt(f'{cores('verde')}Sua opção: {cores()}')
     return opc
 
+# função para ler um número inteiro, com tratamento de erros
 def leiaInt(msg = ''):
     """
     Realiza a leitura de um número inteiro do teclado com validação de erro.

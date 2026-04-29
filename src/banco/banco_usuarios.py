@@ -9,6 +9,7 @@ except ImportError:
 DB_PATH = 'src/banco/banco.db'
 
 @contextmanager
+# Gerenciador de contexto para funções de DB, garante commit, rollback e fecha a conexão
 def gerenciar_db():
     """
     Gerenciador de contexto para operações no banco de dados SQLite.
@@ -34,6 +35,7 @@ def gerenciar_db():
     finally:
         conexao.close()
 
+# cria a tabela, caso ela ainda não exista
 def criar_table_contas_usuarios():
     query_criar_usuarios = """
     CREATE TABLE IF NOT EXISTS contas_usuarios (
@@ -46,6 +48,7 @@ def criar_table_contas_usuarios():
     with gerenciar_db() as cursor:
         cursor.execute(query_criar_usuarios)
 
+# inserir um novo usuário 
 def inserir_usuario(nome, email, senha, tipo_c):
     """
     Insere um novo registro de usuário na tabela 'contas_usuarios'.
@@ -66,6 +69,7 @@ def inserir_usuario(nome, email, senha, tipo_c):
     except sqlite3.Error as erro:
         print(f'{cores("vermelho")}ERRO ao inserir: {erro}{cores()}')
 
+# retorna os dados de todos os usuários cadastrados
 def obter_dados():
     """
     Recupera e exibe no terminal todos os usuários cadastrados.
@@ -85,6 +89,7 @@ def obter_dados():
     except sqlite3.Error as erro:
         print(f"Erro ao buscar dados: {erro}")
 
+# dele um usuário da tabela, com base no ID
 def deletar_usuario(id_usuario):
     """
     Remove um usuário permanentemente do banco de dados através do ID.
@@ -102,6 +107,7 @@ def deletar_usuario(id_usuario):
     except sqlite3.Error as erro:
         print(f"Erro ao deletar: {erro}")
 
+# atualiza um campo específico de um usuário, com base no ID
 def atualizar_usuario(coluna, valor, id_usuario):
     """
     Atualiza um campo específico de um usuário baseado no ID.
@@ -122,6 +128,7 @@ def atualizar_usuario(coluna, valor, id_usuario):
     except sqlite3.Error as erro:
         print(f"Erro ao atualizar: {erro}")
 
+# função para validar o login
 def validação_login(email, senha, tipo_conta):
     """
     Verifica se as credenciais de login são válidas no banco de dados.
@@ -174,6 +181,16 @@ def validação_login(email, senha, tipo_conta):
 
 # função para verificar se um usuário já existe no banco de dados
 def usuario_existe(email, tipoC):
+    """
+    Verifica no banco de dados se já existe um registro com o e-mail e tipo de conta informados.
+
+    Args:
+        email (str): O endereço de e-mail do usuário a ser verificado.
+        tipoC (str): O tipo de conta (ex: 'Comum' ou 'Administrador').
+
+    Returns:
+        bool: True se o usuário já estiver cadastrado, False caso contrário.
+    """
     criar_table_contas_usuarios()
     
     query = "SELECT email FROM contas_usuarios WHERE email = ? AND tipoConta = ?"
