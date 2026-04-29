@@ -90,6 +90,7 @@
 <h1>Link para o drive com os fluxogramas do projeto</h1>
 <p><a href="https://drive.google.com/drive/folders/1mM4qqK3J-SPdMHgQSI99EP3JTfQxVX9q?usp=drive_link"> link drive</a></p>
 
+<h1>Arquitetura do projeto</h1>
 ```bash
 Ruralinfo/
 ├── src/
