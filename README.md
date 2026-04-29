@@ -1,7 +1,7 @@
 <p align="center">
     <strong>Nome da Aplicação:</strong> Ruralinfo<br>
-    <strong>Integrante:</strong> <a href="https://github.com/SeuUsuarioAqui">Daniel</a><br>
-    <strong>Professor:</strong> [Inserir Nome do Professor]<br>
+    <strong>Integrantes:</strong> <a href="https://github.com/DanielMoreiraFr">Daniel Moreira</a><br> <a href="https://github.com/kauefreitasR">Kaue Freitas</a><br>
+    <strong>Professor:</strong> [Cleyton Vanut]<br>
     <strong>Disciplina:</strong> Projeto Interdisciplinar para Sistemas de Informação<br>
     <strong>Curso:</strong> Bacharelado em Sistemas de Informação<br>
     <strong>Unidade de Ensino:</strong> Universidade Federal Rural de Pernambuco (UFRPE)<br>
