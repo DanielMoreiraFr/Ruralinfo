@@ -57,7 +57,7 @@
         <td>Banco de dados relacional leve para armazenamento local de contas e avisos.</td>
     </tr>
     <tr>
-        <td><strong>tkinter.messagebox</strong></td>
+        <td><strong>MessageBox</strong></td>
         <td>Exibição de alertas de erro, sucesso e avisos de validação ao usuário.</td>
     </tr>
     <tr>
@@ -67,7 +67,7 @@
 </table>
 
 <h2>Instalação e Execução</h2>
-<p>O projeto utiliza a biblioteca <strong>CustomTkinter</strong> e a <strong>Messagebox</strong>, que deve ser instalada previamente.</p>
+<p>O projeto utiliza a biblioteca <strong>CustomTkinter</strong>, que deve ser instalada previamente.</p>
 
 <pre><code>pip install customtkinter</code></pre>
 
