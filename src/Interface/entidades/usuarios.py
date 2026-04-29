@@ -8,7 +8,7 @@ from Interface.entidades.infos import MuralInformativo
 
 # Classe que gerencia tanto a tela de Login quanto a de Cadastro
 class TelaUsuario(CTk):
-    def __init__(self, modo="login"): # O parâmetro 'modo' define o comportamento da tela
+    def __init__(self, modo="login"): # O parâmetro 'modo' define o comportamento da tela [ entre login e cadastro ]
         super().__init__()
         self.modo = modo
         self.title(f"{self.modo.capitalize()}")
