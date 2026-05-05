@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Cadastro — Ruralinfo{% endblock %}
+
+{% block conteudo %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+        <div class="text-center mb-4 mt-3">
+            <i class="bi bi-person-plus display-5 text-success"></i>
+            <h1 class="h3 fw-bold mt-2">Criar Conta</h1>
+            <p class="text-muted small">Use seu e-mail institucional @ufrpe.br</p>
+        </div>
+
+        <!-- Erros globais -->
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger rounded-3">
+            {% for erro in form.non_field_errors %}
+            <p class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>{{ erro }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Nome Completo -->
+                    <div class="mb-3">
+                        <label for="{{ form.nome_completo.id_for_label }}" class="form-label fw-medium">
+                            {{ form.nome_completo.label }}
+                        </label>
+                        {{ form.nome_completo }}
+                        {% if form.nome_completo.errors %}
+                        <div class="invalid-feedback d-block">{{ form.nome_completo.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- E-mail -->
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label fw-medium">
+                            {{ form.email.label }}
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Tipo de Conta -->
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.tipo_conta.label }}</label>
+                        <div class="d-flex gap-4">
+                            {% for radio in form.tipo_conta %}
+                            <div class="form-check">
+                                {{ radio.tag }}
+                                <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Código de Convite (visível apenas para ADMIN via JS) -->
+                    <div class="mb-3" id="campo-convite" style="display:none;">
+                        <label for="{{ form.codigo_convite.id_for_label }}" class="form-label fw-medium">
+                            <i class="bi bi-key me-1"></i>{{ form.codigo_convite.label }}
+                        </label>
+                        {{ form.codigo_convite }}
+                        <div class="form-text">
+                            Solicite um código para um administrador existente.
+                        </div>
+                        {% if form.codigo_convite.errors %}
+                        <div class="invalid-feedback d-block">{{ form.codigo_convite.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Senha -->
+                    <div class="mb-3">
+                        <label for="{{ form.senha.id_for_label }}" class="form-label fw-medium">
+                            {{ form.senha.label }}
+                        </label>
+                        {{ form.senha }}
+                        <!-- Indicador de força da senha -->
+                        <div class="mt-2" id="forca-senha" style="display:none;">
+                            <div class="progress" style="height: 6px;">
+                                <div id="barra-forca" class="progress-bar" style="width:0%; transition: width .3s;"></div>
+                            </div>
+                            <small id="texto-forca" class="text-muted"></small>
+                        </div>
+                        {% if form.senha.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for erro in form.senha.errors %}
+                            <p class="mb-0">{{ erro }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">
+                            Mínimo 10 caracteres, com maiúscula, número e símbolo (!@#...).
+                        </div>
+                    </div>
+
+                    <!-- Confirmar Senha -->
+                    <div class="mb-4">
+                        <label for="{{ form.confirmar_senha.id_for_label }}" class="form-label fw-medium">
+                            {{ form.confirmar_senha.label }}
+                        </label>
+                        {{ form.confirmar_senha }}
+                        {% if form.confirmar_senha.errors %}
+                        <div class="invalid-feedback d-block">{{ form.confirmar_senha.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-ufrpe btn-lg fw-semibold">
+                            <i class="bi bi-check2-circle me-2"></i>Criar Conta
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <p class="text-center text-muted mt-3 small">
+            Já tem uma conta?
+            <a href="{% url 'accounts:login' %}" class="fw-medium text-success">Entrar</a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // -----------------------------------------------------------------------
+    // Exibe/oculta o campo de código de convite conforme o tipo selecionado
+    // -----------------------------------------------------------------------
+    const radiosTipo = document.querySelectorAll('input[name="tipo_conta"]');
+    const campoConvite = document.getElementById('campo-convite');
+    const inputConvite = document.getElementById('{{ form.codigo_convite.id_for_label }}');
+
+    function toggleConvite() {
+        const selecionado = document.querySelector('input[name="tipo_conta"]:checked');
+        if (selecionado && selecionado.value === 'ADMIN') {
+            campoConvite.style.display = 'block';
+            inputConvite.required = true;
+        } else {
+            campoConvite.style.display = 'none';
+            inputConvite.required = false;
+            inputConvite.value = '';
+        }
+    }
+
+    radiosTipo.forEach(r => r.addEventListener('change', toggleConvite));
+
+    // Roda na carga para o caso de POST com erro (tipo já selecionado)
+    toggleConvite();
+
+    // -----------------------------------------------------------------------
+    // Indicador de força de senha (client-side)
+    // -----------------------------------------------------------------------
+    const inputSenha = document.getElementById('{{ form.senha.id_for_label }}');
+    const forcaDiv   = document.getElementById('forca-senha');
+    const barra      = document.getElementById('barra-forca');
+    const textoForca = document.getElementById('texto-forca');
+
+    inputSenha.addEventListener('input', function () {
+        const s = this.value;
+        if (!s) { forcaDiv.style.display = 'none'; return; }
+        forcaDiv.style.display = 'block';
+
+        let pontos = 0;
+        if (s.length >= 10)              pontos++;
+        if (/[A-Z]/.test(s))             pontos++;
+        if (/\d/.test(s))                pontos++;
+        if (/[!@#$%^&*()\-_=+\[\]{}|]/.test(s)) pontos++;
+
+        const config = [
+            { label: 'Muito fraca',  cor: 'bg-danger',  pct: 25  },
+            { label: 'Fraca',        cor: 'bg-warning',  pct: 50  },
+            { label: 'Boa',          cor: 'bg-info',     pct: 75  },
+            { label: 'Forte',        cor: 'bg-success',  pct: 100 },
+        ];
+        const c = config[Math.max(0, pontos - 1)];
+
+        barra.style.width   = c.pct + '%';
+        barra.className     = 'progress-bar ' + c.cor;
+        textoForca.textContent = c.label;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block titulo %}{{ aviso.titulo }} — Ruralinfo{% endblock %}
+
+{% block conteudo %}
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+
+        <!-- Breadcrumb / voltar -->
+        <a href="{% url 'mural:lista' %}" class="btn btn-sm btn-outline-secondary mb-4">
+            <i class="bi bi-arrow-left me-1"></i>Voltar ao Mural
+        </a>
+
+        <article class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+            <!-- Imagem de capa -->
+            {% if aviso.imagem %}
+            <img
+                src="{{ aviso.imagem.url }}"
+                alt="{{ aviso.alt_texto|default:aviso.titulo }}"
+                class="card-img-top"
+                style="max-height: 360px; object-fit: cover;"
+            >
+            {% endif %}
+
+            <div class="card-body p-4 p-md-5">
+                <!-- Metadados -->
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                    <span class="badge {{ aviso.categoria_badge_class }} fs-6">
+                        {{ aviso.get_categoria_display }}
+                    </span>
+                    <span class="text-muted small">
+                        <i class="bi bi-person me-1"></i>{{ aviso.autor.nome_completo }}
+                    </span>
+                    <span class="text-muted small">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        {{ aviso.data_criacao|date:"d/m/Y" }} às {{ aviso.data_criacao|time:"H:i" }}
+                    </span>
+                </div>
+
+                <h1 class="h2 fw-bold mb-4">{{ aviso.titulo }}</h1>
+
+                <!-- Conteúdo do aviso com quebras de linha preservadas -->
+                <div class="lh-lg text-body">
+                    {{ aviso.conteudo|linebreaks }}
+                </div>
+
+                <!-- Ações de ADMIN -->
+                {% if user.tipo_conta == 'ADMIN' %}
+                <hr class="mt-4">
+                <div class="d-flex gap-3">
+                    <a href="{% url 'mural:editar' aviso.pk %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-pencil me-2"></i>Editar
+                    </a>
+                    <form method="post" action="{% url 'mural:deletar' aviso.pk %}"
+                          onsubmit="return confirm('Tem certeza que deseja remover este aviso?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="bi bi-trash3 me-2"></i>Deletar
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+
+            </div>
+        </article>
+
+    </div>
+</div>
+{% endblock %}
