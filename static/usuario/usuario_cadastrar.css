@@ -1,0 +1,134 @@
+/* Definição de Variáveis de Cores */
+:root {
+    --primary-blue: #1a3c4d;
+    --highlight-yellow: #d9c52e;
+    --text-white: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--primary-blue);
+    /* Um degradê sutil para dar profundidade ao fundo azul */
+    background: radial-gradient(circle at top right, #244d61, var(--primary-blue));
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Navbar Estilizada */
+.navbar {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.navbar-brand-custom {
+    background-color: #112b38;
+    padding: 10px 30px;
+    border-radius: 8px;
+    border-bottom: 3px solid var(--highlight-yellow);
+}
+
+.navbar-brand-custom span {
+    color: var(--highlight-yellow);
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+/* Wrapper para centralizar o Card */
+.main-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px); /* O efeito de desfoque */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Título Impactante */
+.title-highlight {
+    color: var(--highlight-yellow);
+    font-weight: 900;
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 35px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Inputs Customizados */
+.input-group-custom {
+    margin-bottom: 20px;
+}
+
+.input-group-custom label {
+    display: block;
+    color: var(--text-white);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.input-group-custom input, 
+.input-group-custom select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.95); /* Branco quase puro para contraste */
+    color: #333;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.input-group-custom input:focus, 
+.input-group-custom select:focus {
+    outline: none;
+    border-color: var(--highlight-yellow);
+    box-shadow: 0 0 8px rgba(217, 197, 46, 0.4);
+}
+
+/* Estilo para o Select Placeholder */
+select:invalid {
+    color: #888;
+}
+
+/* Botão de Ação em Amarelo */
+.btn-main-action {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--highlight-yellow);
+    color: var(--primary-blue);
+    border: none;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn-main-action:hover {
+    background-color: #f0da3d;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(217, 197, 46, 0.3);
+}
+
+.btn-main-action:active {
+    transform: translateY(0);
+}

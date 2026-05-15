@@ -1,0 +1,59 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'usuario/usuario_cadastrar.css' %}">
+
+    <title>Ruralinfo - Cadastro</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand-custom">
+            <span>RURALINFO</span>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="glass-card">
+            <form method="POST" action="">
+                {% csrf_token %}
+                
+                <h1 class="title-highlight">CADASTRO DE USUÁRIOS</h1>
+
+                <div class="input-group-custom">
+                    <label for="nome">NOME COMPLETO</label>
+                    <input type="text" name="nome" id="nome" placeholder="Digite seu nome" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <label for="email">E-MAIL INSTITUCIONAL</label>
+                    <input type="email" name="email" id="email" placeholder="exemplo@ufrpe.br" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <label for="senha">SENHA</label>
+                    <input type="password" name="senha" id="senha" placeholder="••••••••" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <label for="tipo_usuario">TIPO DE PERFIL</label>
+                    <select name="tipo_usuario" id="tipo_usuario" required>
+                        <option value="" disabled selected hidden>Selecione...</option>
+                        <option value="aluno">Usuário Comum</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-main-action">CADASTRAR</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
