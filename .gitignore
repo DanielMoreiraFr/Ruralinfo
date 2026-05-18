@@ -1,7 +1,51 @@
-./media
+# ==========================================
+# Ambiente Virtual (VENV)
+# ==========================================
+venv/
+ENV/
+env/
 
-./db.sqlite3
-./package-lock.json
-./package.json
-./mural/migrations/__pycache__
-./mural/migrations/
+# ==========================================
+# Arquivos de Sistema e IDE (VS Code / Windows)
+# ==========================================
+.vscode/
+.DS_Store
+Thumbs.db
+*.bak
+*.swp
+
+# ==========================================
+# Banco de Dados Local (SQLite)
+# ==========================================
+# Ignora o banco local para não sobrescrever os dados de produção/outros devs
+*.sqlite3
+db.sqlite3
+
+# ==========================================
+# Arquivos de Mídia e Uploads (Imagens de teste)
+# ==========================================
+# Evita subir fotos de teste que você cadastrar no mural local
+media/
+/media/
+
+# ==========================================
+# Cache do Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==========================================
+# Node / Frontend (Se houver compilação de ativos)
+# ==========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# ==========================================
+# Configurações Locais Sensíveis (Futuro)
+# ==========================================
+.env
+local_settings.py
