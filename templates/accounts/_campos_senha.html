@@ -1,0 +1,76 @@
+{% load widget_tweaks %}
+<!-- _campos_senha.html — campos Senha + Confirmar com toggle e indicador de força -->
+
+<div class="mb-3">
+    <label class="form-label" for="{{ form.senha.id_for_label }}">
+        {{ form.senha.label }}
+    </label>
+    <div class="input-group">
+        {{ form.senha|add_class:"form-control"|attr:"id:id_senha_"|attr:"id:id_senha_cadastro_" }}
+        <button class="btn btn-outline-secondary" type="button"
+                onclick="toggleSenha('id_{{ id_sufixo }}_senha', this)">
+            <i class="bi bi-eye"></i>
+        </button>
+    </div>
+    <!-- Indicador de força -->
+    <div class="mt-1" id="forca_{{ id_sufixo }}" style="display:none;">
+        <div class="progress" style="height:5px;">
+            <div id="barra_{{ id_sufixo }}" class="progress-bar" style="width:0%;transition:width .3s;"></div>
+        </div>
+        <small id="txt_{{ id_sufixo }}" class="text-secondary"></small>
+    </div>
+    {% if form.senha.errors %}
+    <div class="text-danger small mt-1">
+        {% for erro in form.senha.errors %}<p class="mb-0">{{ erro }}</p>{% endfor %}
+    </div>
+    {% endif %}
+    <div class="form-text text-secondary">
+        10+ chars · maiúscula · número · símbolo (!@#...)
+    </div>
+</div>
+
+<div class="mb-3">
+    <label class="form-label" for="{{ form.confirmar_senha.id_for_label }}">
+        {{ form.confirmar_senha.label }}
+    </label>
+    {{ form.confirmar_senha|add_class:"form-control" }}
+    {% if form.confirmar_senha.errors %}
+    <div class="text-danger small mt-1">{{ form.confirmar_senha.errors.0 }}</div>
+    {% endif %}
+</div>
+
+<script>
+(function() {
+    const suf   = '{{ id_sufixo }}';
+    // O id real do campo é prefixo_senha (ex: comum-senha, admin-senha)
+    const inputId = '{{ form.senha.html_name }}'.replace(/-/g,'_').replace(/\[/g,'_').replace(/\]/g,'');
+    // widget-tweaks mantém o id gerado pelo Django: id_prefix-fieldname
+    const input = document.getElementById('id_{{ form.senha.html_name }}');
+    if (!input) return;
+
+    const forca = document.getElementById('forca_' + suf);
+    const barra = document.getElementById('barra_' + suf);
+    const txt   = document.getElementById('txt_' + suf);
+
+    input.addEventListener('input', function () {
+        const s = this.value;
+        if (!s) { forca.style.display = 'none'; return; }
+        forca.style.display = 'block';
+        let pts = 0;
+        if (s.length >= 10) pts++;
+        if (/[A-Z]/.test(s)) pts++;
+        if (/\d/.test(s))    pts++;
+        if (/[!@#$%^&*()\-_=+\[\]{}|]/.test(s)) pts++;
+        const cfg = [
+            {label:'Muito fraca', cor:'bg-danger',  pct:25},
+            {label:'Fraca',       cor:'bg-warning', pct:50},
+            {label:'Boa',         cor:'bg-info',    pct:75},
+            {label:'Forte',       cor:'bg-success', pct:100},
+        ];
+        const c = cfg[Math.max(0, pts - 1)];
+        barra.style.width   = c.pct + '%';
+        barra.className     = 'progress-bar ' + c.cor;
+        txt.textContent     = c.label;
+    });
+})();
+</script>

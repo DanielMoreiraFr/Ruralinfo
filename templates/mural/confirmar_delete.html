@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Confirmar Exclusão — Ruralinfo{% endblock %}
+
+{% block conteudo %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+        <div class="card-form p-4 text-center">
+            <i class="bi bi-exclamation-triangle display-4 text-danger mb-3"></i>
+            <h5 class="fw-bold text-light mb-2">Deletar aviso permanentemente?</h5>
+            <p class="text-secondary mb-4">
+                {{ aviso.conteudo|truncatechars:100 }}
+            </p>
+            <p class="text-warning small mb-4">
+                Esta ação não pode ser desfeita. Se quiser apenas ocultar,
+                use o botão <i class="bi bi-eye-slash"></i> no mural.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="bi bi-trash3 me-2"></i>Deletar
+                    </button>
+                </form>
+                <a href="{% url 'mural:index' %}" class="btn btn-outline-light px-4">
+                    Cancelar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

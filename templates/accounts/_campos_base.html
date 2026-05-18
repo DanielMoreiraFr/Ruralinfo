@@ -1,0 +1,21 @@
+{% load widget_tweaks %}
+<!-- _campos_base.html — campos Nome e E-mail (compartilhados entre os dois forms) -->
+<div class="mb-3">
+    <label class="form-label" for="{{ form.nome_completo.id_for_label }}">
+        {{ form.nome_completo.label }}
+    </label>
+    {{ form.nome_completo|add_class:"form-control" }}
+    {% if form.nome_completo.errors %}
+    <div class="text-danger small mt-1">{{ form.nome_completo.errors.0 }}</div>
+    {% endif %}
+</div>
+
+<div class="mb-3">
+    <label class="form-label" for="{{ form.email.id_for_label }}">
+        {{ form.email.label }}
+    </label>
+    {{ form.email|add_class:"form-control" }}
+    {% if form.email.errors %}
+    <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+    {% endif %}
+</div>

@@ -1,15 +1,7 @@
-Plaintext
+./media
 
-venv/
-
-**/__pycache__/
-
-src/banco.db
-src/banco/banco.db
-src/**.db
-*.db
-
-pyvenv.cfg
-.vscode/
-
-teste.py    
+./db.sqlite3
+./package-lock.json
+./package.json
+./mural/migrations/__pycache__
+./mural/migrations/
