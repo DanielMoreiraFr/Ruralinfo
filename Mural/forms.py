@@ -9,6 +9,7 @@ class AvisoForm(forms.ModelForm):
     com request.user (equivale ao id da sessão do legado).
     """
 
+    # campo oculto pra ser preenchudo na view
     class Meta:
         model  = Aviso
         fields = ['conteudo', 'categoria', 'imagem', 'alt_texto', 'publicado']
@@ -19,6 +20,7 @@ class AvisoForm(forms.ModelForm):
             'alt_texto': forms.TextInput(attrs={'placeholder': 'Descrição da imagem para acessibilidade'}),
         }
 
+    # validações
     def clean(self):
         cleaned   = super().clean()
         imagem    = cleaned.get('imagem')

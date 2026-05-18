@@ -1,15 +1,25 @@
-"""
-ruralinfo/settings.py — Configurações do projeto Ruralinfo Django
-"""
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+# Carrega o arquivo .env da raiz do projeto
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-SUBSTITUA-ANTES-DE-QUALQUER-DEPLOY'
+# ★ Lidos do .env — nunca hardcoded no código
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+# Lê ALLOWED_HOSTS do .env — separa por vírgula se houver mais de um
+_hosts = os.environ.get('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = [h.strip() for h in _hosts.split(',') if h.strip()]
+
+# Em desenvolvimento com DEBUG=True o Django já aceita localhost automaticamente,
+# mas adicionamos explicitamente para evitar erros:
+if DEBUG:
+    ALLOWED_HOSTS += ['localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,10 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Biblioteca para estilizar widgets de form com Bootstrap via template
     'widget_tweaks',
 
-    # Apps do Ruralinfo
     'accounts',
     'mural',
 ]
@@ -64,12 +72,12 @@ DATABASES = {
     }
 }
 
-# ★ CRÍTICO: deve ser definido ANTES do primeiro migrate
+# ★ Model de usuário customizado
 AUTH_USER_MODEL = 'accounts.Usuario'
 
 # Redirecionamentos de autenticação
-LOGIN_URL          = 'accounts:login'
-LOGIN_REDIRECT_URL = 'mural:index'
+LOGIN_URL           = 'accounts:login'
+LOGIN_REDIRECT_URL  = 'mural:index'
 LOGOUT_REDIRECT_URL = 'mural:index'
 
 # Internacionalização
@@ -80,8 +88,9 @@ USE_TZ        = True
 
 # Arquivos estáticos
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# ★ Arquivos de mídia (imagens dos avisos via ImageField)
+# Arquivos de mídia (uploads)
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 

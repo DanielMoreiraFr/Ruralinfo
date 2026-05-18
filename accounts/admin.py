@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Usuario, CodigoConvite
 
-
+# Registrar o modelo Usuario com uma configuração personalizada no admin
 @admin.register(Usuario)
 class UsuarioAdmin(UserAdmin):
     list_display    = ('email', 'nome_completo', 'tipo_conta', 'is_active')
@@ -25,6 +25,7 @@ class UsuarioAdmin(UserAdmin):
     )
 
 
+# Registrar o modelo CodigoConvite com uma configuração personalizada no admin do django
 @admin.register(CodigoConvite)
 class CodigoConviteAdmin(admin.ModelAdmin):
     list_display    = ('codigo', 'criado_por', 'foi_usado', 'usado_por', 'criado_em')

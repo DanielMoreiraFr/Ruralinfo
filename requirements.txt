@@ -1,0 +1,7 @@
+# Ruralinfo — dependências do projeto
+# Instale com: pip install -r requirements.txt
+
+Django>=5.0
+Pillow>=10.0          # ImageField do app mural (upload de imagens)
+django-widget-tweaks  # estilização de campos de form via template
+python-dotenv         # lê variáveis de ambiente do arquivo .env

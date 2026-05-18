@@ -5,17 +5,11 @@ from django.contrib.auth.models import AbstractUser
 
 class Usuario(AbstractUser):
     """
-    Substitui a tabela `contas_usuarios` do SQLite legado.
+    Modelo de usuário personalizado que suporta dois tipos de conta: COMUM e ADMIN.
 
-    EQUIVALÊNCIA COM O LEGADO:
-        nome      → nome_completo
-        email     → email (sem unique isolado)
-        senha     → gerenciada pelo AbstractUser com hashing
-        tipoConta → tipo_conta ('COMUM' | 'ADMIN')
-
-    O campo `username` é invisível ao usuário e gerado automaticamente
-    no save() combinando email + tipo_conta, exatamente como a função
-    `validação_login` do legado buscava por tipo antes de comparar o email.
+    a exclusividade é garantida pela combinação de email + tipo_conta, permitindo
+    que o mesmo email seja usado tanto pra ADMIN quanto para COMUM, mas não duplicado dentro
+    do mesmo tipo.
     """
 
     TIPO_CONTA_CHOICES = [
@@ -23,8 +17,6 @@ class Usuario(AbstractUser):
         ('ADMIN', 'Administrador'),
     ]
 
-    # Removemos unique=True isolado do email — a unicidade real
-    # é garantida pelo unique_together abaixo (email + tipo_conta)
     email = models.EmailField(
         verbose_name='E-mail Institucional',
         blank=False,
@@ -45,29 +37,27 @@ class Usuario(AbstractUser):
         default='COMUM',
     )
 
-    # Desativamos first_name e last_name do AbstractUser —
-    # usamos nome_completo no lugar, igual ao campo `nome` do legado
-    first_name = None  # type: ignore
-    last_name = None   # type: ignore
+    # desativa first_name e last_name do AbstractUser —
+    first_name = None
+    last_name = None
 
     REQUIRED_FIELDS = ['email', 'nome_completo']
 
     class Meta:
         verbose_name = 'Usuário'
         verbose_name_plural = 'Usuários'
-        # Equivalente ao check `usuario_existe(email, tipoC)` do legado:
-        # impede duplicata da mesma combinação no banco
         unique_together = [('email', 'tipo_conta')]
 
     def save(self, *args, **kwargs):
         """
         Gera o username composto automaticamente.
-        Equivale à lógica de `validação_login` que buscava por tipoConta
         antes de comparar emails — aqui tornamos isso uma chave explícita.
         """
+
         self.email = self.email.strip().lower()
         self.username = f"{self.email}_{self.tipo_conta}"
-        # Hierarquia de permissão: ADMIN sempre tem acesso ao painel
+
+        # Hierarquia de permissão pra adm ter acesso a tudo que o comum tem, só nesse sentido
         self.is_staff = (self.tipo_conta == 'ADMIN')
         super().save(*args, **kwargs)
 
