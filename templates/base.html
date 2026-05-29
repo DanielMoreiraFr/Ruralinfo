@@ -36,18 +36,29 @@
                 </li>
                 {% endif %}
                 
-                <li class="dropdown">
-                    <a class="nav-link dropdown-toggle" id="userDropdownToggle">
+                <!-- Ajuste no Dropdown nativo (Meus Dados inserido) -->
+                <li class="dropdown" style="position: relative;">
+                    <a class="nav-link dropdown-toggle" id="userDropdownToggle" style="cursor: pointer; display: flex; align-items: center; gap: 0.4rem;">
                         <span class="user-badge">{{ user.get_tipo_conta_display }}</span>
-                        {{ user.nome_completo|truncatechars:18 }} <i class="bi bi-chevron-down" style="font-size:0.75rem;"></i>
+                        {{ user.nome_completo|truncatechars:18 }} 
+                        <i class="bi bi-chevron-down" id="dropdownArrow" style="font-size:0.75rem; transition: transform 0.2s;"></i>
                     </a>
                     <ul class="dropdown-menu" id="userDropdownMenu">
                         <li><span class="dropdown-item-text">{{ user.email }}</span></li>
                         <li><hr class="dropdown-divider"></li>
+                        
+                        <!-- Rota para a tela de Perfil -->
                         <li>
-                            <form method="post" action="{% url 'accounts:logout' %}">
+                            <a href="{% url 'accounts:perfil' %}" class="dropdown-link-item">
+                                <i class="bi bi-person-vcard" style="color: var(--amarelo);"></i> Meus Dados
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        
+                        <li>
+                            <form method="post" action="{% url 'accounts:logout' %}" style="margin: 0; padding: 0;">
                                 {% csrf_token %}
-                                <button type="submit" class="text-danger">
+                                <button type="submit" class="logout-btn-submit">
                                     <i class="bi bi-box-arrow-right"></i> Sair
                                 </button>
                             </form>
@@ -90,6 +101,40 @@
 </footer>
 
 <script src="{% static 'js/alerta.js' %}"></script>
+
+<!-- ONDE COLOCAR O JAVASCRIPT: No final da página, logo antes do fechamento da tag body -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('userDropdownToggle');
+        const menuDropdown = document.getElementById('userDropdownMenu');
+        const arrowIcon = document.getElementById('dropdownArrow');
+
+        if (toggleBtn && menuDropdown) {
+            // Ação de abrir e fechar no clique
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isOpened = menuDropdown.classList.contains('active');
+                
+                if (isOpened) {
+                    menuDropdown.classList.remove('active');
+                    arrowIcon.style.transform = 'rotate(0deg)';
+                } else {
+                    menuDropdown.classList.add('active');
+                    arrowIcon.style.transform = 'rotate(180deg)';
+                }
+            });
+
+            // Fecha se o usuário clicar em qualquer ponto fora do menu
+            document.addEventListener('click', function(e) {
+                if (!toggleBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('active');
+                    arrowIcon.style.transform = 'rotate(0deg)';
+                }
+            });
+        }
+    });
+</script>
+
 {% block extra_js %}{% endblock %}
 </body>
 </html>

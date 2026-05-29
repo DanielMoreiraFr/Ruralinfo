@@ -1,4 +1,6 @@
-/* Definições Globais de Design System */
+/* ==========================================================================
+   DEFINIÇÕES GLOBAIS DE DESIGN SYSTEM
+   ========================================================================== */
 :root {
     --azul-escuro: #112b38;
     --azul-card: rgba(17, 43, 56, 0.95);
@@ -32,7 +34,24 @@ body {
     width: 100%;
 }
 
-/* Navbar Arquitetada Nativa */
+main {
+    flex: 1;
+    padding: 2.5rem 0;
+    width: 100%;
+}
+
+footer {
+    background: #0a1921;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--texto-mutado);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ==========================================================================
+   NAVBAR ARQUITETADA NATIVA
+   ========================================================================== */
 .navbar {
     background-color: #0a1921;
     border-bottom: 2px solid var(--amarelo);
@@ -87,36 +106,54 @@ body {
     color: var(--amarelo);
 }
 
-/* Componente Dropdown Nativo */
-.dropdown {
+/* ==========================================================================
+   COMPONENTE DROPDOWN NATIVO (MENU DO USUÁRIO)
+   ========================================================================== */
+.navbar-menu .dropdown {
     position: relative;
 }
 
-.dropdown-menu {
+.navbar-menu .dropdown-menu {
+    display: none;
     position: absolute;
     right: 0;
     top: 100%;
-    background: #0a1921;
-    border: 1px solid rgba(244, 196, 48, 0.25);
-    border-radius: 6px;
+    margin-top: 0.6rem;
+    background-color: #0d1f2d; /* Tom escuro do projeto */
+    border: 1px solid rgba(255, 244, 48, 0.2);
+    border-radius: 8px;
+    list-style: none;
     padding: 0.5rem 0;
     min-width: 210px;
-    list-style: none;
-    display: none;
-    margin-top: 0.6rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }
 
-.dropdown-menu.active {
+.navbar-menu .dropdown-menu.active {
     display: block;
 }
 
 .dropdown-item-text {
     display: block;
-    padding: 0.4rem 1rem;
+    padding: 0.4rem 1.2rem;
     color: var(--texto-mutado);
     font-size: 0.8rem;
     word-break: break-all;
+}
+
+.dropdown-link-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1.2rem;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.dropdown-link-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .dropdown-divider {
@@ -125,24 +162,26 @@ body {
     margin: 0.4rem 0;
 }
 
-.dropdown-menu form button {
-    background: none;
+/* Botão de Sair Interno (Logout via POST) */
+.logout-btn-submit {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1.2rem;
+    color: var(--vermelho);
+    background: transparent;
     border: none;
     width: 100%;
     text-align: left;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-weight: 600;
-    font-family: inherit;
     font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background 0.2s;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.dropdown-menu form button:hover {
-    background: rgba(255, 77, 77, 0.1);
+.logout-btn-submit:hover {
+    background-color: rgba(255, 77, 77, 0.08);
 }
 
 .user-badge {
@@ -155,7 +194,9 @@ body {
     text-transform: uppercase;
 }
 
-/* Botões Nativos Utilitários */
+/* ==========================================================================
+   BOTÕES NATIVOS UTILITÁRIOS
+   ========================================================================== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -200,7 +241,9 @@ body {
     color: var(--vermelho) !important;
 }
 
-/* Notificações Flutuantes (Messages) */
+/* ==========================================================================
+   NOTIFICAÇÕES FLUTUANTES (MESSAGES DO DJANGO)
+   ========================================================================== */
 .django-messages {
     position: fixed;
     top: 4.5rem;
@@ -248,23 +291,91 @@ body {
     opacity: 1;
 }
 
-/* Estrutura de Fluxo Ocupacional */
-main {
-    flex: 1;
-    padding: 2.5rem 0;
-    width: 100%;
+/* ==========================================================================
+   ESTILOS EXCLUSIVOS DA TELA DE PERFIL
+   ========================================================================== */
+.perfil-card-wrapper {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
 }
 
-footer {
+.perfil-info-block {
     background: #0a1921;
-    text-align: center;
-    padding: 1.5rem;
-    font-size: 0.85rem;
-    color: var(--texto-mutado);
-    border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Responsividade Mobile */
+.perfil-info-label {
+    color: var(--amarelo);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.5px;
+}
+
+.perfil-info-value {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Organiza o Tipo de Usuário e Ingresso lado a lado */
+.perfil-split-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+/* Botão Inline de Salvar Novo Nickname */
+.perfil-btn-salvar {
+    background-color: var(--amarelo);
+    color: #0a1921;
+    border: none;
+    padding: 0 1.2rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: opacity 0.2s ease;
+}
+
+.perfil-btn-salvar:hover {
+    opacity: 0.9;
+}
+
+/* Botão Voltar Amarelo Consertado */
+.perfil-btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--amarelo) !important; 
+    border: 1px solid var(--amarelo);
+    background: transparent;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+}
+
+.perfil-btn-voltar:hover {
+    background-color: var(--amarelo);
+    color: #0a1921 !important;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE E MEDIA QUERIES
+   ========================================================================== */
 @media (max-width: 768px) {
     .navbar-toggle {
         display: block;
@@ -285,7 +396,7 @@ footer {
     .navbar-menu.active {
         display: flex;
     }
-    .dropdown-menu {
+    .navbar-menu .dropdown-menu {
         position: static;
         background: rgba(255, 255, 255, 0.03);
         border: none;
@@ -293,4 +404,133 @@ footer {
         width: 100%;
         box-shadow: none;
     }
+}
+
+@media (max-width: 576px) {
+    .perfil-split-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.perfil-btn-deletar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--vermelho) !important;
+    border: 1px solid var(--vermelho);
+    background: transparent;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+}
+
+.perfil-btn-deletar:hover {
+    background-color: var(--vermelho);
+    color: #fff !important;
+}
+
+/* Fundo escurecido do Popup (Overlay) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none; /* Escondido por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 1.5rem;
+}
+
+/* Classe de ativação que o JS vai injetar */
+.modal-overlay.active {
+    display: flex;
+}
+
+/* Caixa interna do Popup */
+.modal-content {
+    background: #0a1921;
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    border-radius: 8px;
+    padding: 1.8rem;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    animation: popupSurgir 0.2s ease-out;
+}
+
+@keyframes popupSurgir {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Inputs e Botões internos do Modal */
+.modal-content h3 {
+    color: var(--vermelho);
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.modal-content p {
+    color: var(--texto-claro);
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
+}
+
+.modal-input-senha {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    background: #07121a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    margin-top: 0.4rem;
+    margin-bottom: 1.5rem;
+    outline: none;
+}
+
+.modal-input-senha:focus {
+    border-color: var(--vermelho);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.btn-modal-cancelar {
+    background: transparent;
+    border: 1px solid var(--texto-mutado);
+    color: var(--texto-mutado);
+    padding: 0.55rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-modal-cancelar:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-modal-deletar-confirmar {
+    background: var(--vermelho);
+    color: #fff;
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-modal-deletar-confirmar:hover {
+    opacity: 0.9;
 }

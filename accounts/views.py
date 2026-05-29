@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db import IntegrityError
 
 from .forms import LoginForm, CadastroComumForm, CadastroAdminForm
 
@@ -86,3 +87,59 @@ def logout_view(request):
         logout(request)
         messages.info(request, 'Você saiu com segurança.')
     return redirect('mural:index')
+
+@login_required
+def perfil_view(request):
+    """
+    Exibe os dados cadastrais e permite a alteração do Nome de Usuário (Nick).
+    """
+    if request.method == 'POST':
+        novo_username = request.POST.get('username', '').strip()
+        
+        # Validações básicas para manter a ordem do chat
+        if not novo_username:
+            messages.error(request, "O nome de usuário não pode ficar em branco.")
+        elif ' ' in novo_username:
+            messages.error(request, "O nome de usuário não pode conter espaços.")
+        elif len(novo_username) < 3:
+            messages.error(request, "O nick deve conter pelo menos 3 caracteres.")
+        else:
+            try:
+                # Tenta atualizar o identificador do usuário logado
+                request.user.username = novo_username
+                request.user.save()
+                messages.success(request, "Nome de usuário atualizado com sucesso!")
+                return redirect('accounts:perfil')
+            except IntegrityError:
+                # Caso o banco acuse que o username já existe por conta do UNIQUE do modelo
+                messages.error(request, "Este nome de usuário já está sendo utilizado por outro membro.")
+                
+    return render(request, 'accounts/perfil.html', {
+        'usuario': request.user
+    })
+
+@login_required
+def deletar_conta_view(request):
+    """
+    Recebe o pedido de exclusão de conta via POST, valida a senha 
+    e deleta permanentemente o usuário.
+    """
+    if request.method == 'POST':
+        senha_informada = request.POST.get('password', '')
+        usuario_atual = request.user
+        
+        # Verifica se a senha informada corresponde ao hash do banco
+        if usuario_atual.check_password(senha_informada):
+            # Deleta o registro do banco de dados
+            usuario_atual.delete()
+            
+            # Realiza o logout limpo da sessão do usuário
+            logout(request)
+            
+            messages.success(request, "Sua conta foi removida com sucesso. Esperamos ver você de volta em breve!")
+            return redirect('mural:index')
+        else:
+            messages.error(request, "Falha na exclusão: A senha informada está incorreta.")
+            return redirect('accounts:perfil')
+            
+    return redirect('accounts:perfil')

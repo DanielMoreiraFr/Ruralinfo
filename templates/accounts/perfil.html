@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Meus Dados — Ruralinfo{% endblock %}
+
+{% block conteudo %}
+<div style="padding: 2rem 0; max-width: 600px; margin: 0 auto;">
+    <div class="form-container-mural">
+        
+        <!-- Cabeçalho do Perfil -->
+        <div style="display: flex; align-items: center; gap: 1.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 1.2rem; margin-bottom: 1.5rem;">
+            <div style="background: var(--amarelo); color: #0a1921; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
+                {{ usuario.nome_completo|slice:":1"|upper }}
+            </div>
+            <div>
+                <h2 style="color: #fff; font-size: 1.35rem; margin: 0; font-weight: 600;">Dados Cadastrais</h2>
+                <p style="color: var(--texto-mutado); margin: 0; font-size: 0.85rem;">Credenciais da conta ativa</p>
+            </div>
+        </div>
+
+        <!-- Seção de Dados Nativos -->
+        <div class="perfil-card-wrapper">
+            
+            <!-- Nome Completo -->
+            <div class="perfil-info-block">
+                <span class="perfil-info-label">Nome Completo</span>
+                <span class="perfil-info-value">{{ usuario.nome_completo }}</span>
+            </div>
+
+            <!-- E-mail institucional -->
+            <div class="perfil-info-block">
+                <span class="perfil-info-label">E-mail Corporativo</span>
+                <span class="perfil-info-value" style="word-break: break-all;">{{ usuario.email }}</span>
+            </div>
+
+            <!-- CAMPO MODIFICADO: Form Inline para Mudar o Nick do Usuário -->
+            <div class="perfil-info-block">
+                <form method="post" action="{% url 'accounts:perfil' %}" style="display: flex; flex-direction: column; gap: 0.4rem; margin: 0;">
+                    {% csrf_token %}
+                    <label for="inputNick" class="perfil-info-label">Nome de Usuário (Nickname do Chat)</label>
+                    <div style="display: flex; gap: 0.8rem; width: 100%;">
+                        <input type="text" id="inputNick" name="username" value="{{ usuario.username }}" required 
+                               style="flex: 1; padding: 0.5rem 0.8rem; background: #07121a; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #00ffcc; font-family: monospace; font-size: 0.95rem; outline: none; transition: border-color 0.2s;"
+                               onfocus="this.style.borderColor='var(--amarelo)'" onblur="this.style.borderColor='rgba(255, 255, 255, 0.15)'">
+                        <button type="submit" class="perfil-btn-salvar">
+                            <i class="bi bi-check-lg"></i> Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Linha Dupla para Tipo e Ingresso -->
+            <div class="perfil-split-row">
+                <div class="perfil-info-block">
+                    <span class="perfil-info-label">Tipo de Usuário</span>
+                    <span class="perfil-info-value" style="color: var(--amarelo);">
+                        {{ usuario.get_tipo_conta_display }}
+                    </span>
+                </div>
+                
+                <div class="perfil-info-block">
+                    <span class="perfil-info-label">Ingresso no Sistema</span>
+                    <span class="perfil-info-value" style="font-size: 0.9rem;">
+                        <i class="bi bi-calendar-check" style="margin-right: 0.2rem; color: var(--texto-mutado);"></i> 
+                        {{ usuario.date_joined|date:"d/m/Y \à\s H:i" }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Botões de Ação do Rodapé (Alinhamento Espaçado e Responsivo) -->
+        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <button type="button" id="btnAbrirModalDelete" class="perfil-btn-deletar">
+                <i class="bi bi-trash3"></i> Excluir Conta
+            </button>
+            
+            <a href="{% url 'mural:index' %}" class="perfil-btn-voltar">
+                <i class="bi bi-arrow-left"></i> Voltar para o Mural
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- POPUP MODAL NATIVO (Escondido via CSS por padrão) -->
+<div id="deleteAccountModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3><i class="bi bi-exclamation-triangle"></i> Atenção!</h3>
+        <p>Você está prestes a excluir permanentemente sua conta no Ruralinfo. Esta ação não poderá ser desfeita e todos os seus dados serão apagados do sistema.</p>
+        
+        <form method="post" action="{% url 'accounts:deletar_conta' %}">
+            {% csrf_token %}
+            <label for="confirmarSenhaInput" class="perfil-info-label" style="color: var(--texto-claro); display: block; margin-bottom: 0.4rem;">Confirme sua senha para continuar:</label>
+            <input type="password" id="confirmarSenhaInput" name="password" class="modal-input-senha" placeholder="Digite sua senha atual" required>
+            
+            <div class="modal-actions">
+                <button type="button" id="btnFecharModalDelete" class="btn-modal-cancelar">Cancelar</button>
+                <button type="submit" class="btn-modal-deletar-confirmar">Excluir Conta</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script de Controle do Popup Modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('deleteAccountModal');
+        const btnAbrir = document.getElementById('btnAbrirModalDelete');
+        const btnFechar = document.getElementById('btnFecharModalDelete');
+        const inputSenha = document.getElementById('confirmarSenhaInput');
+
+        if (btnAbrir && modal) {
+            // Abre o modal ao clicar no botão vermelho
+            btnAbrir.addEventListener('click', function() {
+                modal.classList.add('active');
+                inputSenha.focus();
+            });
+
+            // Fecha o modal ao clicar em "Cancelar"
+            btnFechar.addEventListener('click', function() {
+                modal.classList.remove('active');
+                inputSenha.value = ''; // Limpa o campo por segurança
+            });
+
+            // Fecha o modal se clicar na área escura de fundo
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    inputSenha.value = '';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
