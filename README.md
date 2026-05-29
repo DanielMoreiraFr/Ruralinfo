@@ -1,58 +1,49 @@
-<p align="center">
-    <strong>Nome da Aplicação:</strong> Ruralinfo<br>
-    <strong>Integrantes:</strong> <a href="https://github.com/DanielMoreiraFr">Daniel Moreira</a>, <a href="https://github.com/kauefreitasR">Kaue Freitas</a><br>
-    <strong>Professor:</strong> Cleyton Vanut<br>
-    <strong>Disciplina:</strong> Projeto Interdisciplinar para Sistemas de Informação 1<br>
-    <strong>Curso:</strong> Bacharelado em Sistemas de Informação<br>
-    <strong>Unidade de Ensino:</strong> Universidade Federal Rural de Pernambuco (UFRPE)<br>
-</p>
+# Nome da Aplicação: Ruralinfo
 
-<p>
-O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de informações no Campus Dois Irmãos da UFRPE.
-O sistema funciona como um mural digital onde a administração pode gerenciar comunicados, avisos acadêmicos e informações institucionais,
-garantindo que o corpo discente tenha acesso rápido e seguro aos dados da universidade.
-Esta versão representa a migração completa da aplicação desktop (CustomTkinter + SQLite) para uma plataforma web moderna utilizando o framework Django.
-</p>
+O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de informações no Campus Dois Irmãos da UFRPE. O sistema funciona como um mural digital onde a administração pode gerenciar comunicados, avisos acadêmicos e informações institucionais, garantindo que o corpo discente tenha acesso rápido e seguro aos dados da universidade. Esta versão representa a migração completa da aplicação desktop (CustomTkinter + SQLite) para uma plataforma web moderna utilizando o framework Django.
 
 ---
 
 ## Ferramentas Utilizadas
 
 | Ferramenta | Descrição |
-|---|---|
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="20"> **Python 3.11+** | Linguagem de programação principal |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/django/django-plain.svg" width="20"> **Django 5.x** | Framework web principal (MTV) |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-original.svg" width="20"> **Bootstrap 5** | Framework CSS para o frontend responsivo |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg" width="20"> **SQLite** | Banco de dados relacional (via ORM do Django) |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" width="20"> **VSCode** | IDE de desenvolvimento |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" width="20"> **Git** | Versionamento de código |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="20"> **GitHub** | Repositório e cooperação remota |
+| --- | --- |
+| **Python 3.11+** | Linguagem de programação principal |
+| **Django 5.x** | Framework web principal (MTV) |
+| **Bootstrap 5** | Framework CSS para o frontend responsivo |
+| **SQLite** | Banco de dados relacional (via ORM do Django) |
+| **VSCode** | IDE de desenvolvimento |
+| **Git** | Versionamento de código |
+| **GitHub** | Repositório e cooperação remota |
 
 ---
 
-# VERSÃO 2VA
+## VERSÃO 2VA
 
-## Funcionalidades Implementadas
+### Funcionalidades Implementadas
 
-- **1 — Sistema de Autenticação Dual:** Um mesmo e-mail `@ufrpe.br` pode possuir uma conta **COMUM** e uma conta **ADMIN** independentes. O login exige a seleção explícita do tipo de conta.
-- **2 — Validação Institucional:** Filtro obrigatório para e-mails do domínio `@ufrpe.br` nos formulários de cadastro e login.
-- **3 — Segurança de Credenciais:** Senhas armazenadas com hashing PBKDF2-SHA256. Validação de força: mínimo 10 caracteres, letra maiúscula, número e caractere especial.
-- **4 — Sistema de Convites para Admin:** Nenhuma conta ADMIN pode ser criada publicamente. O cadastro exige um código UUID gerado por um administrador existente.
-- **5 — Mural Informativo com Categorias:** Feed público de avisos organizados por categoria (Aviso Geral, Evento, Acadêmico, Oportunidade, Extensão, Pesquisa, Manutenção, Urgente) com filtro interativo.
-- **6 — CRUD Completo para Admin:** Administradores podem criar, editar, ocultar e deletar qualquer aviso do sistema. A função de **ocultar** mantém o registro no banco sem exibi-lo ao público.
-- **7 — Rastreabilidade de Autoria:** Cada aviso registra o administrador que o criou via chave estrangeira, servindo como auditoria interna.
-- **8 — Suporte a Imagens:** Avisos podem conter imagem com campo de texto alternativo obrigatório (acessibilidade).
-- **9 — Acesso por Visitante:** O mural é acessível sem autenticação. A navbar adapta-se automaticamente exibindo opções de login/cadastro para visitantes e o perfil do usuário para contas autenticadas.
+* **1 — Sistema de Autenticação Dual:** Um mesmo e-mail `@ufrpe.br` pode possuir uma conta **COMUM** e uma conta **ADMIN** independentes. O login exige a seleção explícita do tipo de conta.
+* **2 — Validação Institucional:** Filtro obrigatório para e-mails do domínio `@ufrpe.br` nos formulários de cadastro e login.
+* **3 — Segurança de Credenciais:** Senhas armazenadas com hashing PBKDF2-SHA256. Validação de força: mínimo 10 caracteres, letra maiúscula, número e caractere especial.
+* **4 — Sistema de Convites para Admin:** Nenhuma conta ADMIN pode ser criada publicamente. O cadastro exige um código UUID gerado por um administrador existente.
+* **5 — Mural Informativo com Categorias:** Feed público de avisos organizados por categoria (Aviso Geral, Evento, Acadêmico, Oportunidade, Extensão, Pesquisa, Manutenção, Urgente) com filtro interativo.
+* **6 — CRUD Completo para Admin:** Administradores podem criar, editar, ocultar e deletar qualquer aviso do sistema. A função de **ocultar** mantém o registro no banco sem exibi-lo ao público.
+* **7 — Rastreabilidade de Autoria:** Cada aviso registra o administrador que o criou via chave estrangeira, servindo como auditoria interna.
+* **8 — Suporte a Imagens:** Avisos podem conter imagem com campo de texto alternativo obrigatório (acessibilidade).
+* **9 — Acesso por Visitante:** O mural é acessível sem autenticação. A navbar adapta-se automaticamente exibindo opções de login/cadastro para visitantes e o perfil do usuário para contas autenticadas.
+* **10 — Nome de Usuário Customizado (Nickname):** Interface embutida na tela de perfil para alteração do identificador do usuário com validação inline de unicidade, preparando a identidade visual para futuras salas de conversa.
+* **11 — Exclusão Avançada de Conta:** Sistema destrutivo seguro com acionamento por janela popup modal nativa (JavaScript puro) que exige a digitação e validação criptográfica da senha atual do usuário antes da remoção definitiva do banco de dados.
 
-## Bibliotecas Utilizadas
+### Bibliotecas Utilizadas
 
 | Biblioteca | Descrição |
-|---|---|
+| --- | --- |
 | **Django** | Framework principal: ORM, autenticação, roteamento e templates |
 | **Pillow** | Processamento de imagens para o `ImageField` do mural |
-| **django-widget-tweaks** | Aplicação de classes CSS Bootstrap diretamente nos campos de formulário nos templates |
-| **Bootstrap 5** *(CDN)* | Componentes visuais responsivos e sistema de grid |
-| **Bootstrap Icons** *(CDN)* | Ícones utilizados na interface |
+| **python-dotenv** | Isolamento de chaves secretas do Django e credenciais do banco através de arquivos `.env` |
+| **django-widget-tweaks** | Aplicação de classes CSS diretamente nos campos de formulário nos templates |
+| **Bootstrap 5 (CDN)** | Componentes visuais responsivos e sistema de grid |
+| **Bootstrap Icons (CDN)** | Ícones utilizados na interface |
 
 ---
 
@@ -63,6 +54,7 @@ Esta versão representa a migração completa da aplicação desktop (CustomTkin
 ```bash
 git clone https://github.com/DanielMoreiraFr/Ruralinfo.git
 cd Ruralinfo
+
 ```
 
 ### 2. Crie e ative um ambiente virtual
@@ -70,34 +62,39 @@ cd Ruralinfo
 ```bash
 python -m venv venv
 
-# Windows
-venv\Scripts\activate
-
-# Linux / macOS
-source venv/bin/activate
 ```
+
+* No Windows: `venv\Scripts\activate`
+* No Linux/macOS: `source venv/bin/activate`
 
 ### 3. Instale as dependências
 
 ```bash
 pip install -r requirements.txt
+
 ```
 
-### 4. Execute as migrations
+> **Nota:** Crie um arquivo chamado `.env` na raiz do projeto baseado no `.env.example` preenchendo sua `SECRET_KEY` e mudando a flag `DEBUG=True`.
 
-> **Importante:** sempre gere a migration do `accounts` antes das demais, pois os outros apps dependem do model de usuário customizado.
+### 4. Execute as migrations
 
 ```bash
 python manage.py makemigrations accounts
 python manage.py makemigrations mural
 python manage.py migrate
+
 ```
 
 ### 5. Crie o primeiro administrador
 
+Abra o shell do Django:
+
 ```bash
 python manage.py shell
+
 ```
+
+Execute o script abaixo dentro do shell interativo:
 
 ```python
 from accounts.models import Usuario
@@ -111,15 +108,17 @@ admin = Usuario(
 admin.set_password('SuaSenhaForte@2025!')
 admin.save()
 exit()
+
 ```
 
 ### 6. Inicie o servidor
 
 ```bash
 python manage.py runserver
+
 ```
 
-Acesse em: **http://127.0.0.1:8000/**
+Acesse em: **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
 
 ---
 
@@ -129,18 +128,23 @@ Acesse em: **http://127.0.0.1:8000/**
 ruralinfo/
 ├── manage.py
 ├── requirements.txt
+├── .env                          # variáveis de ambiente configuradas localmente
 ├── db.sqlite3                    # gerado após migrate
 ├── media/                        # uploads de imagens dos avisos
 │
 ├── ruralinfo/                    # pacote de configuração
-│   ├── settings.py               # AUTH_USER_MODEL · MEDIA · MESSAGE_TAGS
+│   ├── settings.py               # AUTH_USER_MODEL · MEDIA · MESSAGE_TAGS · dotenv
 │   ├── urls.py                   # roteador principal
 │   └── wsgi.py
 │
-├── accounts/                     # app de autenticação
+├── static/                       # arquivos estáticos globais
+│   └── css/
+│       └── base.css              # design system, variáveis de cor, botões e modal
+│
+├── accounts/                     # app de autenticação e perfil
 │   ├── models.py                 # Usuario (AbstractUser) · CodigoConvite
 │   ├── forms.py                  # LoginForm · CadastroComumForm · CadastroAdminForm
-│   ├── views.py                  # login · cadastro · logout
+│   ├── views.py                  # login · cadastro · perfil · deletar_conta
 │   ├── urls.py
 │   ├── admin.py
 │   └── migrations/
@@ -158,12 +162,14 @@ ruralinfo/
     ├── accounts/
     │   ├── login.html
     │   ├── cadastro.html
+    │   ├── perfil.html           # alteração de nick e modal de exclusão
     │   ├── _campos_base.html     # partial: nome e email
     │   └── _campos_senha.html    # partial: senha + confirmar + indicador de força
     └── mural/
         ├── index.html            # feed público com filtro de categorias
         ├── form.html             # criar e editar aviso
         └── confirmar_delete.html
+
 ```
 
 ---
@@ -174,33 +180,69 @@ ruralinfo/
 
 ---
 
-# VERSÃO 3VA (Planejamento)
+## VERSÃO 3VA (Planejamento)
 
-## Funcionalidades Futuras
+### Funcionalidades Futuras
 
-- **10 — Implementação da Rota do Circular:** Mapeamento visual dos trajetos realizados pelo transporte interno da UFRPE.
-- **11 — Busca do Circular:** Consulta dos horários previstos de saída e chegada por ponto de parada.
-- **12 — Review Técnico do Ônibus:** Área para feedback discente sobre as condições de transporte, com dados consolidados para melhorias institucionais.
-- **13 — Review Ruralinfo + Sugestões:** Canal direto para feedback sobre a experiência do usuário com a plataforma web.
-- **14 — A definir:** Funcionalidade bônus baseada nas necessidades identificadas durante os testes da 2VA.
+* **12 — Implementação da Rota do Circular:** Mapeamento visual dos trajetos realizados pelo transporte interno da UFRPE (Mapeado no RF007).
+* **13 — Busca do Circular:** Consulta dos horários previstos de saída e chegada por ponto de parada (Mapeado no RF007).
+* **14 — Pesquisa e Localização:** Sistema de buscas detalhado de blocos e prédios no campus (Mapeado no RF008, RF010).
+* **15 — Review Técnico do Ônibus e Locais:** Área para feedback discente sobre as condições de transporte e instalações físicas (Mapeado no RF009, RF013).
+* **16 — Sistema de Sugestão e Moderação:** Permissão para que usuários comuns sugiram anúncios que passarão por uma fila de aprovação dos administradores (Mapeado no RF014, RF015).
+* **17 — Token por E-mail:** Envio de código verificador para ativação de novas contas com regras de expiração (Mapeado no RF016).
+* **18 — Chat de Interação síncrono:** Canal de bate-papo em tempo real conectando a comunidade acadêmica através dos nicknames customizados gerenciados no perfil.
 
 ---
 
-# VERSÃO 1VA (Histórico)
+## VERSÃO 1VA (Histórico)
 
 A primeira versão do Ruralinfo foi desenvolvida como uma aplicação **desktop** utilizando **CustomTkinter** e banco de dados **SQLite** gerenciado manualmente com `sqlite3` e `contextlib`.
 
-## Funcionalidades da V1
+### Funcionalidades da V1
 
-- Sistema de autenticação dual com alternância dinâmica de modo (Login/Cadastro)
-- Validação institucional de e-mails `@ufrpe.br`
-- Validação rigorosa de senhas
-- Mural informativo para visualização de avisos
-- Persistência em SQLite com tratamento de transações e Context Managers
+* Sistema de autenticação dual com alternância dinâmica de modo (Login/Cadastro)
+* Validação institucional de e-mails `@ufrpe.br`
+* Validação rigorosa de senhas
+* Mural informativo para visualização de avisos
+* Persistência em SQLite com tratamento de transações e Context Managers
 
-## Execução da V1
+### Execução da V1
 
 ```bash
 pip install customtkinter
 python src/main.py
+
 ```
+
+---
+
+## 📋 Matriz de Requisitos & Cronograma de Desenvolvimento
+
+| Feature / ID | Requisito / Fluxo Principal | Validação de Erros / Fluxos Alternativos | Status | Prioridade |
+| --- | --- | --- | --- | --- |
+| **RF001** | **Tela Inicial:** Usuário escolhe entre cadastro / visitante / login / fechar | **RETORNO PÓS ERRO DE DÍGITO NO MENU DE CADASTRO:** Caso o usuário digite um número que não foi prescrito no menu, ele é notificado e é solicitado que digite novamente. | `Pronta` | P1 - Altíssima |
+| **RF002** | **Cadastro:** Usuário seleciona tipo de conta (Administrador ou Comum), insere nome completo, e-mail, senha e confirma senha. | **VALIDAÇÃO DE ERROS DE EMAIL:** 1. Verificar se há: "@ufrpe.com" não há espaços em branco.<br>
+
+<br>2. Verificar se o e-mail inserido no cadastro é diferente de qualquer outro já cadastrado no banco de dados para o tipo de conta selecionado.<br>
+
+<br>3. No caso de invalidez no email, pedir para o usuário digitar novamente.<br>
+
+<br>
+
+<br>**VALIDAÇÃO DE ERROS SENHA:** 1. Verificar se há pelo menos 10 caracteres, uma letra maiúscula, não pode ser vazia e deve ter um caractere especial.<br>
+
+<br>2. pelo menos um número. | `Pronta` | P1 - Altíssima |
+| **RF003** | **Login:** Usuário insere e-mail e senha. | **SE O E-MAIL DO USUÁRIO FOR VERIFICADO COMO ADM:** Abre janela de acesso específico para adm. | `Pronta` | P1 - Altíssima |
+| **RF004** | **Tela do mural:** Exibição do feed principal de informações. | Sem interações alternativas listadas. | `Pronta` | P1 - Altíssima |
+| **RF005** | **CRUD do mural:** Gerenciamento dos posts. | Precisa estar logado para acessar área de comentários. | `Pronta` | P2 - Alta |
+| **RF006** | **Separador do mural por tipo de evento:** Divisão por categorias. | Sem interação do usuário. | `Pronta` | P2 - Alta |
+| **RF007** | **Quadro de horários do circular:** Consulta de linhas do transporte. | **VALIDAÇÃO DE ERROS NA BUSCA:** 1. Endereço inválido / inexistente. | `Em desenvol.` | P3 - Regular |
+| **RF008** | **Pesquisa por local:** Localização de blocos do campus. | Tratamento para local não encontrado. | `A fazer` | P1 - Altíssima |
+| **RF009** | **Sessão de comentários por local:** Fórum por prédio ou bloco. | Restrição de spam e controle de usuários logados. | `A fazer` | P2 - Alta |
+| **RF010** | **Informações do local da pesquisa:** Detalhes de blocos encontrados. | Tratamento de dados inexistentes. | `A fazer` | P2 - Alta |
+| **RF011** | **Definições hierárquicas pelo Super ADM:** Controle de permissões. | Bloqueio de segurança e acessos indevidos. | `Pronta` | P1 - Altíssima |
+| **RF012** | **Tela do Super ADM:** Dashboard de controle mestre. | Autenticação reforçada para o painel mestre. | `Pronta` | P1 - Altíssima |
+| **RF013** | **Feedback do local:** Avaliação de infraestrutura pelos discentes. | Tratamento para envio duplicado de notas. | `A fazer` | P3 - Regular |
+| **RF014** | **Sugestão de anúncio pelo usuário comum:** Envio à fila de moderação. | Validação de conteúdo impróprio ou vazio. | `A fazer` | P2 - Alta |
+| **RF015** | **Área da revisão da sugestão + redirecionamento para criar:** Painel do ADM. | Validação e aprovação segura dos fluxos de sugestões. | `A fazer` | P2 - Alta |
+| **RF016** | **Código enviado no email para confirmar o cadastro:** Verificação de conta. | Expiração de token temporário e reenvio. | `A fazer` | P2 - Alta |
