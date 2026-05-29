@@ -10,7 +10,7 @@ O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de info
 | :---: | --- |
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="25" height="25"> | **Python 3.11+** — Linguagem de programação principal |
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/django/django-plain.svg" width="25" height="25"> | **Django 5.x** — Framework web principal (Arquitetura MTV) |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-original.svg" width="25" height="25"> | **Bootstrap 5** — Framework CSS para o frontend responsivo |
+
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg" width="25" height="25"> | **SQLite** — Banco de dados relacional (via ORM nativo do Django) |
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" width="25" height="25"> | **VSCode** — IDE de desenvolvimento principal |
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" width="25" height="25"> | **Git** — Sistema de controle de versionamento distribuído |
@@ -41,9 +41,6 @@ O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de info
 | **Django** | Framework principal: ORM, autenticação, roteamento e templates |
 | **Pillow** | Processamento de imagens para o `ImageField` do mural |
 | **python-dotenv** | Isolamento de chaves secretas do Django e credenciais do banco através de arquivos `.env` |
-| **django-widget-tweaks** | Aplicação de classes CSS diretamente nos campos de formulário nos templates |
-| **Bootstrap 5 (CDN)** | Componentes visuais responsivos e sistema de grid |
-| **Bootstrap Icons (CDN)** | Ícones utilizados na interface |
 
 ---
 
