@@ -7,16 +7,16 @@ O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de info
 ## Ferramentas Utilizadas
 
 | Ferramenta | Descrição |
-| --- | --- |
-| **Python 3.11+** | Linguagem de programação principal |
-| **Django 5.x** | Framework web principal (MTV) |
-| **Bootstrap 5** | Framework CSS para o frontend responsivo |
-| **SQLite** | Banco de dados relacional (via ORM do Django) |
-| **VSCode** | IDE de desenvolvimento |
-| **Git** | Versionamento de código |
-| **GitHub** | Repositório e cooperação remota |
+| :---: | --- |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="25" height="25"> | **Python 3.11+** — Linguagem de programação principal |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/django/django-plain.svg" width="25" height="25"> | **Django 5.x** — Framework web principal (Arquitetura MTV) |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-original.svg" width="25" height="25"> | **Bootstrap 5** — Framework CSS para o frontend responsivo |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg" width="25" height="25"> | **SQLite** — Banco de dados relacional (via ORM nativo do Django) |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" width="25" height="25"> | **VSCode** — IDE de desenvolvimento principal |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" width="25" height="25"> | **Git** — Sistema de controle de versionamento distribuído |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="25" height="25"> | **GitHub** — Hospedagem de repositório e cooperação remota |
 
----
+---z
 
 ## VERSÃO 2VA
 
@@ -213,36 +213,3 @@ pip install customtkinter
 python src/main.py
 
 ```
-
----
-
-## 📋 Matriz de Requisitos & Cronograma de Desenvolvimento
-
-| Feature / ID | Requisito / Fluxo Principal | Validação de Erros / Fluxos Alternativos | Status | Prioridade |
-| --- | --- | --- | --- | --- |
-| **RF001** | **Tela Inicial:** Usuário escolhe entre cadastro / visitante / login / fechar | **RETORNO PÓS ERRO DE DÍGITO NO MENU DE CADASTRO:** Caso o usuário digite um número que não foi prescrito no menu, ele é notificado e é solicitado que digite novamente. | `Pronta` | P1 - Altíssima |
-| **RF002** | **Cadastro:** Usuário seleciona tipo de conta (Administrador ou Comum), insere nome completo, e-mail, senha e confirma senha. | **VALIDAÇÃO DE ERROS DE EMAIL:** 1. Verificar se há: "@ufrpe.com" não há espaços em branco.<br>
-
-<br>2. Verificar se o e-mail inserido no cadastro é diferente de qualquer outro já cadastrado no banco de dados para o tipo de conta selecionado.<br>
-
-<br>3. No caso de invalidez no email, pedir para o usuário digitar novamente.<br>
-
-<br>
-
-<br>**VALIDAÇÃO DE ERROS SENHA:** 1. Verificar se há pelo menos 10 caracteres, uma letra maiúscula, não pode ser vazia e deve ter um caractere especial.<br>
-
-<br>2. pelo menos um número. | `Pronta` | P1 - Altíssima |
-| **RF003** | **Login:** Usuário insere e-mail e senha. | **SE O E-MAIL DO USUÁRIO FOR VERIFICADO COMO ADM:** Abre janela de acesso específico para adm. | `Pronta` | P1 - Altíssima |
-| **RF004** | **Tela do mural:** Exibição do feed principal de informações. | Sem interações alternativas listadas. | `Pronta` | P1 - Altíssima |
-| **RF005** | **CRUD do mural:** Gerenciamento dos posts. | Precisa estar logado para acessar área de comentários. | `Pronta` | P2 - Alta |
-| **RF006** | **Separador do mural por tipo de evento:** Divisão por categorias. | Sem interação do usuário. | `Pronta` | P2 - Alta |
-| **RF007** | **Quadro de horários do circular:** Consulta de linhas do transporte. | **VALIDAÇÃO DE ERROS NA BUSCA:** 1. Endereço inválido / inexistente. | `Em desenvol.` | P3 - Regular |
-| **RF008** | **Pesquisa por local:** Localização de blocos do campus. | Tratamento para local não encontrado. | `A fazer` | P1 - Altíssima |
-| **RF009** | **Sessão de comentários por local:** Fórum por prédio ou bloco. | Restrição de spam e controle de usuários logados. | `A fazer` | P2 - Alta |
-| **RF010** | **Informações do local da pesquisa:** Detalhes de blocos encontrados. | Tratamento de dados inexistentes. | `A fazer` | P2 - Alta |
-| **RF011** | **Definições hierárquicas pelo Super ADM:** Controle de permissões. | Bloqueio de segurança e acessos indevidos. | `Pronta` | P1 - Altíssima |
-| **RF012** | **Tela do Super ADM:** Dashboard de controle mestre. | Autenticação reforçada para o painel mestre. | `Pronta` | P1 - Altíssima |
-| **RF013** | **Feedback do local:** Avaliação de infraestrutura pelos discentes. | Tratamento para envio duplicado de notas. | `A fazer` | P3 - Regular |
-| **RF014** | **Sugestão de anúncio pelo usuário comum:** Envio à fila de moderação. | Validação de conteúdo impróprio ou vazio. | `A fazer` | P2 - Alta |
-| **RF015** | **Área da revisão da sugestão + redirecionamento para criar:** Painel do ADM. | Validação e aprovação segura dos fluxos de sugestões. | `A fazer` | P2 - Alta |
-| **RF016** | **Código enviado no email para confirmar o cadastro:** Verificação de conta. | Expiração de token temporário e reenvio. | `A fazer` | P2 - Alta |
