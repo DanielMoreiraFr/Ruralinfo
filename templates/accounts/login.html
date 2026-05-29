@@ -1,53 +1,49 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
 {% block titulo %}Entrar — Ruralinfo{% endblock %}
 
-{% block conteudo %}
-<div class="row justify-content-center mt-3">
-    <div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4">
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
 
+{% block conteudo %}
+<div class="centered-wrapper">
+    <div style="width: 100%; max-width: 410px;">
+        
         <div class="text-center mb-4">
-            <i class="bi bi-broadcast display-5" style="color: var(--amarelo);"></i>
-            <h4 class="fw-bold mt-2" style="color: var(--amarelo);">Ruralinfo</h4>
-            <p class="text-secondary small">Portal da comunidade UFRPE</p>
+            <i class="bi bi-broadcast" style="color: var(--amarelo); font-size: 2.6rem;"></i>
+            <h4 style="color: var(--amarelo); font-size: 1.6rem; font-weight: 700; margin-top: 0.4rem;">Ruralinfo</h4>
+            <p style="color: var(--texto-mutado); font-size: 0.85rem;">Conectando a comunidade acadêmica da UFRPE</p>
         </div>
 
-        <!-- Erros globais -->
         {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-            {% for erro in form.non_field_errors %}
-            <p class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>{{ erro }}</p>
-            {% endfor %}
+        <div class="card-form mb-3 text-danger" style="padding: 1rem;">
+            {{ form.non_field_errors.0 }}
         </div>
         {% endif %}
 
-        <div class="card-form p-4">
-            <h6 class="fw-semibold mb-4 text-light">Entrar na sua conta</h6>
-
+        <div class="card-form">
             <form method="post" novalidate>
                 {% csrf_token %}
 
-                <!-- E-mail -->
-                <div class="mb-3">
+                <div class="form-group">
                     <label class="form-label" for="{{ form.email.id_for_label }}">
                         {{ form.email.label }}
                     </label>
-                    {{ form.email|add_class:"form-control" }}
+                    {{ form.email }}
                     {% if form.email.errors %}
-                    <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                    <div class="text-danger">{{ form.email.errors.0 }}</div>
                     {% endif %}
                 </div>
 
-                <!-- Tipo de Conta (Radio) -->
-                <div class="mb-3">
+                <div class="form-group">
                     <label class="form-label">{{ form.tipo_conta.label }}</label>
-                    <div class="d-flex gap-4">
+                    <div class="radio-group">
                         {% for radio in form.tipo_conta %}
                         <div class="form-check">
                             {{ radio.tag }}
-                            <label class="form-check-label" for="{{ radio.id_for_label }}"
-                                   style="color: #cce0e8;">
+                            <label for="{{ radio.id_for_label }}" style="color: var(--texto-claro); font-size: 0.95rem; cursor: pointer;">
                                 {{ radio.choice_label }}
                             </label>
                         </div>
@@ -55,48 +51,36 @@
                     </div>
                 </div>
 
-                <!-- Senha -->
-                <div class="mb-4">
+                <div class="form-group">
                     <label class="form-label" for="{{ form.senha.id_for_label }}">
                         {{ form.senha.label }}
                     </label>
                     <div class="input-group">
-                        {{ form.senha|add_class:"form-control"|attr:"id:id_senha_login" }}
-                        <button class="btn btn-outline-secondary" type="button"
-                                onclick="toggleSenha('id_senha_login', this)">
+                        {{ form.senha }}
+                        <button class="btn-toggle-password" type="button" onclick="toggleSenha(this)">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
                     {% if form.senha.errors %}
-                    <div class="text-danger small mt-1">{{ form.senha.errors.0 }}</div>
+                    <div class="text-danger">{{ form.senha.errors.0 }}</div>
                     {% endif %}
                 </div>
 
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-ruralinfo btn-lg">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-ruralinfo w-100" style="justify-content: center; padding: 0.75rem;">
+                        <i class="bi bi-box-arrow-in-right"></i> Autenticar
                     </button>
                 </div>
             </form>
         </div>
 
-        <p class="text-center text-secondary mt-3 small">
-            Não tem uma conta?
-            <a href="{% url 'accounts:cadastro' %}"
-               style="color: var(--amarelo);">Cadastre-se aqui</a>
+        <p class="text-center mt-4" style="color: var(--texto-mutado); font-size: 0.9rem;">
+            Novo no portal? <a href="{% url 'accounts:cadastro' %}" style="color: var(--amarelo); font-weight: 600; text-decoration: none;">Crie sua conta</a>
         </p>
-
-        <p class="text-center mt-2">
-            <a href="{% url 'mural:index' %}" class="text-secondary small">
-                <i class="bi bi-arrow-left me-1"></i>Continuar como visitante
-            </a>
-        </p>
-
     </div>
 </div>
 {% endblock %}
 
-{% load static %}
 {% block extra_js %}
 <script src="{% static 'js/olho_login.js' %}"></script>
 {% endblock %}

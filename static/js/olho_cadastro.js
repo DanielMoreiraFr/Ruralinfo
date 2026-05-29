@@ -1,50 +1,73 @@
-/* Toggle de visibilidade da senha no cadastro.*/
 function toggleSenhaCadastro(btn) {
-    var input = btn.closest('.input-group').querySelector('input');
-    var icon  = btn.querySelector('i');
-
+    const container = btn.closest('.input-group');
+    if (!container) return;
+    
+    const input = container.querySelector('input');
+    const icon = btn.querySelector('i');
+    
     if (input.type === 'password') {
-        input.type     = 'text';
+        input.type = 'text';
         icon.className = 'bi bi-eye-slash';
     } else {
-        input.type     = 'password';
+        input.type = 'password';
         icon.className = 'bi bi-eye';
     }
 }
 
-/* Indicador de força de senha
-   Chamado pelo _campos_senha.html passando os IDs gerados
-
-       iniciarForcaSenha('id_comum-senha', 'comum'); */
 function iniciarForcaSenha(inputId, sufixo) {
-    var input = document.getElementById(inputId);
+    const input = document.getElementById(inputId);
     if (!input) return;
-
-    var forca = document.getElementById('forca_'  + sufixo);
-    var barra = document.getElementById('barra_'  + sufixo);
-    var txt   = document.getElementById('txt_'    + sufixo);
-
+    
+    const forcaContainer = document.getElementById('forca_' + sufixo);
+    const barra = document.getElementById('barra_' + sufixo);
+    const txt = document.getElementById('txt_' + sufixo);
+    
     input.addEventListener('input', function () {
-        var s = this.value;
-        if (!s) { forca.style.display = 'none'; return; }
-        forca.style.display = 'block';
-
-        var pts = 0;
-        if (s.length >= 10)                                        pts++;
-        if (/[A-Z]/.test(s))                                      pts++;
-        if (/\d/.test(s))                                         pts++;
-        if (/[!@#$%^&*()\-_=+\[\]{}|;:'",.<>?`~\\]/.test(s))    pts++;
-
-        var cfg = [
-            { label: 'Muito fraca', cor: 'bg-danger',  pct: 25  },
-            { label: 'Fraca',       cor: 'bg-warning', pct: 50  },
-            { label: 'Boa',         cor: 'bg-info',    pct: 75  },
-            { label: 'Forte',       cor: 'bg-success', pct: 100 },
+        const val = this.value;
+        if (!val) {
+            forcaContainer.style.display = 'none';
+            return;
+        }
+        
+        forcaContainer.style.display = 'block';
+        let pontos = 0;
+        
+        if (val.length >= 10) pontos++;
+        if (/[A-Z]/.test(val)) pontos++;
+        if (/\d/.test(val)) pontos++;
+        if (/[!@#$%^&*()\-_=+\[\]{}|;:'",.<>?`~\\]/.test(val)) pontos++;
+        
+        const escalas = [
+            { txt: 'Muito fraca', cor: 'bg-danger', pct: 25 },
+            { txt: 'Fraca', cor: 'bg-warning', pct: 50 },
+            { txt: 'Boa', cor: 'bg-info', pct: 75 },
+            { txt: 'Forte', cor: 'bg-success', pct: 100 }
         ];
-        var c = cfg[Math.max(0, pts - 1)];
-
-        barra.style.width   = c.pct + '%';
-        barra.className     = 'progress-bar ' + c.cor;
-        txt.textContent     = c.label;
+        
+        const config = escalas[Math.max(0, pontos - 1)];
+        barra.style.width = config.pct + '%';
+        barra.className = 'progress-bar ' + config.cor;
+        txt.textContent = config.txt;
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Alternância de Abas Manual
+    const botoes = document.querySelectorAll('#tabsCadastro .nav-link');
+    const panes = document.querySelectorAll('.tab-content .tab-pane');
+
+    botoes.forEach(botao => {
+        botao.addEventListener('click', function () {
+            const target = this.getAttribute('data-target');
+            
+            botoes.forEach(b => b.classList.remove('active'));
+            panes.forEach(p => p.classList.remove('show', 'active'));
+            
+            this.classList.add('active');
+            const targetPane = document.getElementById(target);
+            if (targetPane) {
+                targetPane.classList.add('show', 'active');
+            }
+        });
+    });
+});

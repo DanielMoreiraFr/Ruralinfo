@@ -1,39 +1,34 @@
 from django import forms
 from .models import Aviso
 
-
 class AvisoForm(forms.ModelForm):
     """
-    Formulário de criação e edição de avisos.
-    O campo `autor` é excluído — atribuído automaticamente na view
-    com request.user (equivale ao id da sessão do legado).
+    Formulário de criação e edição de avisos atualizado com o campo título.
     """
-
-    # campo oculto pra ser preenchudo na view
     class Meta:
         model  = Aviso
-        fields = ['conteudo', 'categoria', 'imagem', 'alt_texto', 'publicado']
+        # Incluído o 'titulo' como primeiro campo do formulário
+        fields = ['titulo', 'categoria', 'imagem', 'alt_texto', 'conteudo', 'publicado']
         widgets = {
-            'conteudo':  forms.Textarea(attrs={'rows': 4, 'placeholder': 'Escreva o aviso...'}),
+            'titulo':    forms.TextInput(attrs={'placeholder': 'Ex: Inscrições abertas para monitoria'}),
             'categoria': forms.Select(),
             'imagem':    forms.ClearableFileInput(),
             'alt_texto': forms.TextInput(attrs={'placeholder': 'Descrição da imagem para acessibilidade'}),
+            'conteudo':  forms.Textarea(attrs={'rows': 5, 'placeholder': 'Escreva o corpo do aviso com detalhes...'}),
+            'publicado': forms.CheckboxInput(),
         }
 
-    # validações
     def clean(self):
         cleaned   = super().clean()
         imagem    = cleaned.get('imagem')
         alt_texto = cleaned.get('alt_texto')
 
-        # Se alt_texto não for None, aplica o strip e limpa o texto
         if alt_texto:
             alt_texto = alt_texto.strip()
             cleaned['alt_texto'] = alt_texto
         else:
-            alt_texto = ''  # Garante que vire string vazia caso seja None
+            alt_texto = ''
 
-        # Se há imagem, o alt_texto se torna obrigatório (acessibilidade)
         if imagem and not alt_texto:
             self.add_error(
                 'alt_texto',

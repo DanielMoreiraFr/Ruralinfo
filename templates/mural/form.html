@@ -1,77 +1,91 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
 {% block titulo %}{{ titulo_pagina }} — Ruralinfo{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mural.css' %}">
+{% endblock %}
+
 {% block conteudo %}
-<div class="row justify-content-center">
-    <div class="col-12 col-lg-7">
+<div style="padding: 1rem 0;">
+    <div class="form-container-mural">
+        <h2 style="color: var(--amarelo); font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 700;">
+            <i class="bi bi-pencil-square"></i> {{ titulo_pagina }}
+        </h2>
 
-        <div class="d-flex align-items-center gap-3 mb-4">
-            <a href="{% url 'mural:index' %}" class="btn btn-sm btn-outline-light">
-                <i class="bi bi-arrow-left"></i>
-            </a>
-            <h5 class="fw-bold mb-0" style="color: var(--amarelo);">
-                {{ titulo_pagina }}
-            </h5>
-        </div>
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
 
-        <!-- Erros globais -->
-        {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-            {% for erro in form.non_field_errors %}
-            <p class="mb-0">{{ erro }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors.0 }}</div>
+            {% endif %}
 
-        <div class="card-form p-4">
-            <form method="post" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
-
-                {% for field in form %}
-                <div class="mb-3">
-                    <label class="form-label" for="{{ field.id_for_label }}">
-                        {{ field.label }}
-                        {% if field.field.required %}<span class="text-warning">*</span>{% endif %}
-                    </label>
-
-                    {{ field|add_class:"form-control" }}
-
-                    {% if field.help_text %}
-                    <div class="form-text text-secondary">{{ field.help_text }}</div>
-                    {% endif %}
-
-                    {% if field.errors %}
-                    <div class="text-danger small mt-1">
-                        {% for erro in field.errors %}
-                        <p class="mb-0">{{ erro }}</p>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-
-                <!-- Preview da imagem atual na edição -->
-                {% if aviso.imagem %}
-                <div class="mb-3">
-                    <label class="form-label text-secondary small">Imagem atual:</label><br>
-                    <img src="{{ aviso.imagem.url }}" alt="{{ aviso.alt_texto }}"
-                         class="rounded" style="max-height: 160px;">
-                </div>
+            <div class="form-group" style="margin-bottom: 1.2rem;">
+                <label class="form-label" style="color: var(--texto-claro); font-weight: 600; display: block; margin-bottom: 0.4rem;">
+                    Título do Post
+                </label>
+                {{ form.titulo }}
+                {% if form.titulo.errors %}
+                    <div class="text-danger" style="font-size: 0.85rem; margin-top: 0.2rem;">{{ form.titulo.errors.0 }}</div>
                 {% endif %}
+            </div>
 
-                <div class="d-flex gap-3 mt-4">
-                    <button type="submit" class="btn btn-ruralinfo px-4">
-                        <i class="bi bi-check2-circle me-2"></i>{{ btn_label }}
-                    </button>
-                    <a href="{% url 'mural:index' %}" class="btn btn-outline-light px-4">
-                        Cancelar
-                    </a>
-                </div>
+            <div class="form-group" style="margin-bottom: 1.2rem;">
+                <label class="form-label" style="color: var(--texto-claro); font-weight: 600; display: block; margin-bottom: 0.4rem;">
+                    Categoria / Canal de Destino
+                </label>
+                {{ form.categoria }}
+                {% if form.categoria.errors %}
+                    <div class="text-danger" style="font-size: 0.85rem; margin-top: 0.2rem;">{{ form.categoria.errors.0 }}</div>
+                {% endif %}
+            </div>
 
-            </form>
-        </div>
+            <div class="form-group" style="margin-bottom: 1.2rem;">
+                <label class="form-label" style="color: var(--texto-claro); font-weight: 600; display: block; margin-bottom: 0.4rem;">
+                    Anexar Imagem Banner
+                </label>
+                {{ form.imagem }}
+                {% if form.imagem.errors %}
+                    <div class="text-danger" style="font-size: 0.85rem; margin-top: 0.2rem;">{{ form.imagem.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.2rem;">
+                <label class="form-label" style="color: var(--texto-claro); font-weight: 600; display: block; margin-bottom: 0.4rem;">
+                    Texto Alternativo (Acessibilidade)
+                </label>
+                {{ form.alt_texto }}
+                <small style="color: var(--texto-mutado); display: block; margin-top: 0.2rem;">{{ form.alt_texto.help_text }}</small>
+                {% if form.alt_texto.errors %}
+                    <div class="text-danger" style="font-size: 0.85rem; margin-top: 0.2rem;">{{ form.alt_texto.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.2rem;">
+                <label class="form-label" style="color: var(--texto-claro); font-weight: 600; display: block; margin-bottom: 0.4rem;">
+                    Conteúdo da Postagem
+                </label>
+                {{ form.conteudo }}
+                {% if form.conteudo.errors %}
+                    <div class="text-danger" style="font-size: 0.85rem; margin-top: 0.2rem;">{{ form.conteudo.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group mb-3" style="display: flex; align-items: center; gap: 0.5rem;">
+                {{ form.publicado }}
+                <label for="{{ form.publicado.id_for_label }}" style="color: var(--texto-claro); cursor: pointer; margin: 0;">
+                    Tornar este aviso visível imediatamente no mural
+                </label>
+            </div>
+
+            <div class="form-actions-row">
+                <a href="{% url 'mural:index' %}" class="btn btn-outline-light">Cancelar</a>
+                <button type="submit" class="btn btn-ruralinfo">
+                    <i class="bi bi-file-earmark-check"></i> {{ btn_label }}
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

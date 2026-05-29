@@ -1,0 +1,296 @@
+/* Definições Globais de Design System */
+:root {
+    --azul-escuro: #112b38;
+    --azul-card: rgba(17, 43, 56, 0.95);
+    --amarelo: #f4c430;
+    --texto-claro: #cce0e8;
+    --texto-mutado: #8faab5;
+    --vermelho: #ff4d4d;
+    --verde: #2ecc71;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--azul-escuro);
+    color: #fff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    width: 100%;
+}
+
+/* Navbar Arquitetada Nativa */
+.navbar {
+    background-color: #0a1921;
+    border-bottom: 2px solid var(--amarelo);
+    padding: 0.85rem 0;
+    position: relative;
+    z-index: 100;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    color: var(--amarelo);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.6rem;
+    cursor: pointer;
+    display: none;
+}
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+}
+
+.nav-link {
+    color: var(--texto-claro);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    color: var(--amarelo);
+}
+
+/* Componente Dropdown Nativo */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #0a1921;
+    border: 1px solid rgba(244, 196, 48, 0.25);
+    border-radius: 6px;
+    padding: 0.5rem 0;
+    min-width: 210px;
+    list-style: none;
+    display: none;
+    margin-top: 0.6rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-item-text {
+    display: block;
+    padding: 0.4rem 1rem;
+    color: var(--texto-mutado);
+    font-size: 0.8rem;
+    word-break: break-all;
+}
+
+.dropdown-divider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 0.4rem 0;
+}
+
+.dropdown-menu form button {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.dropdown-menu form button:hover {
+    background: rgba(255, 77, 77, 0.1);
+}
+
+.user-badge {
+    background: var(--amarelo);
+    color: #000;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Botões Nativos Utilitários */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    background: transparent;
+}
+
+.btn-outline-light:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-ruralinfo {
+    background: var(--amarelo);
+    color: #0a1921;
+}
+
+.btn-ruralinfo:hover {
+    opacity: 0.9;
+}
+
+.text-danger {
+    color: var(--vermelho) !important;
+}
+
+/* Notificações Flutuantes (Messages) */
+.django-messages {
+    position: fixed;
+    top: 4.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-width: 360px;
+    width: 100%;
+}
+
+.alert {
+    background: #0a1921;
+    border-left: 4px solid var(--amarelo);
+    padding: 0.9rem 1.1rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    animation: surgimento 0.2s ease-out;
+}
+
+@keyframes surgimento {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-danger, .alert-error { border-left-color: var(--vermelho); }
+.alert-success { border-left-color: var(--verde); }
+
+.btn-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.6;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* Estrutura de Fluxo Ocupacional */
+main {
+    flex: 1;
+    padding: 2.5rem 0;
+    width: 100%;
+}
+
+footer {
+    background: #0a1921;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--texto-mutado);
+    border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #0a1921;
+        padding: 1.5rem;
+        border-bottom: 2px solid var(--amarelo);
+        gap: 1.2rem;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    }
+    .navbar-menu.active {
+        display: flex;
+    }
+    .dropdown-menu {
+        position: static;
+        background: rgba(255, 255, 255, 0.03);
+        border: none;
+        margin-top: 0.5rem;
+        width: 100%;
+        box-shadow: none;
+    }
+}

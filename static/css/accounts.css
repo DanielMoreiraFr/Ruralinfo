@@ -1,0 +1,175 @@
+/* Layout Específico de Autenticação */
+.centered-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 65vh;
+    padding: 1rem 0;
+}
+
+.card-form {
+    background: var(--azul-card);
+    border: 1px solid rgba(244, 196, 48, 0.15);
+    border-radius: 12px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 1.4rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--texto-claro);
+    margin-bottom: 0.45rem;
+}
+
+/* Captura de Formulários Globais do Django */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    background: #0a1921;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--amarelo);
+    box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.15);
+}
+
+/* Input Groups com Olho Embutido */
+.input-group {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.input-group input {
+    padding-right: 2.8rem !important;
+}
+
+.btn-toggle-password {
+    position: absolute;
+    right: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--texto-mutado);
+    cursor: pointer;
+    font-size: 1.15rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.btn-toggle-password:hover {
+    color: #fff;
+}
+
+/* Radios Customizados Nativos */
+.radio-group {
+    display: flex;
+    gap: 1.8rem;
+    margin-top: 0.3rem;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.form-check input[type="radio"] {
+    accent-color: var(--amarelo);
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+
+/* Sistema Nivelado de Abas (Tabs) */
+.nav-tabs {
+    display: flex;
+    list-style: none;
+    border-bottom: 2px solid var(--amarelo);
+    margin-bottom: -1px;
+    width: 100%;
+}
+
+.nav-tabs .nav-item {
+    flex: 1;
+}
+
+.nav-tabs .nav-link {
+    background: transparent;
+    border: 1px solid transparent;
+    width: 100%;
+    text-align: center;
+    padding: 0.85rem 1rem;
+    color: var(--texto-claro);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--azul-card);
+    border-color: var(--amarelo) var(--amarelo) transparent var(--amarelo);
+    color: var(--amarelo);
+}
+
+.tab-content .tab-pane {
+    display: none;
+}
+
+.tab-content .tab-pane.show.active {
+    display: block;
+}
+
+/* Medidor Dinâmico de Força de Senha */
+.progress-container {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.bg-danger { background-color: var(--vermelho); }
+.bg-warning { background-color: var(--amarelo); }
+.bg-info { background-color: #3498db; }
+.bg-success { background-color: var(--verde); }
+
+/* Utilitários Locais de Alinhamento */
+.text-center { text-align: center; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1.5rem; }
+.w-100 { width: 100%; }

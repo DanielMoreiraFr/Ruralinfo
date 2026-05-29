@@ -1,55 +1,38 @@
-{% load static widget_tweaks %}
-
-<div class="mb-3">
+<div class="form-group">
     <label class="form-label" for="{{ form.senha.id_for_label }}">
         {{ form.senha.label }}
     </label>
     <div class="input-group">
-        {{ form.senha|add_class:"form-control" }}
-        <button class="btn btn-outline-secondary" type="button"
-                onclick="toggleSenhaCadastro(this)"
-                title="Mostrar/ocultar senha">
+        {{ form.senha }}
+        <button class="btn-toggle-password" type="button" onclick="toggleSenhaCadastro(this)">
             <i class="bi bi-eye"></i>
         </button>
     </div>
 
-    <div class="mt-1" id="forca_{{ id_sufixo }}" style="display:none;">
-        <div class="progress" style="height:5px;">
-            <div id="barra_{{ id_sufixo }}" class="progress-bar"
-                 style="width:0%; transition:width .3s;"></div>
+    <div class="mt-2" id="forca_{{ id_sufixo }}" style="display: none;">
+        <div class="progress-container">
+            <div id="barra_{{ id_sufixo }}" class="progress-bar"></div>
         </div>
-        <small id="txt_{{ id_sufixo }}" class="text-secondary"></small>
+        <small id="txt_{{ id_sufixo }}" style="color: var(--texto-mutado); font-size: 0.8rem; margin-top: 2px; display: block;"></small>
     </div>
 
     {% if form.senha.errors %}
-    <div class="text-danger small mt-1">
-        {% for erro in form.senha.errors %}<p class="mb-0">{{ erro }}</p>{% endfor %}
-    </div>
+    <div class="text-danger">{{ form.senha.errors.0 }}</div>
     {% endif %}
-    <div class="form-text text-secondary">
-        10+ chars · maiúscula · número · símbolo (!@#...)
-    </div>
+    <div class="form-text">Mínimo 10 caracteres, contendo maiúscula, número e símbolo.</div>
 </div>
 
-<div class="mb-3">
+<div class="form-group">
     <label class="form-label" for="{{ form.confirmar_senha.id_for_label }}">
         {{ form.confirmar_senha.label }}
     </label>
     <div class="input-group">
-        {{ form.confirmar_senha|add_class:"form-control" }}
-        <button class="btn btn-outline-secondary" type="button"
-                onclick="toggleSenhaCadastro(this)"
-                title="Mostrar/ocultar senha">
+        {{ form.confirmar_senha }}
+        <button class="btn-toggle-password" type="button" onclick="toggleSenhaCadastro(this)">
             <i class="bi bi-eye"></i>
         </button>
     </div>
     {% if form.confirmar_senha.errors %}
-    <div class="text-danger small mt-1">{{ form.confirmar_senha.errors.0 }}</div>
+    <div class="text-danger">{{ form.confirmar_senha.errors.0 }}</div>
     {% endif %}
 </div>
-
-<!-- Carrega o JS externo e passa as variáveis Django via inline mínimo -->
-<script src="{% static 'js/olho_cadastro.js' %}"></script>
-<script>
-    iniciarForcaSenha('{{ form.senha.id_for_label }}', '{{ id_sufixo }}');
-</script>

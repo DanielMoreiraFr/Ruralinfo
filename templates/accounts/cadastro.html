@@ -1,123 +1,94 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
-{% block titulo %}Cadastro — Ruralinfo{% endblock %}
+{% block titulo %}Criar Conta — Ruralinfo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
 
 {% block conteudo %}
-<div class="row justify-content-center mt-3">
-    <div class="col-12 col-md-8 col-lg-6">
+<div class="centered-wrapper">
+    <div style="width: 100%; max-width: 550px;">
 
         <div class="text-center mb-4">
-            <i class="bi bi-person-plus display-5" style="color: var(--amarelo);"></i>
-            <h4 class="fw-bold mt-2" style="color: var(--amarelo);">Criar Conta</h4>
-            <p class="text-secondary small">Use seu e-mail institucional @ufrpe.br</p>
+            <i class="bi bi-person-plus" style="color: var(--amarelo); font-size: 2.5rem;"></i>
+            <h4 style="color: var(--amarelo); font-size: 1.6rem; font-weight: 700; margin-top: 0.4rem;">Registro Institucional</h4>
         </div>
 
-        <!-- Abas COMUM / ADMIN -->
-        <ul class="nav nav-tabs" id="tabsCadastro">
+        <ul class="nav-tabs" id="tabsCadastro">
             <li class="nav-item">
-                <button class="nav-link {% if aba_ativa == 'comum' %}active{% endif %}"
-                        data-bs-toggle="tab" data-bs-target="#tab-comum">
-                    <i class="bi bi-person me-1"></i>Conta Comum
+                <button class="nav-link {% if aba_ativa != 'admin' %}active{% endif %}" data-target="tab-comum">
+                    <i class="bi bi-person"></i> Estudante / Servidor
                 </button>
             </li>
             <li class="nav-item">
-                <button class="nav-link {% if aba_ativa == 'admin' %}active{% endif %}"
-                        data-bs-toggle="tab" data-bs-target="#tab-admin">
-                    <i class="bi bi-shield-check me-1"></i>Conta Admin
+                <button class="nav-link {% if aba_ativa == 'admin' %}active{% endif %}" data-target="tab-admin">
+                    <i class="bi bi-shield-lock"></i> Administrador
                 </button>
             </li>
         </ul>
 
-        <div class="tab-content">
-
-            <!-- ===== ABA COMUM ===== -->
-            <div class="tab-pane fade {% if aba_ativa == 'comum' %}show active{% endif %}"
-                 id="tab-comum">
-
-                {% if aba_ativa == 'comum' and form_comum.errors %}
-                <div class="alert alert-danger mb-3">
-                    {% for field in form_comum %}{% for erro in field.errors %}
-                    <p class="mb-0">{{ field.label }}: {{ erro }}</p>
-                    {% endfor %}{% endfor %}
-                    {% for erro in form_comum.non_field_errors %}
-                    <p class="mb-0">{{ erro }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
+        <div class="tab-content" style="background: var(--azul-card); border: 1px solid rgba(244,196,48,0.2); border-top: none; border-radius: 0 0 12px 12px; padding: 2rem;">
+            
+            <!-- ABA COMUM -->
+            <div class="tab-pane {% if aba_ativa != 'admin' %}show active{% endif %}" id="tab-comum">
                 <form method="post" novalidate>
                     {% csrf_token %}
                     <input type="hidden" name="tipo_formulario" value="comum">
 
                     {% include 'accounts/_campos_base.html' with form=form_comum %}
-
-                    <!-- Senha -->
                     {% include 'accounts/_campos_senha.html' with form=form_comum id_sufixo='comum' %}
 
-                    <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-ruralinfo btn-lg">
-                            <i class="bi bi-check2-circle me-2"></i>Criar Conta Comum
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-ruralinfo w-100" style="justify-content: center; padding: 0.75rem;">
+                            <i class="bi bi-check-circle"></i> Concluir Cadastro
                         </button>
                     </div>
                 </form>
             </div>
 
-            <!-- ===== ABA ADMIN ===== -->
-            <div class="tab-pane fade {% if aba_ativa == 'admin' %}show active{% endif %}"
-                 id="tab-admin">
-
-                {% if aba_ativa == 'admin' and form_admin.errors %}
-                <div class="alert alert-danger mb-3">
-                    {% for field in form_admin %}{% for erro in field.errors %}
-                    <p class="mb-0">{{ field.label }}: {{ erro }}</p>
-                    {% endfor %}{% endfor %}
-                    {% for erro in form_admin.non_field_errors %}
-                    <p class="mb-0">{{ erro }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
+            <!-- ABA ADMIN -->
+            <div class="tab-pane {% if aba_ativa == 'admin' %}show active{% endif %}" id="tab-admin">
                 <form method="post" novalidate>
                     {% csrf_token %}
                     <input type="hidden" name="tipo_formulario" value="admin">
 
                     {% include 'accounts/_campos_base.html' with form=form_admin %}
 
-                    <!-- Código de Convite -->
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label class="form-label" for="{{ form_admin.codigo_convite.id_for_label }}">
-                            <i class="bi bi-key me-1 text-warning"></i>
                             {{ form_admin.codigo_convite.label }}
                         </label>
-                        {{ form_admin.codigo_convite|add_class:"form-control" }}
-                        <div class="form-text text-secondary">
-                            Solicite o UUID a um administrador existente.
-                        </div>
+                        {{ form_admin.codigo_convite }}
+                        <div class="form-text">Insira o código de verificação emitido pela reitoria.</div>
                         {% if form_admin.codigo_convite.errors %}
-                        <div class="text-danger small mt-1">
-                            {{ form_admin.codigo_convite.errors.0 }}
-                        </div>
+                        <div class="text-danger">{{ form_admin.codigo_convite.errors.0 }}</div>
                         {% endif %}
                     </div>
 
                     {% include 'accounts/_campos_senha.html' with form=form_admin id_sufixo='admin' %}
 
-                    <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-ruralinfo btn-lg">
-                            <i class="bi bi-shield-check me-2"></i>Criar Conta Admin
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-ruralinfo w-100" style="justify-content: center; padding: 0.75rem;">
+                            <i class="bi bi-shield-check"></i> Registrar Credencial Admin
                         </button>
                     </div>
                 </form>
             </div>
-
         </div>
 
-        <p class="text-center text-secondary mt-3 small">
-            Já tem uma conta?
-            <a href="{% url 'accounts:login' %}" style="color: var(--amarelo);">Entrar</a>
+        <p class="text-center mt-4" style="color: var(--texto-mutado); font-size: 0.9rem;">
+            Já possui acesso? <a href="{% url 'accounts:login' %}" style="color: var(--amarelo); font-weight: 600; text-decoration: none;">Realizar Login</a>
         </p>
-
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/olho_cadastro.js' %}"></script>
+<script>
+    iniciarForcaSenha('{{ form_comum.senha.id_for_label }}', 'comum');
+    iniciarForcaSenha('{{ form_admin.senha.id_for_label }}', 'admin');
+</script>
 {% endblock %}

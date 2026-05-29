@@ -1,139 +1,89 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
 {% block titulo %}Mural de Avisos — Ruralinfo{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mural.css' %}">
+{% endblock %}
+
 {% block conteudo %}
-
-<!-- Cabeçalho da página -->
-<div class="d-flex flex-column flex-md-row align-items-md-center
-            justify-content-between gap-3 mb-4">
+<div class="mural-header">
     <div>
-        <h4 class="fw-bold mb-0" style="color: var(--amarelo);">
-            <i class="bi bi-megaphone me-2"></i>Mural de Avisos
-        </h4>
-        <small class="text-secondary">Informações e comunicados da UFRPE</small>
+        <h2 class="mural-title">Mural Informativo</h2>
+        <p style="color: var(--texto-mutado); font-size: 0.9rem;">Fique por dentro dos comunicados da UFRPE</p>
     </div>
-
     {% if user.is_authenticated and user.tipo_conta == 'ADMIN' %}
     <a href="{% url 'mural:criar' %}" class="btn btn-ruralinfo">
-        <i class="bi bi-plus-lg me-1"></i>Novo Aviso
+        <i class="bi bi-plus-lg"></i> Criar Novo Post
     </a>
     {% endif %}
 </div>
 
-<!-- ===================== FILTROS DE CATEGORIA ===================== -->
-<div class="d-flex flex-wrap gap-2 mb-4">
-    <a href="{% url 'mural:index' %}"
-       class="pill-categoria {% if not categoria_ativa %}active{% endif %}">
+<div class="categoria-filter-container" style="margin-bottom: 2rem; display: flex; gap: 0.6rem; flex-wrap: wrap;">
+    <a href="{% url 'mural:index' %}" class="btn btn-sm {% if not categoria_ativa %}btn-ruralinfo{% else %}btn-outline-light{% endif %}" style="border-radius: 20px; font-size: 0.85rem; padding: 0.4rem 1rem;">
         Todos
     </a>
-    {% for valor, rotulo in categorias %}
-    <a href="?categoria={{ valor }}"
-       class="pill-categoria {% if categoria_ativa == valor %}active{% endif %}">
-        {{ rotulo }}
+    {% for slug, nome in categorias %}
+    <a href="{% url 'mural:index' %}?categoria={{ slug }}" class="btn btn-sm {% if categoria_ativa == slug %}btn-ruralinfo{% else %}btn-outline-light{% endif %}" style="border-radius: 20px; font-size: 0.85rem; padding: 0.4rem 1rem;">
+        {{ nome }}
     </a>
     {% endfor %}
 </div>
 
-<!-- ===================== GRID DE AVISOS ===================== -->
 {% if avisos %}
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-    {% for aviso in avisos %}
-    <div class="col">
-        <div class="card card-aviso h-100">
-
-            <!-- Imagem (se houver) -->
-            {% if aviso.imagem %}
-            <img src="{{ aviso.imagem.url }}"
-                 alt="{{ aviso.alt_texto|default:'' }}"
-                 class="card-img-top"
-                 style="height: 180px; object-fit: cover; border-radius: 10px 10px 0 0;">
-            {% endif %}
-
-            <div class="card-body d-flex flex-column">
-
-                <!-- Linha superior: categoria + oculto indicator -->
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <span class="badge badge-categoria bg-{{ aviso.badge_class }}">
-                        {{ aviso.get_categoria_display }}
-                    </span>
-                    {% if not aviso.publicado %}
-                    <span class="badge badge-oculto">
-                        <i class="bi bi-eye-slash me-1"></i>Oculto
-                    </span>
-                    {% endif %}
-                </div>
-
-                <!-- Conteúdo do aviso -->
-                <p class="card-text flex-grow-1" style="white-space: pre-line;">
-                    {{ aviso.conteudo|truncatechars:200 }}
-                </p>
-
-                <!-- Rodapé do card -->
-                <div class="d-flex justify-content-between align-items-center
-                            mt-3 pt-2"
-                     style="border-top: 1px solid rgba(217,197,46,0.15);">
-                    <small class="text-secondary">
-                        <i class="bi bi-person me-1"></i>
-                        {{ aviso.autor.nome_completo|truncatechars:20 }}
-                    </small>
-                    <small class="text-secondary">
-                        <i class="bi bi-clock me-1"></i>
-                        {{ aviso.data_criacao|timesince }} atrás
-                    </small>
-                </div>
-
-                <!-- Ações de ADMIN -->
-                {% if user.is_authenticated and user.tipo_conta == 'ADMIN' %}
-                <div class="d-flex gap-2 mt-3">
-
-                    <!-- Editar -->
-                    <a href="{% url 'mural:editar' aviso.pk %}"
-                       class="btn btn-sm btn-outline-light flex-fill">
-                        <i class="bi bi-pencil me-1"></i>Editar
-                    </a>
-
-                    <!-- Ocultar / Reativar — equivale ao toggle de estado do legado -->
-                    <form method="post" action="{% url 'mural:toggle' aviso.pk %}">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="btn btn-sm {% if aviso.publicado %}btn-outline-warning{% else %}btn-outline-success{% endif %}"
-                                title="{% if aviso.publicado %}Ocultar{% else %}Reativar{% endif %}">
-                            <i class="bi {% if aviso.publicado %}bi-eye-slash{% else %}bi-eye{% endif %}"></i>
-                        </button>
-                    </form>
-
-                    <!-- Deletar -->
-                    <form method="post" action="{% url 'mural:deletar' aviso.pk %}"
-                          onsubmit="return confirm('Deletar permanentemente?')">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                title="Deletar">
-                            <i class="bi bi-trash3"></i>
-                        </button>
-                    </form>
-
+    <div class="aviso-grid">
+        {% for aviso in avisos %}
+        <div class="aviso-card" {% if not aviso.publicado %}style="opacity: 0.65; border: 1px dashed var(--vermelho);"{% endif %}>
+            <div>
+                {% if aviso.imagem %}
+                <div class="aviso-img-container">
+                    <img src="{{ aviso.imagem.url }}" alt="{{ aviso.alt_texto|default:aviso.titulo }}" class="aviso-img">
                 </div>
                 {% endif %}
 
+                <div class="aviso-meta" style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="badge bg-{{ aviso.badge_class }} text-dark" style="font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 4px;">
+                        {{ aviso.get_categoria_display }}
+                    </span>
+                    <i class="bi bi-person-circle" style="margin-left: 0.3rem;"></i> <span>{{ aviso.autor.nome_completo }}</span>
+                    <span>&bull;</span>
+                    <i class="bi bi-calendar3"></i> <span>{{ aviso.data_criacao|date:"d/m/Y H:i" }}</span>
+                    
+                    {% if not aviso.publicado %}
+                        <span class="text-danger" style="font-weight: bold; font-size: 0.8rem; margin-left: auto;">[Rascunho Oculto]</span>
+                    {% endif %}
+                </div>
+
+                <h3 class="aviso-titulo" style="margin-top: 0.8rem;">{{ aviso.titulo }}</h3>
+                <p class="aviso-conteudo">{{ aviso.conteudo }}</p>
             </div>
+            
+            {% if user.is_authenticated and user.tipo_conta == 'ADMIN' %}
+            <div class="aviso-actions" style="display: flex; gap: 0.8rem; justify-content: flex-end; align-items: center; margin-top: 1rem;">
+                <form method="post" action="{% url 'mural:toggle' aviso.pk %}" style="display: inline; margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-action" style="color: var(--texto-mutado); background: none; border: none; cursor: pointer;" title="Alternar Visibilidade">
+                        {% if aviso.publicado %}<i class="bi bi-eye-slash"></i> Ocultar{% else %}<i class="bi bi-eye"></i> Publicar{% endif %}
+                    </button>
+                </form>
+                
+                <a href="{% url 'mural:editar' aviso.pk %}" class="btn-action btn-edit">
+                    <i class="bi bi-pencil-square"></i> Editar
+                </a>
+                <a href="{% url 'mural:deletar' aviso.pk %}" class="btn-action btn-delete">
+                    <i class="bi bi-trash3"></i> Excluir
+                </a>
+            </div>
+            {% endif %}
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-
 {% else %}
-<!-- Estado vazio -->
-<div class="text-center py-5 mt-5">
-    <i class="bi bi-inbox display-1 text-secondary opacity-50"></i>
-    <h5 class="mt-3 text-secondary">Nenhum aviso encontrado</h5>
-    {% if categoria_ativa %}
-    <a href="{% url 'mural:index' %}" class="btn btn-sm btn-outline-light mt-2">
-        Ver todos
-    </a>
-    {% endif %}
-</div>
+    <div class="mural-vazio">
+        <i class="bi bi-chat-square-dots"></i>
+        <h3>Nenhum aviso encontrado</h3>
+        <p style="margin-top: 0.5rem;">Não há registros para a categoria selecionada no momento.</p>
+    </div>
 {% endif %}
-
 {% endblock %}
