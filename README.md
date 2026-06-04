@@ -43,6 +43,8 @@ Esta versão representa a migração completa da aplicação desktop (CustomTkin
 - **7 — Rastreabilidade de Autoria:** Cada aviso registra o administrador que o criou via chave estrangeira, servindo como auditoria interna.
 - **8 — Suporte a Imagens:** Avisos podem conter imagem com campo de texto alternativo obrigatório (acessibilidade).
 - **9 — Acesso por Visitante:** O mural é acessível sem autenticação. A navbar adapta-se automaticamente exibindo opções de login/cadastro para visitantes e o perfil do usuário para contas autenticadas.
+- **10 — Nome de Usuário Customizado (Nickname):** Interface embutida na tela de perfil para alteração do identificador do usuário com validação inline de unicidade, preparando a identidade visual para futuras salas de conversa.
+- **11 — Exclusão Avançada de Conta:** Sistema destrutivo seguro com acionamento por janela popup modal nativa (JavaScript puro) que exige a digitação e validação criptográfica da senha atual do usuário antes da remoção definitiva do banco de dados.
 
 ## Bibliotecas Utilizadas
 
@@ -50,7 +52,8 @@ Esta versão representa a migração completa da aplicação desktop (CustomTkin
 |---|---|
 | **Django** | Framework principal: ORM, autenticação, roteamento e templates |
 | **Pillow** | Processamento de imagens para o `ImageField` do mural |
-| **django-widget-tweaks** | Aplicação de classes CSS Bootstrap diretamente nos campos de formulário nos templates |
+| **python-dotenv** | Isolamento de chaves secretas do Django e credenciais do banco através de arquivos `.env` |
+| **django-widget-tweaks** | Aplicação de classes CSS diretamente nos campos de formulário nos templates |
 | **Bootstrap 5** *(CDN)* | Componentes visuais responsivos e sistema de grid |
 | **Bootstrap Icons** *(CDN)* | Ícones utilizados na interface |
 
@@ -61,7 +64,7 @@ Esta versão representa a migração completa da aplicação desktop (CustomTkin
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/DanielMoreiraFr/Ruralinfo.git
+git clone [https://github.com/DanielMoreiraFr/Ruralinfo.git](https://github.com/DanielMoreiraFr/Ruralinfo.git)
 cd Ruralinfo
 ```
 
@@ -77,11 +80,13 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### 3. Instale as dependências
+### 3. Instale as dependências e configure as variáveis de ambiente
 
 ```bash
 pip install -r requirements.txt
 ```
+
+> **Nota:** Crie um arquivo chamado `.env` na raiz do projeto baseado no `.env.example` preenchendo sua `SECRET_KEY` e mudando a flag `DEBUG=True`.
 
 ### 4. Execute as migrations
 
@@ -129,18 +134,23 @@ Acesse em: **http://127.0.0.1:8000/**
 ruralinfo/
 ├── manage.py
 ├── requirements.txt
+├── .env                          # variáveis de ambiente configuradas localmente
 ├── db.sqlite3                    # gerado após migrate
 ├── media/                        # uploads de imagens dos avisos
 │
 ├── ruralinfo/                    # pacote de configuração
-│   ├── settings.py               # AUTH_USER_MODEL · MEDIA · MESSAGE_TAGS
+│   ├── settings.py               # AUTH_USER_MODEL · MEDIA · MESSAGE_TAGS · dotenv
 │   ├── urls.py                   # roteador principal
 │   └── wsgi.py
 │
-├── accounts/                     # app de autenticação
+├── static/                       # arquivos estáticos globais
+│   └── css/
+│       └── base.css              # design system, variáveis de cor, botões e modal
+│
+├── accounts/                     # app de autenticação e perfil
 │   ├── models.py                 # Usuario (AbstractUser) · CodigoConvite
 │   ├── forms.py                  # LoginForm · CadastroComumForm · CadastroAdminForm
-│   ├── views.py                  # login · cadastro · logout
+│   ├── views.py                  # login · cadastro · perfil · deletar_conta
 │   ├── urls.py
 │   ├── admin.py
 │   └── migrations/
@@ -158,6 +168,7 @@ ruralinfo/
     ├── accounts/
     │   ├── login.html
     │   ├── cadastro.html
+    │   ├── perfil.html           # alteração de nick e modal de exclusão
     │   ├── _campos_base.html     # partial: nome e email
     │   └── _campos_senha.html    # partial: senha + confirmar + indicador de força
     └── mural/
@@ -182,7 +193,7 @@ ruralinfo/
 - **11 — Busca do Circular:** Consulta dos horários previstos de saída e chegada por ponto de parada.
 - **12 — Review Técnico do Ônibus:** Área para feedback discente sobre as condições de transporte, com dados consolidados para melhorias institucionais.
 - **13 — Review Ruralinfo + Sugestões:** Canal direto para feedback sobre a experiência do usuário com a plataforma web.
-- **14 — A definir:** Funcionalidade bônus baseada nas necessidades identificadas durante os testes da 2VA.
+- **14 — Chat de Interação síncrono:** Canal de bate-papo em tempo real conectando a comunidade acadêmica através dos nicknames customizados gerenciados no perfil.
 
 ---
 
@@ -204,3 +215,26 @@ A primeira versão do Ruralinfo foi desenvolvida como uma aplicação **desktop*
 pip install customtkinter
 python src/main.py
 ```
+
+---
+
+# 📋 Matriz de Requisitos & Cronograma de Desenvolvimento
+
+| Feature / ID | Requisito / Fluxo Principal | Validação de Erros / Fluxos Alternativos | Status | Prioridade |
+| :--- | :--- | :--- | :--- | :--- |
+| **RF001** | **Tela Inicial:** Escolha entre cadastro / visitante / login / fechar | Notificação de dígito inválido fora do menu prescrito no cadastro. | Pronta | P1 - Altíssima |
+| **RF002** | **Cadastro:** Seleção de conta (Admin ou Comum), Nome e E-mail | Validação de espaços, bloqueio de duplicidade e restrição ao domínio `@ufrpe.br`. Senha forte com min. 10 chars, maiúscula, número e char especial. | Pronta | P1 - Altíssima |
+| **RF003** | **Login:** Inserção de e-mail institucional e senha | Validação de credenciais. Se for verificado como ADM, libera rotas exclusivas. | Pronta | P1 - Altíssima |
+| **RF004** | **Tela do Mural:** Exibição do feed público de informações | Renderização adaptável com base no status da sessão do usuário. | Pronta | P1 - Altíssima |
+| **RF005** | **CRUD do Mural:** Gerenciamento dos posts pelos administradores | Restrição de área. Usuário comum precisa estar logado para interagir. | Pronta | P2 - Alta |
+| **RF006** | **Filtro de Categorias:** Separador do mural por tipo de evento | Separação lógica automatizada em nível de banco sem quebras. | Pronta | P2 - Alta |
+| **RF007** | **Horários do Circular:** Quadro de horários do transporte interno | Tratamento de endereço inválido ou inexistente na busca. | Em des. | P3 - Regular |
+| **RF008** | **Pesquisa por Local:** Localização de blocos e prédios do campus | Erro de local não catalogado no sistema. | A fazer | P1 - Altíssima |
+| **RF009** | **Comentários por Local:** Espaço para debates sobre locais específicos | Bloqueio de spam e validação de autenticação ativa. | A fazer | P2 - Alta |
+| **RF010** | **Informações do Local:** Exibição de dados da pesquisa | Fallback para dados ausentes ou indisponíveis temporariamente. | A fazer | P2 - Alta |
+| **RF011** | **Hierarquia de Permissões:** Definições feitas pelo Super ADM | Bloqueio de elevação de privilégios maliciosa. | Pronta | P1 - Altíssima |
+| **RF012** | **Painel do Super ADM:** Tela administrativa avançada | Auditoria de segurança de tokens gerados. | Pronta | P1 - Altíssima |
+| **RF013** | **Feedback do Local:** Avaliações das instalações pelos discentes | Tratamento de duplicidade de notas pelo mesmo usuário. | A fazer | P3 - Regular |
+| **RF014** | **Sugestão de Anúncios:** Envio de posts sugeridos por usuários comuns | Validação de campos obrigatórios antes do envio à fila. | A fazer | P2 - Alta |
+| **RF015** | **Revisão de Sugestões:** Área do ADM para aprovar/reprovar posts | Redirecionamento correto pós-validação de aprovação. | A fazer | P2 - Alta |
+| **RF016** | **Token por E-mail:** Envio de código verificador para ativação | Expiração de token e reenvio de código de segurança. | A fazer | P2 - Alta |

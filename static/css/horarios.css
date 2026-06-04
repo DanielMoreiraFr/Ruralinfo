@@ -1,0 +1,47 @@
+/* Wrapper para garantir o scroll lateral no mobile */
+.tabela-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    background-color: #1e1e1e; /* Une todo o fundo da tabela no azul-escuro correto */
+    border: 2px solid var(--amarelo, #ffcc00); /* Borda externa amarela ao redor da planilha */
+    border-radius: 6px;
+}
+
+/* Configuração da estrutura estilo Excel */
+.tabela-horarios {
+    width: 100%;
+    border-collapse: collapse; /* Funde as bordas eliminando os "gaps" vazios */
+    background-color: #1e1e1e; /* Fundo azul-escuro unificado */
+}
+
+/* Borda amarela em TODOS os lados de cada célula */
+.tabela-horarios th, 
+.tabela-horarios td {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    padding: 12px 16px; /* Espaçamento interno (controla o tamanho da célula) */
+    text-align: center;
+    font-size: 0.95rem;
+    
+    /* Cria a grade amarela perfeita unindo as células */
+    border: 1px solid var(--amarelo, #ffcc00); 
+}
+
+/* Estilo para destacar os títulos do Cabeçalho (Ponto, 1ª, 2ª...) */
+.tabela-horarios th {
+    background-color: #252526; /* Um tom discretamente mais escuro */
+    font-weight: bold;
+    color: var(--amarelo, #ffcc00);
+}
+
+/* Estilo opcional para a coluna de Pontos (Zootecnia, Cegoe...) se quiser destacar */
+.tabela-horarios tbody td:first-child {
+    font-weight: 600;
+    text-align: left; /* Alinha os nomes dos pontos à esquerda para melhor leitura */
+}
+
+/* Células sem horário em destaque sutil */
+.tabela-horarios td.vazio {
+    color: #555555;
+    background-color: #1a1a1a; /* Fundo ligeiramente alterado para o traço "—" */
+}
