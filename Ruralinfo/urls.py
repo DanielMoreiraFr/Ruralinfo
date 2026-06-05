@@ -12,3 +12,7 @@ urlpatterns = [
     path('mural/',     include('mural.urls',    namespace='mural')),
     path('',           lambda r: redirect('mural:index'), name='home'), # lambda simplfica o redirect
 ]
+
+
+# configura o Django para colocar os aruqivos de midia 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

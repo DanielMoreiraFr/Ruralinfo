@@ -146,46 +146,8 @@
 </footer>
 
 <script src="{% static 'js/alerta.js' %}"></script>
+<script src="{% static 'js/navbar.js' %}"></script>
 <script src="{% static 'js/sidebar.js' %}"></script>
-
-<script>
-    // ── Dropdown do usuário ──
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggleBtn   = document.getElementById('userDropdownToggle');
-        const menuDropdown = document.getElementById('userDropdownMenu');
-        const arrowIcon   = document.getElementById('dropdownArrow');
-
-        if (toggleBtn && menuDropdown) {
-            toggleBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                const isOpened = menuDropdown.classList.contains('active');
-                if (isOpened) {
-                    menuDropdown.classList.remove('active');
-                    arrowIcon.style.transform = 'rotate(0deg)';
-                } else {
-                    menuDropdown.classList.add('active');
-                    arrowIcon.style.transform = 'rotate(180deg)';
-                }
-            });
-
-            document.addEventListener('click', function (e) {
-                if (!toggleBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
-                    menuDropdown.classList.remove('active');
-                    arrowIcon.style.transform = 'rotate(0deg)';
-                }
-            });
-        }
-
-        // ── Menu mobile ──
-        const menuToggle = document.getElementById('menuToggle');
-        const navbarMenu = document.getElementById('navbarMenu');
-        if (menuToggle && navbarMenu) {
-            menuToggle.addEventListener('click', function () {
-                navbarMenu.classList.toggle('active');
-            });
-        }
-    });
-</script>
 
 {% block extra_js %}{% endblock %}
 </body>

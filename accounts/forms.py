@@ -2,6 +2,7 @@ import re
 import uuid
 from django import forms
 from django.contrib.auth import authenticate
+from django.db import transaction
 
 from .models import Usuario, CodigoConvite
 
@@ -145,7 +146,6 @@ class CadastroComumForm(forms.ModelForm):
     def save(self, commit=True):
         usuario = super().save(commit=False)
         usuario.tipo_conta = 'COMUM'
-        # set_password faz o hashing — substitui o plain text do legado
         usuario.set_password(self.cleaned_data['senha'])
         if commit:
             usuario.save()
@@ -230,14 +230,18 @@ class CadastroAdminForm(forms.ModelForm):
         return cleaned
 
     def save(self, commit=True):
-        usuario = super().save(commit=False)
-        usuario.tipo_conta = 'ADMIN'
-        usuario.set_password(self.cleaned_data['senha'])
-        if commit:
-            usuario.save()
-            convite = self.cleaned_data.get('_convite')
-            if convite:
-                convite.foi_usado  = True
-                convite.usado_por  = usuario
-                convite.save()
-        return usuario
+        try:
+            with transaction.atomic():
+                usuario = super().save(commit=False)
+                usuario.tipo_conta = 'ADMIN'
+                usuario.set_password(self.cleaned_data['senha'])
+                if commit:
+                    usuario.save()
+                    convite = self.cleaned_data.get('_convite')
+                    if convite:
+                        convite.foi_usado = True
+                        convite.usado_por = usuario
+                        convite.save()
+            return usuario
+        except Exception:
+            raise

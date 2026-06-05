@@ -61,11 +61,18 @@ def cadastro_view(request):
         elif tipo == 'admin':
             form_admin = CadastroAdminForm(request.POST, prefix='admin')
             if form_admin.is_valid():
-                form_admin.save()
-                messages.success(
-                    request, 'Conta Admin criada! Faça login para continuar.'
-                )
-                return redirect('accounts:login')
+                try:
+                    form_admin.save()
+                    messages.success(
+                        request, 'Conta Admin criada! Faça login para continuar.'
+                    )
+                    return redirect('accounts:login')
+                except Exception:
+                    messages.error(
+                        request,
+                        'Erro ao criar a conta. O código de convite não foi consumido, tente novamente.'
+                    )
+                    aba_ativa = 'admin'
 
         # Se teve erro, mostra qual aba estava ativa para o template reabrir
         aba_ativa = tipo or 'comum'
