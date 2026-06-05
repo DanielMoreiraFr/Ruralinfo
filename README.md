@@ -20,7 +20,17 @@ O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de info
 
 ## VERSÃO 2VA
 
-### Funcionalidades Implementadas
+- **1 — Sistema de Autenticação Dual:** Um mesmo e-mail `@ufrpe.br` pode possuir uma conta **COMUM** e uma conta **ADMIN** independentes. O login exige a seleção explícita do tipo de conta.
+- **2 — Validação Institucional:** Filtro obrigatório para e-mails do domínio `@ufrpe.br` nos formulários de cadastro e login.
+- **3 — Segurança de Credenciais:** Senhas armazenadas com hashing PBKDF2-SHA256. Validação de força: mínimo 10 caracteres, letra maiúscula, número e caractere especial.
+- **4 — Sistema de Convites para Admin:** Nenhuma conta ADMIN pode ser criada publicamente. O cadastro exige um código UUID gerado por um administrador existente.
+- **5 — Mural Informativo com Categorias:** Feed público de avisos organizados por categoria (Aviso Geral, Evento, Acadêmico, Oportunidade, Extensão, Pesquisa, Manutenção, Urgente) com filtro interativo.
+- **6 — CRUD Completo para Admin:** Administradores podem criar, editar, ocultar e deletar qualquer aviso do sistema. A função de **ocultar** mantém o registro no banco sem exibi-lo ao público.
+- **7 — Rastreabilidade de Autoria:** Cada aviso registra o administrador que o criou via chave estrangeira, servindo como auditoria interna.
+- **8 — Suporte a Imagens:** Avisos podem conter imagem com campo de texto alternativo obrigatório (acessibilidade).
+- **9 — Acesso por Visitante:** O mural é acessível sem autenticação. A navbar adapta-se automaticamente exibindo opções de login/cadastro para visitantes e o perfil do usuário para contas autenticadas.
+- **10 — Nome de Usuário Customizado (Nickname):** Interface embutida na tela de perfil para alteração do identificador do usuário com validação inline de unicidade, preparando a identidade visual para futuras salas de conversa.
+- **11 — Exclusão Avançada de Conta:** Sistema destrutivo seguro com acionamento por janela popup modal nativa (JavaScript puro) que exige a digitação e validação criptográfica da senha atual do usuário antes da remoção definitiva do banco de dados.
 
 * **1 — Sistema de Autenticação Dual:** Um mesmo e-mail `@ufrpe.br` pode possuir uma conta **COMUM** e uma conta **ADMIN** independentes. O login exige a seleção explícita do tipo de conta.
 * **2 — Validação Institucional:** Filtro obrigatório para e-mails do domínio `@ufrpe.br` nos formulários de cadastro e login.
@@ -41,6 +51,9 @@ O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de info
 | **Django** | Framework principal: ORM, autenticação, roteamento e templates |
 | **Pillow** | Processamento de imagens para o `ImageField` do mural |
 | **python-dotenv** | Isolamento de chaves secretas do Django e credenciais do banco através de arquivos `.env` |
+| **django-widget-tweaks** | Aplicação de classes CSS diretamente nos campos de formulário nos templates |
+| **Bootstrap 5** *(CDN)* | Componentes visuais responsivos e sistema de grid |
+| **Bootstrap Icons** *(CDN)* | Ícones utilizados na interface |
 
 ---
 
@@ -49,7 +62,7 @@ O Ruralinfo é uma aplicação web desenvolvida para centralizar o fluxo de info
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/DanielMoreiraFr/Ruralinfo.git
+git clone [https://github.com/DanielMoreiraFr/Ruralinfo.git](https://github.com/DanielMoreiraFr/Ruralinfo.git)
 cd Ruralinfo
 
 ```
@@ -61,10 +74,7 @@ python -m venv venv
 
 ```
 
-* No Windows: `venv\Scripts\activate`
-* No Linux/macOS: `source venv/bin/activate`
-
-### 3. Instale as dependências
+### 3. Instale as dependências e configure as variáveis de ambiente
 
 ```bash
 pip install -r requirements.txt
@@ -72,6 +82,8 @@ pip install -r requirements.txt
 ```
 
 > **Nota:** Crie um arquivo chamado `.env` na raiz do projeto baseado no `.env.example` preenchendo sua `SECRET_KEY` e mudando a flag `DEBUG=True`.
+
+### 4. Execute as migrations
 
 ### 4. Execute as migrations
 
@@ -181,13 +193,11 @@ ruralinfo/
 
 ### Funcionalidades Futuras
 
-* **12 — Implementação da Rota do Circular:** Mapeamento visual dos trajetos realizados pelo transporte interno da UFRPE (Mapeado no RF007).
-* **13 — Busca do Circular:** Consulta dos horários previstos de saída e chegada por ponto de parada (Mapeado no RF007).
-* **14 — Pesquisa e Localização:** Sistema de buscas detalhado de blocos e prédios no campus (Mapeado no RF008, RF010).
-* **15 — Review Técnico do Ônibus e Locais:** Área para feedback discente sobre as condições de transporte e instalações físicas (Mapeado no RF009, RF013).
-* **16 — Sistema de Sugestão e Moderação:** Permissão para que usuários comuns sugiram anúncios que passarão por uma fila de aprovação dos administradores (Mapeado no RF014, RF015).
-* **17 — Token por E-mail:** Envio de código verificador para ativação de novas contas com regras de expiração (Mapeado no RF016).
-* **18 — Chat de Interação síncrono:** Canal de bate-papo em tempo real conectando a comunidade acadêmica através dos nicknames customizados gerenciados no perfil.
+- **10 — Implementação da Rota do Circular:** Mapeamento visual dos trajetos realizados pelo transporte interno da UFRPE.
+- **11 — Busca do Circular:** Consulta dos horários previstos de saída e chegada por ponto de parada.
+- **12 — Review Técnico do Ônibus:** Área para feedback discente sobre as condições de transporte, com dados consolidados para melhorias institucionais.
+- **13 — Review Ruralinfo + Sugestões:** Canal direto para feedback sobre a experiência do usuário com a plataforma web.
+- **14 — Chat de Interação síncrono:** Canal de bate-papo em tempo real conectando a comunidade acadêmica através dos nicknames customizados gerenciados no perfil.
 
 ---
 
@@ -208,5 +218,27 @@ A primeira versão do Ruralinfo foi desenvolvida como uma aplicação **desktop*
 ```bash
 pip install customtkinter
 python src/main.py
-
 ```
+
+---
+
+# 📋 Matriz de Requisitos & Cronograma de Desenvolvimento
+
+| Feature / ID | Requisito / Fluxo Principal | Validação de Erros / Fluxos Alternativos | Status | Prioridade |
+| :--- | :--- | :--- | :--- | :--- |
+| **RF001** | **Tela Inicial:** Escolha entre cadastro / visitante / login / fechar | Notificação de dígito inválido fora do menu prescrito no cadastro. | Pronta | P1 - Altíssima |
+| **RF002** | **Cadastro:** Seleção de conta (Admin ou Comum), Nome e E-mail | Validação de espaços, bloqueio de duplicidade e restrição ao domínio `@ufrpe.br`. Senha forte com min. 10 chars, maiúscula, número e char especial. | Pronta | P1 - Altíssima |
+| **RF003** | **Login:** Inserção de e-mail institucional e senha | Validação de credenciais. Se for verificado como ADM, libera rotas exclusivas. | Pronta | P1 - Altíssima |
+| **RF004** | **Tela do Mural:** Exibição do feed público de informações | Renderização adaptável com base no status da sessão do usuário. | Pronta | P1 - Altíssima |
+| **RF005** | **CRUD do Mural:** Gerenciamento dos posts pelos administradores | Restrição de área. Usuário comum precisa estar logado para interagir. | Pronta | P2 - Alta |
+| **RF006** | **Filtro de Categorias:** Separador do mural por tipo de evento | Separação lógica automatizada em nível de banco sem quebras. | Pronta | P2 - Alta |
+| **RF007** | **Horários do Circular:** Quadro de horários do transporte interno | Tratamento de endereço inválido ou inexistente na busca. | Em des. | P3 - Regular |
+| **RF008** | **Pesquisa por Local:** Localização de blocos e prédios do campus | Erro de local não catalogado no sistema. | A fazer | P1 - Altíssima |
+| **RF009** | **Comentários por Local:** Espaço para debates sobre locais específicos | Bloqueio de spam e validação de autenticação ativa. | A fazer | P2 - Alta |
+| **RF010** | **Informações do Local:** Exibição de dados da pesquisa | Fallback para dados ausentes ou indisponíveis temporariamente. | A fazer | P2 - Alta |
+| **RF011** | **Hierarquia de Permissões:** Definições feitas pelo Super ADM | Bloqueio de elevação de privilégios maliciosa. | Pronta | P1 - Altíssima |
+| **RF012** | **Painel do Super ADM:** Tela administrativa avançada | Auditoria de segurança de tokens gerados. | Pronta | P1 - Altíssima |
+| **RF013** | **Feedback do Local:** Avaliações das instalações pelos discentes | Tratamento de duplicidade de notas pelo mesmo usuário. | A fazer | P3 - Regular |
+| **RF014** | **Sugestão de Anúncios:** Envio de posts sugeridos por usuários comuns | Validação de campos obrigatórios antes do envio à fila. | A fazer | P2 - Alta |
+| **RF015** | **Revisão de Sugestões:** Área do ADM para aprovar/reprovar posts | Redirecionamento correto pós-validação de aprovação. | A fazer | P2 - Alta |
+| **RF016** | **Token por E-mail:** Envio de código verificador para ativação | Expiração de token e reenvio de código de segurança. | A fazer | P2 - Alta |

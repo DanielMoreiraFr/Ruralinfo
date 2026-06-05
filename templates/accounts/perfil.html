@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+{% endblock %}
+
 {% block titulo %}Meus Dados — Ruralinfo{% endblock %}
 
 {% block conteudo %}
@@ -103,34 +107,8 @@
 </div>
 
 <!-- Script de Controle do Popup Modal -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('deleteAccountModal');
-        const btnAbrir = document.getElementById('btnAbrirModalDelete');
-        const btnFechar = document.getElementById('btnFecharModalDelete');
-        const inputSenha = document.getElementById('confirmarSenhaInput');
+{% block extra_js %}
+<script src="{% static 'js/perfil.js' %}"></script>
+{% endblock %}
 
-        if (btnAbrir && modal) {
-            // Abre o modal ao clicar no botão vermelho
-            btnAbrir.addEventListener('click', function() {
-                modal.classList.add('active');
-                inputSenha.focus();
-            });
-
-            // Fecha o modal ao clicar em "Cancelar"
-            btnFechar.addEventListener('click', function() {
-                modal.classList.remove('active');
-                inputSenha.value = ''; // Limpa o campo por segurança
-            });
-
-            // Fecha o modal se clicar na área escura de fundo
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                    inputSenha.value = '';
-                }
-            });
-        }
-    });
-</script>
 {% endblock %}

@@ -116,3 +116,6 @@ def toggle_publicado(request, pk):
         messages.success(request, f'Aviso {status} com sucesso.')
 
     return redirect('mural:index')
+
+def horarios(request):
+    return render(request, 'mural/horarios.html')

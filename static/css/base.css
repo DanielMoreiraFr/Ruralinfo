@@ -1,14 +1,20 @@
 /* ==========================================================================
-   DEFINIÇÕES GLOBAIS DE DESIGN SYSTEM
+   BASE.CSS — Estilos globais do Ruralinfo
+   Escopo: navbar, sidebar, footer, botões, alertas, utilitários
+   Cada app tem seu próprio CSS: accounts.css, mural.css, horarios.css
    ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   VARIÁVEIS E RESET
+   -------------------------------------------------------------------------- */
 :root {
     --azul-escuro: #112b38;
-    --azul-card: rgba(17, 43, 56, 0.95);
-    --amarelo: #f4c430;
+    --azul-card:   rgba(17, 43, 56, 0.95);
+    --amarelo:     #f4c430;
     --texto-claro: #cce0e8;
-    --texto-mutado: #8faab5;
-    --vermelho: #ff4d4d;
-    --verde: #2ecc71;
+    --texto-mutado:#8faab5;
+    --vermelho:    #ff4d4d;
+    --verde:       #2ecc71;
 }
 
 * {
@@ -40,6 +46,9 @@ main {
     width: 100%;
 }
 
+/* --------------------------------------------------------------------------
+   FOOTER
+   -------------------------------------------------------------------------- */
 footer {
     background: #0a1921;
     text-align: center;
@@ -49,9 +58,9 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-/* ==========================================================================
-   NAVBAR ARQUITETADA NATIVA
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   NAVBAR
+   -------------------------------------------------------------------------- */
 .navbar {
     background-color: #0a1921;
     border-bottom: 2px solid var(--amarelo);
@@ -102,13 +111,11 @@ footer {
     cursor: pointer;
 }
 
-.nav-link:hover {
-    color: var(--amarelo);
-}
+.nav-link:hover { color: var(--amarelo); }
 
-/* ==========================================================================
-   COMPONENTE DROPDOWN NATIVO (MENU DO USUÁRIO)
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   DROPDOWN DO USUÁRIO
+   -------------------------------------------------------------------------- */
 .navbar-menu .dropdown {
     position: relative;
 }
@@ -119,7 +126,7 @@ footer {
     right: 0;
     top: 100%;
     margin-top: 0.6rem;
-    background-color: #0d1f2d; /* Tom escuro do projeto */
+    background-color: #0d1f2d;
     border: 1px solid rgba(255, 244, 48, 0.2);
     border-radius: 8px;
     list-style: none;
@@ -162,7 +169,6 @@ footer {
     margin: 0.4rem 0;
 }
 
-/* Botão de Sair Interno (Logout via POST) */
 .logout-btn-submit {
     display: flex;
     align-items: center;
@@ -194,9 +200,101 @@ footer {
     text-transform: uppercase;
 }
 
-/* ==========================================================================
-   BOTÕES NATIVOS UTILITÁRIOS
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   SIDEBAR
+   -------------------------------------------------------------------------- */
+.hamburger-btn {
+    background: none;
+    border: none;
+    color: var(--amarelo);
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 0 10px 0 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1999;
+}
+.sidebar-overlay.ativo { display: block; }
+
+.sidebar {
+    position: fixed !important;
+    top: 0;
+    left: -100% !important;
+    width: 260px;
+    height: 100vh;
+    background-color: #0a1921;
+    border-right: 2px solid var(--amarelo);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.aberto { left: 0 !important; }
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid rgba(244, 196, 48, 0.3);
+}
+
+.sidebar-header span {
+    color: var(--amarelo);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.sidebar-fechar {
+    background: none;
+    border: none;
+    color: var(--texto-mutado);
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.sidebar-fechar:hover { color: var(--amarelo); }
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.2rem;
+    color: var(--texto-claro);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.ativo {
+    background-color: rgba(244, 196, 48, 0.08);
+    border-left-color: var(--amarelo);
+    color: var(--amarelo);
+}
+
+/* --------------------------------------------------------------------------
+   BOTÕES GLOBAIS
+   -------------------------------------------------------------------------- */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -233,22 +331,16 @@ footer {
     color: #0a1921;
 }
 
-.btn-ruralinfo:hover {
-    opacity: 0.9;
-}
+.btn-ruralinfo:hover { opacity: 0.9; }
 
-.text-danger {
-    color: var(--vermelho) !important;
-}
-
-/* ==========================================================================
-   NOTIFICAÇÕES FLUTUANTES (MESSAGES DO DJANGO)
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   ALERTAS / FLASH MESSAGES
+   -------------------------------------------------------------------------- */
 .django-messages {
     position: fixed;
     top: 4.5rem;
     right: 1.5rem;
-    z-index: 1000;
+    z-index: 1060;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
@@ -264,17 +356,18 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
     transition: opacity 0.3s ease, transform 0.3s ease;
     animation: surgimento 0.2s ease-out;
 }
 
 @keyframes surgimento {
     from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-.alert-danger, .alert-error { border-left-color: var(--vermelho); }
+.alert-danger,
+.alert-error   { border-left-color: var(--vermelho); }
 .alert-success { border-left-color: var(--verde); }
 
 .btn-close {
@@ -286,100 +379,19 @@ footer {
     line-height: 1;
     opacity: 0.6;
 }
+.btn-close:hover { opacity: 1; }
 
-.btn-close:hover {
-    opacity: 1;
-}
+/* --------------------------------------------------------------------------
+   UTILITÁRIOS GLOBAIS
+   -------------------------------------------------------------------------- */
+.text-danger { color: var(--vermelho) !important; }
 
-/* ==========================================================================
-   ESTILOS EXCLUSIVOS DA TELA DE PERFIL
-   ========================================================================== */
-.perfil-card-wrapper {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-}
-
-.perfil-info-block {
-    background: #0a1921;
-    padding: 1rem 1.2rem;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.perfil-info-label {
-    color: var(--amarelo);
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 0.3rem;
-    letter-spacing: 0.5px;
-}
-
-.perfil-info-value {
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-/* Organiza o Tipo de Usuário e Ingresso lado a lado */
-.perfil-split-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-}
-
-/* Botão Inline de Salvar Novo Nickname */
-.perfil-btn-salvar {
-    background-color: var(--amarelo);
-    color: #0a1921;
-    border: none;
-    padding: 0 1.2rem;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    transition: opacity 0.2s ease;
-}
-
-.perfil-btn-salvar:hover {
-    opacity: 0.9;
-}
-
-/* Botão Voltar Amarelo Consertado */
-.perfil-btn-voltar {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--amarelo) !important; 
-    border: 1px solid var(--amarelo);
-    background: transparent;
-    padding: 0.6rem 1.4rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
-    cursor: pointer;
-}
-
-.perfil-btn-voltar:hover {
-    background-color: var(--amarelo);
-    color: #0a1921 !important;
-}
-
-/* ==========================================================================
-   RESPONSIVIDADE E MEDIA QUERIES
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   RESPONSIVIDADE
+   -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-    .navbar-toggle {
-        display: block;
-    }
+    .navbar-toggle { display: block; }
+
     .navbar-menu {
         display: none;
         flex-direction: column;
@@ -391,12 +403,16 @@ footer {
         padding: 1.5rem;
         border-bottom: 2px solid var(--amarelo);
         gap: 1.2rem;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        z-index: 200;
     }
-    .navbar-menu.active {
-        display: flex;
-    }
+
+    .navbar-menu.active { display: flex; }
+
+    /* Correção do dropdown no mobile — sem isso o display:none da regra
+       principal é sobrescrito e o menu aparece sempre aberto */
     .navbar-menu .dropdown-menu {
+        display: none;
         position: static;
         background: rgba(255, 255, 255, 0.03);
         border: none;
@@ -404,133 +420,6 @@ footer {
         width: 100%;
         box-shadow: none;
     }
-}
 
-@media (max-width: 576px) {
-    .perfil-split-row {
-        grid-template-columns: 1fr;
-    }
-}
-
-.perfil-btn-deletar {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--vermelho) !important;
-    border: 1px solid var(--vermelho);
-    background: transparent;
-    padding: 0.6rem 1.4rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
-    cursor: pointer;
-}
-
-.perfil-btn-deletar:hover {
-    background-color: var(--vermelho);
-    color: #fff !important;
-}
-
-/* Fundo escurecido do Popup (Overlay) */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: none; /* Escondido por padrão */
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    padding: 1.5rem;
-}
-
-/* Classe de ativação que o JS vai injetar */
-.modal-overlay.active {
-    display: flex;
-}
-
-/* Caixa interna do Popup */
-.modal-content {
-    background: #0a1921;
-    border: 1px solid rgba(255, 77, 77, 0.3);
-    border-radius: 8px;
-    padding: 1.8rem;
-    max-width: 450px;
-    width: 100%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    animation: popupSurgir 0.2s ease-out;
-}
-
-@keyframes popupSurgir {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* Inputs e Botões internos do Modal */
-.modal-content h3 {
-    color: var(--vermelho);
-    margin-bottom: 0.5rem;
-    font-size: 1.25rem;
-}
-
-.modal-content p {
-    color: var(--texto-claro);
-    font-size: 0.9rem;
-    margin-bottom: 1.2rem;
-    line-height: 1.4;
-}
-
-.modal-input-senha {
-    width: 100%;
-    padding: 0.6rem 0.8rem;
-    background: #07121a;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    color: #fff;
-    font-size: 1rem;
-    margin-top: 0.4rem;
-    margin-bottom: 1.5rem;
-    outline: none;
-}
-
-.modal-input-senha:focus {
-    border-color: var(--vermelho);
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-}
-
-.btn-modal-cancelar {
-    background: transparent;
-    border: 1px solid var(--texto-mutado);
-    color: var(--texto-mutado);
-    padding: 0.55rem 1.2rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.btn-modal-cancelar:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.btn-modal-deletar-confirmar {
-    background: var(--vermelho);
-    color: #fff;
-    border: none;
-    padding: 0.55rem 1.2rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.btn-modal-deletar-confirmar:hover {
-    opacity: 0.9;
+    .navbar-menu .dropdown-menu.active { display: block; }
 }
