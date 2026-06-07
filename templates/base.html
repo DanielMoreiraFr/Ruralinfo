@@ -30,6 +30,11 @@
             <i class="bi bi-clock"></i>
             Horários do Circular
         </a>
+        <a href="{% url 'locais:lista' %}"
+            class="{% if request.resolver_match.app_name == 'locais' %}ativo{% endif %}">
+            <i class="bi bi-geo-alt"></i>
+            Áreas da Rural
+        </a>
     </nav>
 </aside>
 

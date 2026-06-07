@@ -1,0 +1,100 @@
+/* ==========================================================================
+   LOCAIS_FORM.CSS — Formulário de criação e edição de local
+   Usado em: templates/locais/form_local.html
+             templates/locais/confirmar_delete_local.html
+   ========================================================================== */
+
+.form-local-card {
+    background: var(--azul-card);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 1.6rem;
+}
+
+.form-local-secao-titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--amarelo);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(244, 196, 48, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-local-card input[type="text"],
+.form-local-card input[type="number"],
+.form-local-card textarea {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    background: #0a1921;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.92rem;
+    transition: border-color 0.2s;
+}
+
+.form-local-card input[type="text"]:focus,
+.form-local-card input[type="number"]:focus,
+.form-local-card textarea:focus {
+    outline: none;
+    border-color: var(--amarelo);
+}
+
+.form-local-card input[type="file"] {
+    width: 100%;
+    padding: 0.5rem;
+    background: #0a1921;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: var(--texto-claro);
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.form-erro {
+    display: block;
+    color: var(--vermelho);
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+/* --------------------------------------------------------------------------
+   FORMSET DA GALERIA
+   -------------------------------------------------------------------------- */
+.galeria-formset {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.galeria-formset-linha {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.galeria-formset-preview { margin-bottom: 0.4rem; }
+
+.galeria-formset-campos {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVO
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+    .galeria-formset-campos {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
