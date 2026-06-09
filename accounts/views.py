@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.db import IntegrityError
 
@@ -99,11 +100,12 @@ def logout_view(request):
 # Bloqueia o acesso direto de usuários anônimos à rota de perfil
 @login_required
 def perfil_view(request):
-    """ Exibe as informações da conta logada e gerencia a alteração do nick do usuário. """
+    """ Exibe o perfil do usuário e processa a alteração do nickname. """
+    
     if request.method == 'POST':
         novo_username = request.POST.get('username', '').strip()
         
-        # Conjunto de regras de validação para o novo apelido (nick) digitado
+        # Validações de formato do nome de usuário
         if not novo_username:
             messages.error(request, "O nome de usuário não pode ficar em branco.")
         elif ' ' in novo_username:
@@ -112,13 +114,19 @@ def perfil_view(request):
             messages.error(request, "O nick deve conter pelo menos 3 caracteres.")
         else:
             try:
-                # Tenta atualizar o identificador do usuário logado diretamente no banco
-                request.user.username = novo_username
-                request.user.save()
-                messages.success(request, "Nome de usuário updated com sucesso!")
+                # Atualiza o username do usuário logado
+                user = request.user
+                user.username = novo_username
+                user.save()
+                
+                # Atualiza a sessão para manter o usuário logado após a mudança de credenciais
+                update_session_auth_hash(request, user)
+                
+                messages.success(request, "Nome de usuário atualizado com sucesso!")
                 return redirect('accounts:perfil')
+                
             except IntegrityError:
-                # Trata o erro caso o banco acuse que o apelido já está em uso por outro usuário (Chave Única)
+                # Trata duplicidade caso o username já exista no banco (Unique Constraint)
                 messages.error(request, "Este nome de usuário já está sendo utilizado por outro membro.")
                 
     return render(request, 'accounts/perfil.html', {

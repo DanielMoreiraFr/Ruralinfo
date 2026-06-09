@@ -53,8 +53,9 @@ class Usuario(AbstractUser):
         # Padroniza o e-mail limpando espaços e forçando letras minúsculas
         self.email = self.email.strip().lower()
         
-        # Gera o username composto automaticamente juntando e-mail e tipo de conta
-        self.username = f"{self.email}_{self.tipo_conta}"
+        # SÓ gera o username automático se o usuário for NOVO (não tem chave primária ainda)
+        if not self.pk:
+            self.username = f"{self.email}_{self.tipo_conta}"
 
         # Define automaticamente o acesso ao Admin (is_staff) caso o usuário seja ADMIN
         self.is_staff = (self.tipo_conta == 'ADMIN')

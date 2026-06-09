@@ -196,7 +196,7 @@ def comentar_local(request, pk):
             c = form.save(commit=False)
             c.local  = local
             c.autor  = request.user
-            c.pai    = None # Explicitamente definido como nulo para marcar como comentário raiz
+            c.pai    = None # marcar como comentário raiz
             c.save()
             messages.success(request, 'Comentário publicado!')
         else:
