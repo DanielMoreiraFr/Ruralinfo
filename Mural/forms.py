@@ -1,5 +1,5 @@
 from django import forms
-from .models import Aviso
+from .models import Aviso, Sugestao
 
 class AvisoForm(forms.ModelForm):
     """
@@ -36,3 +36,34 @@ class AvisoForm(forms.ModelForm):
             )
             
         return cleaned
+    
+
+class SugestaoForm(forms.ModelForm):
+    """
+    Formulário de envio de sugestão de pauta.
+    Disponível para usuários COMUM e ADMIN — visitantes não têm acesso.
+    """
+ 
+    class Meta:
+        model  = Sugestao
+        fields = ['texto', 'categoria']
+        widgets = {
+            'texto': forms.Textarea(attrs={
+                'rows': 5,
+                'placeholder': 'Descreva o acontecimento ou pauta que deseja sugerir...',
+            }),
+            'categoria': forms.Select(),
+        }
+        labels = {
+            'texto':     'Descrição da Sugestão',
+            'categoria': 'Categoria Sugerida',
+        }
+ 
+    def clean_texto(self):
+        texto = self.cleaned_data.get('texto', '').strip()
+        if len(texto) < 10:
+            raise forms.ValidationError(
+                'A sugestão deve ter pelo menos 10 caracteres.'
+            )
+        return texto
+ 
