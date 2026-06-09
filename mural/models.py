@@ -1,7 +1,12 @@
 from django.db import models
 from django.conf import settings
 
+
 class Aviso(models.Model):
+    """
+    Representa as publicações oficiais enviadas por Administradores no mural.
+    """
+
     CATEGORIA_CHOICES = [
         ('aviso_geral',  'Aviso Geral'),
         ('evento',       'Evento'),
@@ -24,7 +29,6 @@ class Aviso(models.Model):
         'urgente':      'danger',
     }
 
-    # Novo campo adicionado aqui
     titulo = models.CharField(
         verbose_name='Título',
         max_length=150,
@@ -45,6 +49,7 @@ class Aviso(models.Model):
         default='aviso_geral',
     )
 
+    # Configura o upload de mídias estruturando pastas dinâmicas por Ano/Mês no servidor
     imagem = models.ImageField(
         verbose_name='Imagem',
         upload_to='mural/%Y/%m/', 
@@ -60,6 +65,7 @@ class Aviso(models.Model):
         help_text='Descreva a imagem para leitores de tela.',
     )
 
+    # Chave estrangeira (N:1): PROTECT impede a exclusão do administrador se ele tiver avisos vinculados
     autor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='Autor',
@@ -67,11 +73,13 @@ class Aviso(models.Model):
         related_name='avisos',
     )
 
+    # Grava o timestamp exato de forma automática apenas no momento de inserção do registro
     data_criacao = models.DateTimeField(
         verbose_name='Criado em',
         auto_now_add=True,
     )
 
+    # Atualiza o timestamp de forma automática toda vez que o método save() for acionado
     data_atualizacao = models.DateTimeField(
         verbose_name='Atualizado em',
         auto_now=True,
@@ -83,29 +91,29 @@ class Aviso(models.Model):
         help_text='Desmarque para ocultar o aviso sem deletá-lo.',
     )
 
+    # Configurações de metadados internos e ordenação padrão da tabela no banco
     class Meta:
         verbose_name = 'Aviso'
         verbose_name_plural = 'Avisos'
+        # Traz as publicações mais recentes primeiro no topo do mural
         ordering = ['-data_criacao']
 
+    # Define a visualização textual curta do objeto no painel de administração do Django
     def __str__(self):
         status = '✓' if self.publicado else '○'
-        # Atualizado para mostrar o título no painel admin
+        # get_categoria_display() traduz o valor do banco para o rótulo amigável legível
         return f"[{status}] {self.get_categoria_display()} — {self.titulo}"
 
+    # Cria um método acessível como se fosse um atributo comum do objeto para facilitar o uso no HTML
     @property
     def badge_class(self):
-        """Retorna a classe Bootstrap do badge de categoria."""
+        """Retorna a classe Bootstrap correspondente ao badge de cor da categoria."""
         return self.CATEGORIA_BADGE.get(self.categoria, 'secondary')
     
 
 class Sugestao(models.Model):
     """
-    Sugestão de pauta enviada por usuários logados (COMUM ou ADMIN).
-    Admins podem aceitar (leva para criar post) ou negar (arquiva).
-
-    O campo `arquivado_em` é preenchido automaticamente ao negar,
-    servindo de base para uma futura limpeza automática por tempo.
+    Representa as propostas enviadas por usuários para análise prévia da moderação.
     """
 
     STATUS_CHOICES = [
@@ -114,7 +122,6 @@ class Sugestao(models.Model):
         ('negada',   'Negada'),
     ]
 
-    # Reutiliza as mesmas categorias do Aviso para consistência
     CATEGORIA_CHOICES = [
         ('aviso_geral',  'Aviso Geral'),
         ('evento',       'Evento'),
@@ -126,6 +133,7 @@ class Sugestao(models.Model):
         ('urgente',      'Urgente'),
     ]
 
+    # Chave estrangeira (N:1): CASCADE remove todas as sugestões do usuário caso ele exclua a conta
     autor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -157,6 +165,7 @@ class Sugestao(models.Model):
         auto_now_add=True,
     )
 
+    # Armazena o momento exato em que a sugestão foi arquivada para possibilitar rotinas automáticas de expiração
     arquivado_em = models.DateTimeField(
         verbose_name='Arquivado em',
         null=True,
@@ -164,11 +173,12 @@ class Sugestao(models.Model):
         help_text='Preenchido automaticamente ao negar.',
     )
 
-    # campo de manipulçao dos nomes do painel de admin
+    # Configurações de exibição de nomes e organização das listagens
     class Meta:
         verbose_name = 'Sugestão'
         verbose_name_plural = 'Sugestões'
         ordering = ['-criado_em']
 
+    # Define a exibição reduzida limitando a string do conteúdo para não quebrar tabelas do Admin
     def __str__(self):
         return f"[{self.get_status_display()}] {self.autor.nome_completo} — {self.texto[:60]}"
