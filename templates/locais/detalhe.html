@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}{{ local.nome }} — Ruralinfo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/locais_detalhe.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+
+<a href="{% url 'locais:lista' %}" style="display:inline-flex; align-items:center; gap:0.4rem; color:var(--texto-mutado); text-decoration:none; font-size:0.88rem; margin-bottom:1.5rem;">
+    <i class="bi bi-arrow-left"></i> Áreas da Rural
+</a>
+
+<div class="detalhe-header">
+    <img src="{{ local.imagem_principal.url }}" alt="{{ local.nome }}" id="imagem-principal">
+    <h1 class="detalhe-nome">{{ local.nome }}</h1>
+    {% if user.tipo_conta == 'ADMIN' %}
+        <a href="{% url 'locais:editar' local.pk %}" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-pencil"></i> Editar
+        </a>
+    {% endif %}
+    <p class="detalhe-desc">{{ local.descricao }}</p>
+</div>
+
+{% if galeria %}
+<div class="galeria-container">
+    <div class="galeria-titulo"><i class="bi bi-images" style="margin-right:0.4rem;"></i>Galeria</div>
+
+    <div id="galeria-dados" style="display:none;">
+        {% for foto in galeria %}
+        <span data-src="{{ foto.url }}" data-alt="{{ local.nome }}"></span>
+        {% endfor %}
+    </div>
+
+    <div id="galeria-grid"></div>
+</div>
+
+<div id="lightbox-overlay" class="lightbox-overlay">
+    <button id="lightbox-fechar" class="lightbox-fechar" title="Fechar"><i class="bi bi-x-lg"></i></button>
+    <img id="lightbox-img" class="lightbox-img" src="" alt="">
+    <div class="lightbox-controles">
+        <button id="lightbox-anterior" class="lightbox-btn" title="Anterior"><i class="bi bi-chevron-left"></i></button>
+        <span id="lightbox-contador" class="lightbox-contador"></span>
+        <button id="lightbox-proximo" class="lightbox-btn" title="Próxima"><i class="bi bi-chevron-right"></i></button>
+    </div>
+</div>
+{% endif %}
+
+{% if user.is_authenticated %}
+<div class="avaliacao-secao">
+    <div class="avaliacao-titulo">
+        <i class="bi bi-star" style="margin-right:0.4rem;"></i>
+        {% if avaliacao_usuario %}Sua Avaliação{% else %}Avaliar este Local{% endif %}
+    </div>
+
+    <form method="post" action="{% url 'locais:avaliar' local.pk %}">
+        {% csrf_token %}
+        {{ form_avaliacao.nota }}
+        
+        {% if form_avaliacao.nota.errors %}
+        <div style="color: #ff4d4d; font-size: 0.85rem; margin-bottom: 0.5rem;">
+            {{ form_avaliacao.nota.errors.0 }}
+        </div>
+        {% endif %}
+
+        <div class="estrelas-wrapper" style="display: flex; align-items: center; gap: 1rem;">
+            <div id="estrelas-input" class="estrelas-input" data-nota-atual="{{ avaliacao_usuario.nota|default:0 }}" style="display: inline-flex; gap: 0.3rem; color: var(--amarelo, #f4c430);">
+                <div class="estrela-container" style="position: relative; display: inline-block; font-size: 1.8rem; line-height: 1;">
+                    <i class="estrela-icone bi bi-star"></i>
+                    <span class="estrela-metade esquerda" data-valor="0.5" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                    <span class="estrela-metade direita" data-valor="1.0" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                </div>
+                <div class="estrela-container" style="position: relative; display: inline-block; font-size: 1.8rem; line-height: 1;">
+                    <i class="estrela-icone bi bi-star"></i>
+                    <span class="estrela-metade esquerda" data-valor="1.5" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                    <span class="estrela-metade direita" data-valor="2.0" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                </div>
+                <div class="estrela-container" style="position: relative; display: inline-block; font-size: 1.8rem; line-height: 1;">
+                    <i class="estrela-icone bi bi-star"></i>
+                    <span class="estrela-metade esquerda" data-valor="2.5" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                    <span class="estrela-metade direita" data-valor="3.0" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                </div>
+                <div class="estrela-container" style="position: relative; display: inline-block; font-size: 1.8rem; line-height: 1;">
+                    <i class="estrela-icone bi bi-star"></i>
+                    <span class="estrela-metade esquerda" data-valor="3.5" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                    <span class="estrela-metade direita" data-valor="4.0" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                </div>
+                <div class="estrela-container" style="position: relative; display: inline-block; font-size: 1.8rem; line-height: 1;">
+                    <i class="estrela-icone bi bi-star"></i>
+                    <span class="estrela-metade esquerda" data-valor="4.5" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                    <span class="estrela-metade direita" data-valor="5.0" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5; cursor: pointer;"></span>
+                </div>
+            </div>
+
+            <span id="nota-selecionada" class="nota-selecionada" style="font-weight: 600; font-size: 1rem; min-width: 60px;">
+                {% if avaliacao_usuario %} {{ avaliacao_usuario.nota }} / 5.0 {% else %} Selecione {% endif %}
+            </span>
+
+            <button type="submit" class="btn-avaliar">
+                {% if avaliacao_usuario %}Atualizar{% else %}Enviar{% endif %}
+            </button>
+        </div>
+
+        {% if local.media_avaliacoes %}
+        <div class="avaliacao-media-display" style="margin-top: 0.5rem; opacity: 0.8; font-size: 0.9rem;">
+            <strong>★ {{ local.media_avaliacoes }}</strong> média de {{ local.total_avaliacoes }} avaliação{{ local.total_avaliacoes|pluralize:",ões" }}
+        </div>
+        {% endif %}
+    </form>
+</div>
+{% endif %}
+
+<div class="comentarios-secao">
+    <div class="comentarios-titulo"><i class="bi bi-chat-left-text" style="margin-right:0.4rem;"></i>Comentários ({{ local.total_comentarios }})</div>
+
+    {% if user.is_authenticated %}
+    <div class="form-comentario">
+        <form method="post" action="{% url 'locais:comentar' local.pk %}">
+            {% csrf_token %}
+            <textarea name="conteudo" placeholder="Escreva um comentário sobre {{ local.nome }}..." maxlength="1000" required></textarea>
+            <div class="form-comentario-actions">
+                <button type="submit" class="btn-comentar"><i class="bi bi-send" style="margin-right:0.3rem;"></i>Comentar</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if comentarios %}
+        {% for comentario in comentarios %}
+        <div class="comentario-card" id="comentario-{{ comentario.pk }}">
+            <div class="comentario-meta">
+                <span class="comentario-autor"><i class="bi bi-person-circle" style="margin-right:0.2rem;"></i>{{ comentario.autor.nome_completo }}</span>
+                <span class="comentario-data">{{ comentario.criado_em|date:"d/m/Y" }} às {{ comentario.criado_em|time:"H:i" }}</span>
+            </div>
+
+            <p class="comentario-texto">{{ comentario.conteudo }}</p>
+
+            <div class="comentario-actions">
+                {% if user.is_authenticated and not comentario.is_resposta %}
+                <button class="btn-responder" data-comentario-id="{{ comentario.pk }}"><i class="bi bi-reply"></i> Responder</button>
+                {% endif %}
+
+                {% if user.is_authenticated and user == comentario.autor or user.tipo_conta == 'ADMIN' %}
+                <form method="post" action="{% url 'locais:deletar_comentario' local.pk comentario.pk %}" onsubmit="return confirm('Remover este comentário?')">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-deletar-comentario"><i class="bi bi-trash3"></i> Deletar</button>
+                </form>
+                {% endif %}
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="form-resposta" id="form-resposta-{{ comentario.pk }}">
+                <form method="post" action="{% url 'locais:responder' local.pk comentario.pk %}">
+                    {% csrf_token %}
+                    <textarea name="conteudo" placeholder="Responda {{ comentario.autor.nome_completo }}..." maxlength="1000" required></textarea>
+                    <div class="form-resposta-actions">
+                        <button type="button" class="btn-grid-cancelar btn-cancelar-resposta">Cancelar</button>
+                        <button type="submit" class="btn-comentar"><i class="bi bi-send" style="margin-right:0.3rem;"></i>Responder</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            {% for resposta in comentario.respostas.all %}
+            <div class="comentario-card resposta" id="comentario-{{ resposta.pk }}">
+                <div class="comentario-meta">
+                    <span class="comentario-autor"><i class="bi bi-person-circle" style="margin-right:0.2rem;"></i>{{ resposta.autor.nome_completo }}</span>
+                    <span class="comentario-data">{{ resposta.criado_em|date:"d/m/Y" }} às {{ resposta.criado_em|time:"H:i" }}</span>
+                </div>
+                <p class="comentario-texto">{{ resposta.conteudo }}</p>
+
+                {% if user.is_authenticated and user == resposta.autor or user.tipo_conta == 'ADMIN' %}
+                <div class="comentario-actions">
+                    <form method="post" action="{% url 'locais:deletar_comentario' local.pk resposta.pk %}" onsubmit="return confirm('Remover esta resposta?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-deletar-comentario"><i class="bi bi-trash3"></i> Deletar</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="comentarios-vazio">
+        <i class="bi bi-chat-square"></i>
+        <p>Ainda não há comentários. Seja o primeiro!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/galeria.js' %}"></script>
+<script src="{% static 'js/estrelas.js' %}"></script>
+<script src="{% static 'js/comentarios.js' %}"></script>
+{% endblock %}

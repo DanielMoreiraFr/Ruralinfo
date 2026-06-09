@@ -37,21 +37,21 @@
                 <span class="perfil-info-value" style="word-break: break-all;">{{ usuario.email }}</span>
             </div>
 
-            <!-- CAMPO MODIFICADO: Form Inline para Mudar o Nick do Usuário -->
+            <!-- CAMPO MODIFICADO: Form Inline para Mudar o Nick do Usuário 
             <div class="perfil-info-block">
                 <form method="post" action="{% url 'accounts:perfil' %}" style="display: flex; flex-direction: column; gap: 0.4rem; margin: 0;">
                     {% csrf_token %}
                     <label for="inputNick" class="perfil-info-label">Nome de Usuário (Nickname do Chat)</label>
                     <div style="display: flex; gap: 0.8rem; width: 100%;">
                         <input type="text" id="inputNick" name="username" value="{{ usuario.username }}" required 
-                               style="flex: 1; padding: 0.5rem 0.8rem; background: #07121a; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #00ffcc; font-family: monospace; font-size: 0.95rem; outline: none; transition: border-color 0.2s;"
+                               style="flex: 1; padding: 0.5rem 0.8rem; background: #07121a; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #ffffff; font-family: monospace; font-size: 0.95rem; outline: none; transition: border-color 0.2s;"
                                onfocus="this.style.borderColor='var(--amarelo)'" onblur="this.style.borderColor='rgba(255, 255, 255, 0.15)'">
                         <button type="submit" class="perfil-btn-salvar">
                             <i class="bi bi-check-lg"></i> Salvar
                         </button>
                     </div>
                 </form>
-            </div>
+            </div>-->
 
             <!-- Linha Dupla para Tipo e Ingresso -->
             <div class="perfil-split-row">

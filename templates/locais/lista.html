@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Áreas da Rural — Ruralinfo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/locais_lista.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="locais-header">
+    <div>
+        <h2 class="locais-titulo">Áreas da Rural</h2>
+        <p style="color: var(--texto-mutado); font-size: 0.9rem; margin-top: 0.2rem;">
+            Conheça os espaços do campus UFRPE
+        </p>
+    </div>
+
+    {% if user.tipo_conta == 'ADMIN' %}
+    <a href="{% url 'locais:criar' %}" class="btn btn-ruralinfo">
+        <i class="bi bi-plus-lg"></i> Novo Local
+    </a>
+    {% endif %}
+</div>
+
+{% if locais %}
+<div class="locais-grid">
+    {% for local in locais %}
+    <a href="{% url 'locais:detalhe' local.pk %}" class="local-card">
+
+        <img src="{{ local.imagem_principal.url }}"
+             alt="{{ local.nome }}"
+             class="local-card-img">
+
+        <div class="local-card-body">
+            <div class="local-card-nome">{{ local.nome }}</div>
+            <p class="local-card-desc">{{ local.descricao }}</p>
+
+            <div class="local-card-footer">
+                {% if local.media_avaliacoes %}
+                    <span class="estrelas-media">★ {{ local.media_avaliacoes }}</span>
+                    <span>·</span>
+                    <span>{{ local.total_avaliacoes }} avaliação{{ local.total_avaliacoes|pluralize:",ões" }}</span>
+                {% else %}
+                    <span>Sem avaliações ainda</span>
+                {% endif %}
+                <span style="margin-left: auto;">
+                    <i class="bi bi-chat"></i> {{ local.total_comentarios }}
+                </span>
+            </div>
+        </div>
+
+    </a>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="locais-vazio">
+    <i class="bi bi-geo-alt"></i>
+    <p>Nenhum local cadastrado ainda.</p>
+</div>
+{% endif %}
+
+{% endblock %}
