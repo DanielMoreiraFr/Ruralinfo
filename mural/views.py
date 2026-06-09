@@ -102,7 +102,7 @@ def editar(request, pk):
     else:
         form = AvisoForm(instance=aviso)
 
-    return render(request, 'mural/form.html', {
+    return render(request, 'mural/aviso_form.html', {
         'form':          form,
         'aviso':         aviso,
         'titulo_pagina': 'Editar Aviso',

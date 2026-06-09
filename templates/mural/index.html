@@ -13,10 +13,21 @@
         <h2 class="mural-title">Mural Informativo</h2>
         <p style="color: var(--texto-mutado); font-size: 0.9rem;">Fique por dentro dos comunicados da UFRPE</p>
     </div>
-    {% if user.is_authenticated and user.tipo_conta == 'ADMIN' %}
-    <a href="{% url 'mural:criar' %}" class="btn btn-ruralinfo">
-        <i class="bi bi-plus-lg"></i> Criar Novo Post
-    </a>
+    
+    {% if user.is_authenticated %}
+        <div style="display: flex; gap: 0.8rem; align-items: center;">
+            
+            <a href="{% url 'mural:sugestao_nova' %}" class="btn btn-ruralinfo">
+                <i class="bi bi-lightbulb"></i> Sugerir Pauta
+            </a>
+            
+            {% if user.tipo_conta == 'ADMIN' %}
+                <a href="{% url 'mural:criar' %}" class="btn btn-ruralinfo">
+                    <i class="bi bi-plus-lg"></i> Criar Novo Post
+                </a>
+            {% endif %}
+            
+        </div>
     {% endif %}
 </div>
 

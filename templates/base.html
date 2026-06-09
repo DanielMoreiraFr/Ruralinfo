@@ -65,6 +65,11 @@
             {% if user.is_authenticated %}
                 {% if user.tipo_conta == 'ADMIN' %}
                 <li>
+                    <a class="nav-link" href="{% url 'mural:sugestoes_pendentes' %}">
+                        <i class="bi bi-inbox"></i> Sugestões
+                    </a>
+                </li>
+                <li>
                     <a class="nav-link" href="{% url 'mural:criar' %}">
                         <i class="bi bi-plus-circle"></i> Novo Aviso
                     </a>
