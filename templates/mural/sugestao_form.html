@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Sugerir Pauta — Ruralinfo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mural.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+
+<div style="max-width:680px; margin:0 auto;">
+
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.8rem;">
+        <a href="{% url 'mural:index' %}"
+           style="color:var(--texto-mutado); text-decoration:none; font-size:0.88rem;
+                  display:flex; align-items:center; gap:0.4rem;">
+            <i class="bi bi-arrow-left"></i> Voltar ao Mural
+        </a>
+        <h2 style="color:var(--amarelo); font-size:1.5rem; font-weight:700; margin:0;">
+            Sugerir Pauta
+        </h2>
+    </div>
+
+    <div style="background:var(--azul-card); border:1px solid rgba(255,255,255,0.07);
+                border-radius:10px; padding:1.6rem; margin-bottom:1.2rem;">
+        <p style="color:var(--texto-mutado); font-size:0.88rem; line-height:1.6; margin:0;">
+            <i class="bi bi-info-circle" style="color:var(--amarelo); margin-right:0.4rem;"></i>
+            Sua sugestão será analisada por um administrador. Se aprovada,
+            poderá virar uma notícia no mural. Descreva o acontecimento
+            com o máximo de detalhes possível.
+        </p>
+    </div>
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger" style="margin-bottom:1.2rem;">
+        {% for erro in form.non_field_errors %}
+        <p style="margin:0;">{{ erro }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="form-container-mural">
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- Categoria -->
+            <div class="form-group" style="margin-bottom:1.2rem;">
+                <label class="form-label">
+                    {{ form.categoria.label }}
+                    <span style="color:var(--vermelho);">*</span>
+                </label>
+                {{ form.categoria }}
+                {% if form.categoria.errors %}
+                <span style="color:var(--vermelho); font-size:0.8rem;">
+                    {{ form.categoria.errors.0 }}
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Texto -->
+            <div class="form-group" style="margin-bottom:1.6rem;">
+                <label class="form-label">
+                    {{ form.texto.label }}
+                    <span style="color:var(--vermelho);">*</span>
+                </label>
+                {{ form.texto }}
+                <span style="color:var(--texto-mutado); font-size:0.78rem; margin-top:0.3rem; display:block;">
+                    Mínimo de 10 caracteres.
+                </span>
+                {% if form.texto.errors %}
+                <span style="color:var(--vermelho); font-size:0.8rem;">
+                    {{ form.texto.errors.0 }}
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="form-actions-row">
+                <button type="submit" class="btn btn-ruralinfo">
+                    <i class="bi bi-send"></i> Enviar Sugestão
+                </button>
+                <a href="{% url 'mural:index' %}" class="btn btn-outline-light">
+                    Cancelar
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}
