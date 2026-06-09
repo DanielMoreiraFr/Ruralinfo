@@ -46,7 +46,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Ruralinfo.urls'
+ROOT_URLCONF = 'ruralinfo.urls'
 
 TEMPLATES = [
     {
@@ -64,7 +64,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Ruralinfo.wsgi.application'
+WSGI_APPLICATION = 'ruralinfo.wsgi.application'
 
 DATABASES = {
     'default': {
