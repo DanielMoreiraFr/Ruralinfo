@@ -16,18 +16,19 @@
             <i class="bi bi-inbox"></i> Sugestões Pendentes
         </h2>
         <p style="color:var(--texto-mutado); font-size:0.88rem; margin-top:0.2rem;">
-            {{ sugestoes.count }} sugestão{{ sugestoes.count|pluralize:",ões" }} aguardando análise
+            {{ sugestoes.count }} sugestão({{ sugestoes.count|pluralize:",ões" }}) aguardando análise
         </p>
     </div>
-    <a href="{% url 'mural:sugestoes_arquivadas' %}" class="btn btn-outline-light btn-sm">
+    <a href="{% url 'mural:sugestoes_arquivadas' %}" class="btn btn-outline-light btn-sm" style="margin-top: 0.8rem;">
         <i class="bi bi-archive"></i> Ver Arquivadas
     </a>
 </div>
 
 {% if sugestoes %}
-<div class="sugestoes-lista">
+<div class="sugestoes-lista" style="display: flex; flex-direction: column; gap: 1.5rem;">
+    
     {% for s in sugestoes %}
-    <div class="sugestao-card">
+    <div class="sugestao-card" style="background: var(--azul-card, #0e1e29); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 1.2rem;">
 
         <div class="sugestao-meta">
             <span class="sugestao-autor">
@@ -45,20 +46,18 @@
             </span>
         </div>
 
-        <p class="sugestao-texto">{{ s.texto }}</p>
+        <p class="sugestao-texto" style="margin: 1rem 0; line-height: 1.5;">{{ s.texto }}</p>
 
-        <div class="sugestao-actions">
-            <!-- Aceitar -->
-            <form method="post" action="{% url 'mural:sugestao_aceitar' s.pk %}">
+        <div class="sugestao-actions" style="display: flex; gap: 0.8rem; align-items: center;">
+            <form method="post" action="{% url 'mural:sugestao_aceitar' s.pk %}" style="margin:0;">
                 {% csrf_token %}
                 <button type="submit" class="btn-sugestao btn-aceitar">
                     <i class="bi bi-check-lg"></i> Aceitar e Criar Post
                 </button>
             </form>
 
-            <!-- Negar -->
             <form method="post" action="{% url 'mural:sugestao_negar' s.pk %}"
-                  onsubmit="return confirm('Negar e arquivar esta sugestão?')">
+                  onsubmit="return confirm('Negar e arquivar esta sugestão?')" style="margin:0;">
                 {% csrf_token %}
                 <button type="submit" class="btn-sugestao btn-negar">
                     <i class="bi bi-x-lg"></i> Negar
@@ -68,6 +67,7 @@
 
     </div>
     {% endfor %}
+</div>
 </div>
 
 {% else %}
