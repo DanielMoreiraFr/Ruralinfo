@@ -69,34 +69,42 @@ ImagemLocalFormSet = inlineformset_factory(
 class AvaliacaoForm(forms.ModelForm):
     """
     Formulário para o sistema de notas por estrelas.
-    O campo utiliza HiddenInput pois a interação visual (clique nas estrelas)
-    é capturada via JavaScript e injetada no value deste input oculto.
+    
+    Utiliza um CharField com widget oculto para receber o valor do JavaScript
+    sem restrições rígidas de ChoiceField ou interferências automáticas de 
+    localização (como a conversão de ponto para vírgula no pt-br) do FloatField.
     """
+    nota = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'id_nota_estrela'}))
+
     class Meta:
-        model  = Avaliacao
+        model = Avaliacao
         fields = ['nota']
-        widgets = {
-            'nota': forms.HiddenInput(attrs={'id': 'id_nota_estrela'}),
-        }
 
     def clean_nota(self):
         """
-        Validação matemática rigorosa da nota enviada:
-        1. Impede submissão nula.
-        2. Garante o intervalo de notas aceito pelo modelo (entre 0.5 e 5.0).
-        3. Verifica se a nota é fracionada em passos de 0.5 (evita burlar via console do navegador).
-        """
-        nota = self.cleaned_data.get('nota')
-        if nota is None:
-            raise forms.ValidationError('Selecione uma nota.')
-        if not (0.5 <= nota <= 5.0):
-            raise forms.ValidationError('Nota deve ser entre 0.5 e 5.0.')
+        Validação e normalização rigorosa da nota enviada pelo frontend.
         
-        # Multiplica por 2 e valida se o resultado é um número inteiro (ex: 4.5 * 2 = 9.0 -> válido)
-        if (nota * 2) != int(nota * 2):
-            raise forms.ValidationError('Nota deve ser múltiplo de 0.5.')
-        return nota
-
+        1. Converte o valor recebido para string e padroniza o separador decimal.
+        2. Garante que o valor seja um número flutuante válido.
+        3. Restringe a nota ao intervalo permitido (entre 0.5 e 5.0).
+        4. Verifica se o valor respeita o incremento de meia estrela (múltiplo de 0.5).
+        """
+        try:
+            # Recupera o valor e normaliza substituindo vírgulas por pontos antes de converter para float
+            nota_raw = self.cleaned_data.get('nota')
+            nota = float(str(nota_raw).replace(',', '.'))
+            
+            # Valida as regras de negócio: intervalo permitido e se o passo é múltiplo de 0.5
+            if 0.5 <= nota <= 5.0 and (nota * 2) == int(nota * 2):
+                return nota
+                
+        except (ValueError, TypeError, AttributeError):
+            # Captura falhas de conversão de tipo ou manipulação de string nula
+            pass
+            
+        # retorna um erro de validação
+        raise forms.ValidationError('Nota inválida.')
+    
 
 # =============================================================================
 # COMENTÁRIO / RESPOSTA
