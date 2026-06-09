@@ -61,6 +61,7 @@ O foco foi estabelecer a base do sistema com autenticação e o mural informativ
 ```bash
 pip install customtkinter
 python src/main.py
+
 ```
 
 ---
@@ -77,33 +78,37 @@ e o sistema de autenticação foi completamente reconstruído com segurança rea
 ## Funcionalidades Implementadas
 
 ### 🔐 Autenticação e Segurança
-- **1 — Dualidade de Contas:** Um mesmo e-mail `@ufrpe.br` pode ter uma conta COMUM e uma ADMIN independentes.
-- **2 — Username Composto:** Login construído internamente como `email_TIPO` para suporte à dualidade.
-- **3 — Hashing de Senha:** Senhas armazenadas com PBKDF2-SHA256 via `set_password()` do Django.
-- **4 — Sistema de Convites UUID:** Cadastro de ADMIN exige código gerado por administrador existente.
-- **5 — Verificação de E-mail:** Envio de código de confirmação por e-mail ao realizar cadastro.
-- **6 — Proteção CSRF:** Todos os formulários POST protegidos com token CSRF.
-- **7 — Transação Atômica:** Convite só é consumido se o usuário for criado com sucesso no banco.
+
+* **1 — Dualidade de Contas:** Um mesmo e-mail `@ufrpe.br` pode ter uma conta COMUM e uma ADMIN independentes.
+* **2 — Username Composto:** Login construído internamente como `email_TIPO` para suporte à dualidade.
+* **3 — Hashing de Senha:** Senhas armazenadas com PBKDF2-SHA256 via `set_password()` do Django.
+* **4 — Sistema de Convites UUID:** Cadastro de ADMIN exige código gerado por administrador existente.
+* **5 — Verificação de E-mail:** Envio de código de confirmação por e-mail ao realizar cadastro.
+* **6 — Proteção CSRF:** Todos os formulários POST protegidos com token CSRF.
+* **7 — Transação Atômica:** Convite só é consumido se o usuário for criado com sucesso no banco.
 
 ### 📰 Mural de Avisos
-- **8 — CRUD Completo:** Administradores criam, editam, ocultam e deletam qualquer aviso.
-- **9 — Categorias:** Avisos organizados por Aviso Geral, Evento, Acadêmico, Oportunidade, Extensão, Pesquisa, Manutenção e Urgente.
-- **10 — Ocultar sem Deletar:** Aviso pode ser retirado do ar sem ser removido do banco.
-- **11 — Rastreabilidade:** Cada aviso registra o autor via chave estrangeira para auditoria.
-- **12 — Imagem com Acessibilidade:** Avisos suportam imagem com campo `alt_texto` obrigatório.
-- **13 — Acesso por Visitante:** Mural público acessível sem login para avisos urgentes.
+
+* **8 — CRUD Completo:** Administradores criam, editam, ocultam e deletam qualquer aviso.
+* **9 — Categorias:** Avisos organizados por Aviso Geral, Evento, Acadêmico, Oportunidade, Extensão, Pesquisa, Manutenção e Urgente.
+* **10 — Ocultar sem Deletar:** Aviso pode ser retirado do ar sem ser removido do banco.
+* **11 — Rastreabilidade:** Cada aviso registra o autor via chave estrangeira para auditoria.
+* **12 — Imagem com Acessibilidade:** Avisos suportam imagem com campo `alt_texto` obrigatório.
+* **13 — Acesso por Visitante:** Mural público acessível sem login para avisos urgentes.
 
 ### 👤 Perfil do Usuário
-- **14 — Visualização de Perfil:** Tela com dados cadastrais do usuário logado.
-- **15 — Alteração de Username:** Usuário pode personalizar seu identificador.
-- **16 — Exclusão de Conta:** Remoção permanente com confirmação por senha via modal.
+
+* **14 — Visualização de Perfil:** Tela com dados cadastrais do usuário logado.
+* **15 — Alteração de Username:** Usuário pode personalizar seu identificador.
+* **16 — Exclusão de Conta:** Remoção permanente com confirmação por senha via modal.
 
 ### 🎨 Interface e Experiência
-- **17 — Identidade Visual UFRPE:** Paleta de cores `#112b38` / `#f4c430` aplicada em toda a interface.
-- **18 — Indicador de Força de Senha:** Feedback visual em tempo real no cadastro.
-- **19 — Toggle de Senha:** Botão para mostrar/ocultar campos de senha.
-- **20 — Sidebar de Navegação:** Menu lateral com overlay acessível por botão hambúrguer.
-- **21 — Flash Messages:** Notificações com auto-fechamento em 5 segundos.
+
+* **17 — Identidade Visual UFRPE:** Paleta de cores `#112b38` / `#f4c430` aplicada em toda a interface.
+* **18 — Indicador de Força de Senha:** Feedback visual em tempo real no cadastro.
+* **19 — Toggle de Senha:** Botão para mostrar/ocultar campos de senha.
+* **20 — Sidebar de Navegação:** Menu lateral com overlay acessível por botão hambúrguer.
+* **21 — Flash Messages:** Notificações com auto-fechamento em 5 segundos.
 
 ---
 
@@ -119,27 +124,30 @@ por meio do sistema de sugestões de pauta.
 ## Funcionalidades Implementadas
 
 ### 🗺️ Áreas da Rural
-- **22 — Listagem de Locais:** Grid de cards com imagem, descrição e média de avaliações de cada espaço do campus.
-- **23 — Página de Detalhe:** Tela completa do local com galeria, avaliação e comentários.
-- **24 — Galeria de Fotos:** Exibe linha de 5 thumbnails; se houver mais, a última mostra blur com contador `+N`.
-- **25 — Lightbox:** Visualização ampliada das fotos com navegação por setas e teclado.
-- **26 — Avaliação por Estrelas:** Notas de 0.5 a 5.0 com meias estrelas interativas, validação matemática rigorosa no backend.
-- **27 — Reavaliação:** Usuário pode atualizar sua nota a qualquer momento.
-- **28 — Comentários e Respostas:** Sistema com um nível de profundidade — comentário e resposta.
-- **29 — Moderação:** Admin pode deletar qualquer comentário; autor pode deletar o próprio.
-- **30 — CRUD de Locais pela Interface:** Admins do sistema criam, editam e removem locais sem precisar do painel superuser.
-- **31 — Galeria Dinâmica:** Formulário permite adicionar fotos ilimitadas com botão "+ Adicionar foto".
+
+* **22 — Listagem de Locais:** Grid de cards com imagem, descrição e média de avaliações de cada espaço do campus.
+* **23 — Página de Detalhe:** Tela completa do local com galeria, avaliação e comentários.
+* **24 — Galeria de Fotos:** Exibe linha de 5 thumbnails; se houver mais, a última mostra blur com contador `+N`.
+* **25 — Lightbox:** Visualização ampliada das fotos com navegação por setas e teclado.
+* **26 — Avaliação por Estrelas:** Notas de 0.5 a 5.0 com meias estrelas interativas, validação matemática rigorosa no backend.
+* **27 — Reavaliação:** Usuário pode atualizar sua nota a qualquer momento.
+* **28 — Comentários e Respostas:** Sistema com um nível de profundidade — comentário e resposta.
+* **29 — Moderação:** Admin pode deletar qualquer comentário; autor pode deletar o próprio.
+* **30 — CRUD de Locais pela Interface:** Admins do sistema criam, editam e removem locais sem precisar do painel superuser.
+* **31 — Galeria Dinâmica:** Formulário permite adicionar fotos ilimitadas com botão "+ Adicionar foto".
 
 ### 💡 Sugestões de Pauta
-- **32 — Envio de Sugestão:** Usuários logados sugerem pautas com texto e categoria.
-- **33 — Painel de Pendentes:** Admin visualiza sugestões aguardando análise.
-- **34 — Aceitar com Pré-preenchimento:** Ao aceitar, admin é redirecionado para criar aviso com texto e categoria já preenchidos.
-- **35 — Negar e Arquivar:** Sugestão negada é arquivada com data para futura limpeza automática.
-- **36 — Aba de Arquivadas:** Admin acessa histórico de sugestões negadas separadamente.
+
+* **32 — Envio de Sugestão:** Usuários logados sugerem pautas com texto e categoria.
+* **33 — Painel de Pendentes:** Admin visualiza sugestões aguardando análise.
+* **34 — Aceitar com Pré-preenchimento:** Ao aceitar, admin é redirecionado para criar aviso com texto e categoria já preenchidos.
+* **35 — Negar e Arquivar:** Sugestão negada é arquivada com data para futura limpeza automática.
+* **36 — Aba de Arquivadas:** Admin acessa histórico de sugestões negadas separadamente.
 
 ### 🚌 Horários do Circular Rural
-- **37 — Tabela de Horários:** Consulta dos horários do Circular Rural com dois sentidos — Zootecnia (Início) e Zootecnia (Fim).
-- **38 — Scroll Horizontal:** Tabela navegável com coluna de ponto fixada para facilitar a leitura.
+
+* **37 — Tabela de Horários:** Consulta dos horários do Circular Rural com dois sentidos — Zootecnia (Início) e Zootecnia (Fim).
+* **38 — Scroll Horizontal:** Tabela navegável com coluna de ponto fixada para facilitar a leitura.
 
 ---
 
@@ -148,8 +156,9 @@ por meio do sistema de sugestões de pauta.
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/DanielMoreiraFr/Ruralinfo.git
+git clone [https://github.com/DanielMoreiraFr/Ruralinfo.git](https://github.com/DanielMoreiraFr/Ruralinfo.git)
 cd Ruralinfo
+
 ```
 
 ### 2. Crie e ative um ambiente virtual
@@ -162,12 +171,14 @@ venv\Scripts\activate
 
 # Linux / macOS
 source venv/bin/activate
+
 ```
 
 ### 3. Instale as dependências
 
 ```bash
 pip install -r requirements.txt
+
 ```
 
 ### 4. Configure o `.env`
@@ -178,12 +189,26 @@ Crie um arquivo `.env` na raiz do projeto:
 SECRET_KEY=sua-chave-secreta-gerada-aqui
 DEBUG=True
 ALLOWED_HOSTS=
+
+# --- CONFIGURAÇÃO DE E-MAIL ---
+# Para desenvolvimento local (evita erros de autenticação SMTP/Brevo com IP dinâmico):
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+
+# Para ambiente de homologação/produção (usando Brevo):
+# EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+# EMAIL_HOST=smtp-relay.brevo.com
+# EMAIL_PORT=587
+# EMAIL_HOST_USER=seu-usuario-brevo
+# EMAIL_HOST_PASSWORD=sua-senha-api-brevo
+# DEFAULT_FROM_EMAIL=seu-email-remetente
+
 ```
 
 Para gerar a `SECRET_KEY`:
 
 ```bash
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+
 ```
 
 ### 5. Execute as migrations
@@ -195,17 +220,22 @@ python manage.py makemigrations accounts
 python manage.py makemigrations mural
 python manage.py makemigrations locais
 python manage.py migrate
+
 ```
 
-### 6. Crie o primeiro administrador
+### 6. Crie o primeiro administrador e Código de Convite
+
+Como o cadastro de novos administradores exige um código de convite baseado em UUID válido, use o shell do Django para criar o primeiro administrador do sistema e, opcionalmente, gerar convites iniciais:
 
 ```bash
 python manage.py shell
+
 ```
 
 ```python
-from accounts.models import Usuario
+from accounts.models import Usuario, CodigoConvite
 
+# 1. Criação do Administrador Raiz
 admin = Usuario(
     nome_completo='Admin UFRPE',
     email='admin@ufrpe.br',
@@ -214,13 +244,20 @@ admin = Usuario(
 )
 admin.set_password('SuaSenhaForte@2025!')
 admin.save()
+
+# 2. (Opcional) Criar um token de convite para cadastrar outros administradores via interface
+convite = CodigoConvite.objects.create(criado_por=admin)
+print(f"Código de Convite gerado: {convite.codigo}")
+
 exit()
+
 ```
 
 ### 7. Inicie o servidor
 
 ```bash
 python manage.py runserver
+
 ```
 
 Acesse em: **http://127.0.0.1:8000/**
@@ -305,10 +342,15 @@ ruralinfo/
         ├── detalhe.html
         ├── form_local.html
         └── confirmar_delete_local.html
+
 ```
 
 ---
 
-## Link para os Fluxogramas do Projeto 
+## Link para os Fluxogramas do Projeto
 
 [📁 Google Drive — Diagramas e Fluxogramas](https://drive.google.com/drive/folders/1mM4qqK3J-SPdMHgQSI99EP3JTfQxVX9q?usp=drive_link)
+
+```
+
+```
