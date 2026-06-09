@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Sugestões Pendentes — Ruralinfo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mural.css' %}">
+<link rel="stylesheet" href="{% static 'css/sugestoes.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="sugestoes-header">
+    <div>
+        <h2 class="sugestoes-titulo">
+            <i class="bi bi-inbox"></i> Sugestões Pendentes
+        </h2>
+        <p style="color:var(--texto-mutado); font-size:0.88rem; margin-top:0.2rem;">
+            {{ sugestoes.count }} sugestão{{ sugestoes.count|pluralize:",ões" }} aguardando análise
+        </p>
+    </div>
+    <a href="{% url 'mural:sugestoes_arquivadas' %}" class="btn btn-outline-light btn-sm">
+        <i class="bi bi-archive"></i> Ver Arquivadas
+    </a>
+</div>
+
+{% if sugestoes %}
+<div class="sugestoes-lista">
+    {% for s in sugestoes %}
+    <div class="sugestao-card">
+
+        <div class="sugestao-meta">
+            <span class="sugestao-autor">
+                <i class="bi bi-person-circle"></i> {{ s.autor.nome_completo }}
+            </span>
+            <span class="sugestao-badge">{{ s.get_tipo_conta_display }}</span>
+            <span class="sugestao-data">
+                <i class="bi bi-clock"></i> {{ s.criado_em|date:"d/m/Y" }} às {{ s.criado_em|time:"H:i" }}
+            </span>
+            <span class="sugestao-categoria badge-categoria"
+                  style="background:rgba(244,196,48,0.15); color:var(--amarelo);
+                         border:1px solid rgba(244,196,48,0.3); border-radius:4px;
+                         padding:0.15rem 0.5rem; font-size:0.75rem; font-weight:600;">
+                {{ s.get_categoria_display }}
+            </span>
+        </div>
+
+        <p class="sugestao-texto">{{ s.texto }}</p>
+
+        <div class="sugestao-actions">
+            <!-- Aceitar -->
+            <form method="post" action="{% url 'mural:sugestao_aceitar' s.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-sugestao btn-aceitar">
+                    <i class="bi bi-check-lg"></i> Aceitar e Criar Post
+                </button>
+            </form>
+
+            <!-- Negar -->
+            <form method="post" action="{% url 'mural:sugestao_negar' s.pk %}"
+                  onsubmit="return confirm('Negar e arquivar esta sugestão?')">
+                {% csrf_token %}
+                <button type="submit" class="btn-sugestao btn-negar">
+                    <i class="bi bi-x-lg"></i> Negar
+                </button>
+            </form>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="sugestoes-vazio">
+    <i class="bi bi-inbox"></i>
+    <p>Nenhuma sugestão pendente no momento.</p>
+</div>
+{% endif %}
+
+{% endblock %}
