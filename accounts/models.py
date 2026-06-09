@@ -1,7 +1,10 @@
 import uuid
+import random
 from django.db import models
+from datetime import timedelta
+from django.conf import settings
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-
 
 class Usuario(AbstractUser):
     """
@@ -106,3 +109,28 @@ class CodigoConvite(models.Model):
     def __str__(self):
         status = 'Usado' if self.foi_usado else 'Disponível'
         return f"Convite {str(self.codigo)[:8]}... [{status}]"
+    
+class CodigoVerificacao(models.Model):
+    usuario = models.OneToOneField(
+        'accounts.Usuario',
+        on_delete=models.CASCADE,
+        related_name='codigo_verificacao',
+    )
+    codigo = models.CharField(max_length=6)
+    criado_em = models.DateTimeField(auto_now_add=True)
+ 
+    class Meta:
+        verbose_name = 'Código de Verificação'
+        verbose_name_plural = 'Códigos de Verificação'
+ 
+    def save(self, *args, **kwargs):
+        # Gera um código de 6 dígitos numéricos ao criar
+        if not self.codigo:
+            self.codigo = f"{random.randint(0, 999999):06d}"
+        super().save(*args, **kwargs)
+ 
+    def esta_expirado(self) -> bool:
+        return timezone.now() > self.criado_em + timedelta(minutes=15)
+ 
+    def __str__(self):
+        return f"Código {self.codigo} → {self.usuario}"
