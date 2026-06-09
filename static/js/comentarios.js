@@ -2,9 +2,10 @@
    COMENTARIOS.JS — Toggle do form de resposta inline
    ============================================================ */
 
+// Aguarda o carregamento do HTML
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Botão "Responder" — abre/fecha o form de resposta
+    // Gerencia o clique no botão "Responder"
     document.querySelectorAll('.btn-responder').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const comentarioId = this.dataset.comentarioId;
@@ -13,12 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const visivel = form.classList.contains('visivel');
 
-            // Fecha todos os outros forms abertos
+            // Fecha todos os outros formulários de resposta que estiverem abertos
             document.querySelectorAll('.form-resposta.visivel').forEach(function (f) {
                 f.classList.remove('visivel');
             });
 
-            // Abre este (ou fecha se já estava aberto)
+            // Abre o formulário atual (ou fecha se já estava aberto) e foca no campo de texto
             if (!visivel) {
                 form.classList.add('visivel');
                 form.querySelector('textarea').focus();
@@ -26,13 +27,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Botão "Cancelar" dentro do form de resposta
+    // Gerencia o clique no botão "Cancelar" do formulário de resposta
     document.querySelectorAll('.btn-cancelar-resposta').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const form = this.closest('.form-resposta');
             if (form) {
-                form.classList.remove('visivel');
-                form.querySelector('textarea').value = '';
+                form.classList.remove('visivel'); // Esconde o formulário
+                form.querySelector('textarea').value = ''; // Limpa o texto digitado
             }
         });
     });

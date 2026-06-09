@@ -6,33 +6,37 @@
    O valor é escrito num input hidden que o form envia ao Django.
    ============================================================ */
 
+// Aguarda o HTML carregar
 document.addEventListener('DOMContentLoaded', function () {
     const wrapper    = document.getElementById('estrelas-input');
     const inputNota  = document.getElementById('id_nota_estrela');
     const notaTexto  = document.getElementById('nota-selecionada');
 
+    // Cancela a execução se os elementos essenciais não existirem na página
     if (!wrapper || !inputNota) return;
 
     const metades = wrapper.querySelectorAll('.estrela-metade');
 
-    // Nota atual (se o usuário já avaliou, o Django passa via data-nota)
+    // Recupera a nota anterior enviada pelo Django (ou define 0 se for a primeira vez)
     let notaAtual = parseFloat(wrapper.dataset.notaAtual) || 0;
 
-    // Preenche visualmente a nota já salva ao carregar
+    // Se o usuário já tiver avaliado antes, exibe visualmente as estrelas preenchidas
     if (notaAtual > 0) {
         marcarAte(notaAtual);
         atualizarTexto(notaAtual);
     }
 
-    // Hover — acende as estrelas até o ponto do mouse
+    // Configura os eventos para cada metade de estrela
     metades.forEach(function (metade) {
+        
+        // Efeito Hover: acende temporariamente as estrelas até onde o mouse passar
         metade.addEventListener('mouseenter', function () {
             const valor = parseFloat(this.dataset.valor);
             destacarAte(valor);
         });
 
+        // Retorno do mouse: apaga os hovers e restaura a nota que já estava salva
         metade.addEventListener('mouseleave', function () {
-            // Volta para a nota salva
             if (notaAtual > 0) {
                 marcarAte(notaAtual);
             } else {
@@ -40,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Clique — salva a nota
+        // Clique: define e salva permanentemente a nova nota no input oculto do formulário
         metade.addEventListener('click', function () {
             notaAtual = parseFloat(this.dataset.valor);
             inputNota.value = notaAtual;
@@ -49,8 +53,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Helpers ──
+    // ── Funções Auxiliares (Helpers) ──
 
+    // Aplica a classe visual de hover até a metade apontada pelo mouse
     function destacarAte(valor) {
         metades.forEach(function (m) {
             m.classList.toggle('hover', parseFloat(m.dataset.valor) <= valor);
@@ -58,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Fixa a classe de estrela preenchida com base na nota definitiva escolhida
     function marcarAte(valor) {
         metades.forEach(function (m) {
             const v = parseFloat(m.dataset.valor);
@@ -66,12 +72,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Remove todas as classes de preenchimento e hover das estrelas
     function limparDestaques() {
         metades.forEach(function (m) {
             m.classList.remove('hover', 'preenchida');
         });
     }
 
+    // Atualiza o contador de texto ao lado das estrelas (Ex: 4.5 / 5.0)
     function atualizarTexto(valor) {
         if (notaTexto) {
             notaTexto.textContent = valor.toFixed(1) + ' / 5.0';
