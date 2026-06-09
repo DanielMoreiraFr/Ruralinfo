@@ -78,8 +78,8 @@ AUTH_USER_MODEL = 'accounts.Usuario'
 
 # Redirecionamentos de autenticação
 LOGIN_URL           = 'accounts:login'
-LOGIN_REDIRECT_URL  = 'Mural:index'
-LOGOUT_REDIRECT_URL = 'Mural:index'
+LOGIN_REDIRECT_URL  = 'mural:index'
+LOGOUT_REDIRECT_URL = 'mural:index'
 
 # Internacionalização
 LANGUAGE_CODE = 'pt-br'

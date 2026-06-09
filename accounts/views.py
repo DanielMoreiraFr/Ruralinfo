@@ -146,12 +146,10 @@ def verificar_codigo_view(request):
             
             # Limpa o ID da sessão, pois ele não é mais necessário
             del request.session['usuario_verificacao_id']
-            
-            # REALIZA O LOGIN AUTOMÁTICO DO USUÁRIO 🎉
-            login(request, usuario)
+        
             
             messages.success(request, f"E-mail verificado com sucesso! Bem-vindo(a), {usuario.nome_completo or usuario.username}!")
-            return redirect('mural:index')
+            return redirect('accounts:login')
             
         except CodigoVerificacao.DoesNotExist:
             # Se o get() não encontrar o código digitado no banco
