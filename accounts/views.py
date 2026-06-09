@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.db import IntegrityError
 from .forms import LoginForm, CadastroComumForm, CadastroAdminForm
@@ -10,13 +11,14 @@ from .models import CodigoVerificacao
 
 def login_view(request):
     """
+    Formulário de Login Personalizado.
     Autentica usando o username composto (email_TIPO) montado pelo LoginForm.
     """
-    # se o usuario ta logado joga ele pra home
+    # Redireciona o usuário para a home se ele já estiver logado no sistema
     if request.user.is_authenticated:
         return redirect('mural:index')
 
-    # validação pelo LoginForm e retorna o usuário identificado
+    # Valida as credenciais recebidas via POST e efetua o login se tudo estiver correto
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -29,26 +31,24 @@ def login_view(request):
 
     return render(request, 'accounts/login.html', {'form': form})
 
-# view pra cadastro que lida com os dois tipos de conta, diferenciando com os prefixos
+
 def cadastro_view(request):
     """
-    Exibe dois formulários na mesma página: um para COMUM e um para ADMIN.
-    O template controla qual aba está visível via JavaScript.
-    Equivale ao fluxo de `inserir_usuario` do legado, com validações reais.
+    Formulário de Cadastro Duplo.
+    Exibe dois formulários na mesma página (COMUM e ADMIN) e gerencia o salvamento com base na aba ativa do template.
     """
-
-    # aqui também envia o user pra home se já estiver logado
+    # Redireciona o usuário para a home se ele já estiver logado no sistema
     if request.user.is_authenticated:
         return redirect('mural:index')
 
     form_comum = CadastroComumForm(prefix='comum')
     form_admin = CadastroAdminForm(prefix='admin')
 
-    # o campo hidden 'tipo_formulario' no template indica qual formulário foi submetido
+    # Identifica qual formulário foi enviado através do campo oculto do template
     if request.method == 'POST':
-        tipo = request.POST.get('tipo_formulario')  # campo hidden no template
+        tipo = request.POST.get('tipo_formulario')
 
-        # valida o formulário correto com base no tipo e salva se for válido
+        # Processa e salva o formulário se o envio veio da aba de Usuário Comum
         if tipo == 'comum':
             form_comum = CadastroComumForm(request.POST, prefix='comum')
             if form_comum.is_valid():
@@ -64,7 +64,7 @@ def cadastro_view(request):
                 )
                 return redirect('accounts:verificar_codigo')
 
-        # o processo é o mesmo pro admin, só muda o form e a mensagem
+        # Processa e salva o formulário dentro de uma transação se o envio veio da aba de Admin
         elif tipo == 'admin':
             form_admin = CadastroAdminForm(request.POST, prefix='admin')
             if form_admin.is_valid():
@@ -88,7 +88,7 @@ def cadastro_view(request):
                     )
                     aba_ativa = 'admin'
 
-        # Se teve erro, mostra qual aba estava ativa para o template reabrir
+        # Mantém a aba correta aberta no template caso o formulário retorne com erros de validação
         aba_ativa = tipo or 'comum'
     else:
         aba_ativa = 'comum'
@@ -161,21 +161,23 @@ def verificar_codigo_view(request):
 # logout por POST pra evitar CSRF — só acessível pra usuários logados
 @login_required
 def logout_view(request):
-    """Logout via POST — protegido contra CSRF."""
+    """ Finaliza a sessão ativa do usuário atual no navegador. """
+    # Só processa o encerramento se a requisição vier via método POST por segurança
     if request.method == 'POST':
         logout(request)
         messages.info(request, 'Você saiu com segurança.')
     return redirect('mural:index')
 
+
+# Bloqueia o acesso direto de usuários anônimos à rota de perfil
 @login_required
 def perfil_view(request):
-    """
-    Exibe os dados cadastrais e permite a alteração do Nome de Usuário (Nick).
-    """
+    """ Exibe o perfil do usuário e processa a alteração do nickname. """
+    
     if request.method == 'POST':
         novo_username = request.POST.get('username', '').strip()
         
-        # Validações básicas para manter a ordem do chat
+        # Validações de formato do nome de usuário
         if not novo_username:
             messages.error(request, "O nome de usuário não pode ficar em branco.")
         elif ' ' in novo_username:
@@ -184,35 +186,41 @@ def perfil_view(request):
             messages.error(request, "O nick deve conter pelo menos 3 caracteres.")
         else:
             try:
-                # Tenta atualizar o identificador do usuário logado
-                request.user.username = novo_username
-                request.user.save()
+                # Atualiza o username do usuário logado
+                user = request.user
+                user.username = novo_username
+                user.save()
+                
+                # Atualiza a sessão para manter o usuário logado após a mudança de credenciais
+                update_session_auth_hash(request, user)
+                
                 messages.success(request, "Nome de usuário atualizado com sucesso!")
                 return redirect('accounts:perfil')
+                
             except IntegrityError:
-                # Caso o banco acuse que o username já existe por conta do UNIQUE do modelo
+                # Trata duplicidade caso o username já exista no banco (Unique Constraint)
                 messages.error(request, "Este nome de usuário já está sendo utilizado por outro membro.")
                 
     return render(request, 'accounts/perfil.html', {
         'usuario': request.user
     })
 
+
+# Bloqueia o acesso direto de usuários anônimos à rota de exclusão de conta
 @login_required
 def deletar_conta_view(request):
-    """
-    Recebe o pedido de exclusão de conta via POST, valida a senha 
-    e deleta permanentemente o usuário.
-    """
+    """ Remove permanentemente o registro do usuário atual do banco de dados após confirmar a senha. """
+    # Só executa a exclusão definitiva se a requisição vier via método POST por segurança
     if request.method == 'POST':
         senha_informada = request.POST.get('password', '')
         usuario_atual = request.user
         
-        # Verifica se a senha informada corresponde ao hash do banco
+        # Valida se a senha enviada bate com o hash criptografado armazenado no banco de dados
         if usuario_atual.check_password(senha_informada):
-            # Deleta o registro do banco de dados
+            # Deleta o registro do usuário
             usuario_atual.delete()
             
-            # Realiza o logout limpo da sessão do usuário
+            # Limpa os dados de sessão do navegador do cliente
             logout(request)
             
             messages.success(request, "Sua conta foi removida com sucesso. Esperamos ver você de volta em breve!")

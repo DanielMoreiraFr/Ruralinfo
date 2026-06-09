@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Deletar {{ local.nome }} — Ruralinfo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/locais_form.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+<div style="max-width:500px; margin:3rem auto; text-align:center;">
+
+    <i class="bi bi-exclamation-triangle"
+       style="font-size:3.5rem; color:var(--vermelho); display:block; margin-bottom:1rem;"></i>
+
+    <h2 style="color:var(--vermelho); margin-bottom:0.5rem;">Deletar Local</h2>
+
+    <p style="color:var(--texto-claro); margin-bottom:0.5rem;">
+        Você está prestes a remover permanentemente:
+    </p>
+
+    <p style="color:var(--amarelo); font-size:1.2rem; font-weight:700; margin-bottom:1.5rem;">
+        {{ local.nome }}
+    </p>
+
+    <p style="color:var(--texto-mutado); font-size:0.88rem; margin-bottom:2rem;">
+        Esta ação também removerá todas as imagens da galeria,
+        avaliações e comentários vinculados a este local.
+        <strong style="color:var(--vermelho);">Não pode ser desfeita.</strong>
+    </p>
+
+    <div style="display:flex; justify-content:center; gap:1rem;">
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn"
+                    style="background:var(--vermelho); color:#fff; border:none;">
+                <i class="bi bi-trash3"></i> Confirmar Exclusão
+            </button>
+        </form>
+        <a href="{% url 'locais:detalhe' local.pk %}" class="btn btn-outline-light">
+            Cancelar
+        </a>
+    </div>
+
+</div>
+{% endblock %}
