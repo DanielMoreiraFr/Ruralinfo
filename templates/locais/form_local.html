@@ -86,16 +86,17 @@
     <div class="form-local-card" style="margin-top:1.5rem;">
         <h3 class="form-local-secao-titulo">
             <i class="bi bi-images" style="margin-right:0.4rem;"></i>Galeria de Fotos
-            <span style="font-size:0.78rem; color:var(--texto-mutado); font-weight:400; margin-left:0.5rem;"></span>
+            <span style="font-size:0.78rem; color:var(--texto-mutado); font-weight:400; margin-left:0.5rem;">
+                (opcional)
+            </span>
         </h3>
 
         {{ formset.management_form }}
 
-        <div class="galeria-formset">
+        <div class="galeria-formset" id="galeria-formset">
             {% for img_form in formset %}
             <div class="galeria-formset-linha {% if img_form.instance.pk %}tem-imagem{% endif %}">
 
-                <!-- Preview da imagem existente (na edição) -->
                 {% if img_form.instance.pk and img_form.instance.imagem %}
                 <div class="galeria-formset-preview">
                     <img src="{{ img_form.instance.imagem.url }}"
@@ -128,10 +129,46 @@
                     {% endif %}
                 </div>
 
-                {{ img_form.id }}  {# campo hidden obrigatório para o formset #}
+                {{ img_form.id }}
             </div>
             {% endfor %}
         </div>
+
+        <!-- Botão adicionar foto -->
+        <button type="button" id="btn-adicionar-foto"
+                style="margin-top:1rem; display:flex; align-items:center; gap:0.5rem;
+                       background:transparent; border:1px dashed rgba(244,196,48,0.4);
+                       color:var(--amarelo); padding:0.6rem 1.2rem; border-radius:6px;
+                       cursor:pointer; font-family:inherit; font-size:0.88rem;
+                       transition:border-color 0.2s, background 0.2s;">
+            <i class="bi bi-plus-lg"></i> Adicionar foto
+        </button>
+    </div>
+
+    <!-- Template oculto clonado pelo galeria_form.js -->
+    <div id="template-foto-vazio" class="galeria-formset-linha template-oculto"
+         style="display:none;">
+        <div class="galeria-formset-campos">
+            <div style="flex:1;">
+                <label class="form-label" style="font-size:0.78rem;">Foto</label>
+                <input type="file" name="imagens-__prefix__-imagem"
+                       accept="image/*" id="id_imagens-__prefix__-imagem">
+            </div>
+            <div style="flex:2;">
+                <label class="form-label" style="font-size:0.78rem;">Legenda</label>
+                <input type="text" name="imagens-__prefix__-legenda"
+                       placeholder="Legenda opcional"
+                       id="id_imagens-__prefix__-legenda">
+            </div>
+            <div style="width:80px;">
+                <label class="form-label" style="font-size:0.78rem;">Ordem</label>
+                <input type="number" name="imagens-__prefix__-ordem"
+                       min="0" style="width:70px"
+                       id="id_imagens-__prefix__-ordem">
+            </div>
+        </div>
+        <input type="hidden" name="imagens-__prefix__-id"
+               id="id_imagens-__prefix__-id">
     </div>
 
     <!-- ── Ações ── -->
@@ -154,4 +191,8 @@
     </div>
 
 </form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/galeria_form.js' %}"></script>
 {% endblock %}

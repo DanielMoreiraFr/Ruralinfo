@@ -36,9 +36,11 @@
 /* --------------------------------------------------------------------------
    GALERIA DE FOTOS
    -------------------------------------------------------------------------- */
-.galeria-container {
-    margin-bottom: 2.5rem;
-}
+/* ==========================================================================
+   GALERIA — substituir a seção existente no locais_detalhe.css
+   ========================================================================== */
+
+.galeria-container { margin-bottom: 2.5rem; }
 
 .galeria-titulo {
     font-size: 1rem;
@@ -49,29 +51,57 @@
     letter-spacing: 0.5px;
 }
 
-.galeria-grid {
+/* Grid fixo de 5 colunas */
+#galeria-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 0.6rem;
+}
+
+.galeria-thumb-wrapper {
+    position: relative;
+    cursor: pointer;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color 0.15s;
+}
+
+.galeria-thumb-wrapper:hover {
+    border-color: var(--amarelo);
 }
 
 .galeria-thumb {
     width: 100%;
     height: 120px;
     object-fit: cover;
-    border-radius: 6px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: border-color 0.15s, transform 0.15s;
     display: block;
+    transition: transform 0.15s;
 }
 
-.galeria-thumb:hover {
-    border-color: var(--amarelo);
-    transform: scale(1.02);
+.galeria-thumb-wrapper:hover .galeria-thumb {
+    transform: scale(1.03);
 }
 
-/* Lightbox */
+/* Overlay de blur na 5ª foto quando há mais imagens */
+.galeria-thumb-mais .galeria-thumb {
+    filter: blur(3px) brightness(0.5);
+}
+
+.galeria-blur-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    pointer-events: none;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* Lightbox — sem alterações */
 .lightbox-overlay {
     display: none;
     position: fixed;
@@ -84,7 +114,6 @@
     gap: 1rem;
     padding: 1.5rem;
 }
-
 .lightbox-overlay.ativo { display: flex; }
 
 .lightbox-img {
@@ -136,6 +165,11 @@
     line-height: 1;
 }
 .lightbox-fechar:hover { opacity: 1; }
+
+/* Responsivo */
+@media (max-width: 600px) {
+    #galeria-grid { grid-template-columns: repeat(3, 1fr); }
+}
 
 /* --------------------------------------------------------------------------
    AVALIAÇÃO POR ESTRELAS

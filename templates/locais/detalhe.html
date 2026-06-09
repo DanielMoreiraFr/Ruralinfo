@@ -30,21 +30,29 @@
 </div>
 
 <!-- ===================== GALERIA ===================== -->
+<!-- ===================== GALERIA ===================== -->
 {% if galeria %}
 <div class="galeria-container">
     <div class="galeria-titulo">
         <i class="bi bi-images" style="margin-right:0.4rem;"></i>Galeria
     </div>
-    <div class="galeria-grid">
+
+    <!--
+        O JS lê os data-src de cada item oculto para montar a linha de 5.
+        Não renderizamos <img> diretamente — o galeria.js monta o grid.
+        Isso permite que o JS controle quais são visíveis e qual leva blur.
+    -->
+    <div id="galeria-dados" style="display:none;">
         {% for foto in galeria %}
-        <img src="{{ foto.url }}"
-             alt="{{ local.nome }}"
-             class="galeria-thumb">
+        <span data-src="{{ foto.url }}" data-alt="{{ local.nome }}"></span>
         {% endfor %}
     </div>
+
+    <!-- Grid montado pelo galeria.js -->
+    <div id="galeria-grid"></div>
 </div>
 
-<!-- Lightbox (oculto por padrão) -->
+<!-- Lightbox -->
 <div id="lightbox-overlay" class="lightbox-overlay">
     <button id="lightbox-fechar" class="lightbox-fechar" title="Fechar">
         <i class="bi bi-x-lg"></i>
