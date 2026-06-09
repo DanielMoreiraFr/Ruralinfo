@@ -2,10 +2,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-# Carrega o arquivo .env da raiz do projeto
-load_dotenv()
 
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Carrega o arquivo .env da raiz do projeto
+
 
 # ★ Lidos do .env — nunca hardcoded no código
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -44,7 +46,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ruralinfo.urls'
+ROOT_URLCONF = 'Ruralinfo.urls'
 
 TEMPLATES = [
     {
@@ -62,7 +64,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ruralinfo.wsgi.application'
+WSGI_APPLICATION = 'Ruralinfo.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -76,8 +78,8 @@ AUTH_USER_MODEL = 'accounts.Usuario'
 
 # Redirecionamentos de autenticação
 LOGIN_URL           = 'accounts:login'
-LOGIN_REDIRECT_URL  = 'mural:index'
-LOGOUT_REDIRECT_URL = 'mural:index'
+LOGIN_REDIRECT_URL  = 'Mural:index'
+LOGOUT_REDIRECT_URL = 'Mural:index'
 
 # Internacionalização
 LANGUAGE_CODE = 'pt-br'
@@ -104,3 +106,10 @@ MESSAGE_TAGS = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+EMAIL_BACKEND       = os.environ.get('EMAIL_BACKEND')
+EMAIL_HOST          = os.environ.get('EMAIL_HOST')
+EMAIL_PORT          = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS       = True
+EMAIL_HOST_USER     = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL  = os.environ.get('DEFAULT_FROM_EMAIL')

@@ -1,5 +1,8 @@
 import re
 import uuid
+import secrets
+import string
+from datetime import datetime, timedelta
 from django import forms
 from django.contrib.auth import authenticate
 from django.db import transaction
@@ -167,6 +170,8 @@ class CadastroComumForm(forms.ModelForm):
         if commit:
             usuario.save()
         return usuario
+    
+    
 
 
 # =============================================================================

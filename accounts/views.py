@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.db import IntegrityError
-
 from .forms import LoginForm, CadastroComumForm, CadastroAdminForm
-
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import CodigoVerificacao
 
 def login_view(request):
     """
@@ -51,22 +52,35 @@ def cadastro_view(request):
         if tipo == 'comum':
             form_comum = CadastroComumForm(request.POST, prefix='comum')
             if form_comum.is_valid():
-                form_comum.save()
+                usuario = form_comum.save(commit=False) #ainda não salva, precsa do código de verificação
+                usuario.is_active = False # desativa a conta até a verificação do email
+                usuario.save()
+                
+                request.session['usuario_verificacao_id'] = usuario.id
+                verificacao_email_view(request, usuario)
+                
                 messages.success(
-                    request, 'Conta Comum criada! Faça login para continuar.'
+                    request, 'Conta Comum criada! Por favor, verifique seu e-mail para ativar a conta.'
                 )
-                return redirect('accounts:login')
+                return redirect('accounts:verificar_codigo')
 
         # Processa e salva o formulário dentro de uma transação se o envio veio da aba de Admin
         elif tipo == 'admin':
             form_admin = CadastroAdminForm(request.POST, prefix='admin')
             if form_admin.is_valid():
                 try:
-                    form_admin.save()
+                    # Deixa o save() do form consumir o convite atomicamente
+                    usuario = form_admin.save()
+                    usuario.is_active = False
+                    usuario.save()
+ 
+                    request.session['usuario_verificacao_id'] = usuario.id
+                    verificacao_email_view(request, usuario)
+ 
                     messages.success(
-                        request, 'Conta Admin criada! Faça login para continuar.'
+                        request, 'Conta Admin criada! Por favor, verifique seu e-mail para ativar a conta.'
                     )
-                    return redirect('accounts:login')
+                    return redirect('accounts:verigicar_codigo')
                 except Exception:
                     messages.error(
                         request,
@@ -84,9 +98,67 @@ def cadastro_view(request):
         'form_admin': form_admin,
         'aba_ativa':  aba_ativa,
     })
-
-
-# Bloqueia o acesso direto de usuários anônimos à rota de logout
+    
+def verificacao_email_view(request, usuario):
+    codigo_obj = CodigoVerificacao.objects.create(usuario=usuario)
+    
+    send_mail(
+        subject='Seu código de cerificação - Ruralinfo',
+        message=f'Olá, {usuario.nome_completo or usuario.username}!\n\nUse o seguinte código para verificar seu e-mail: {codigo_obj.codigo}\n\nEste código é válido por 15 minutos.',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[usuario.email],
+        fail_silently=False,
+    )
+    
+def verificar_codigo_view(request):
+    """
+    Exibe a tela para inserção do código de 6 dígitos e valida o número digitado.
+    Se estiver correto, ativa o usuário e realiza o login automático.
+    """
+    # Recupera o ID do usuário que acabou de se cadastrar da sessão temporária
+    usuario_id = request.session.get('usuario_verificacao_id')
+    
+    # Se não houver ID na sessão, significa que a pessoa não veio do cadastro
+    if not usuario_id:
+        messages.error(request, "Sessão expirada ou inválida. Por favor, faça o cadastro novamente.")
+        return redirect('accounts:cadastro')
+        
+    if request.method == 'POST':
+        codigo_digitado = request.POST.get('codigo', '').strip()
+        
+        try:
+            # Busca se existe esse código atrelado a esse usuário específico
+            codigo_obj = CodigoVerificacao.objects.get(codigo=codigo_digitado, usuario_id=usuario_id)
+            
+            # Verifica se os 15 minutos já passaram
+            if codigo_obj.esta_expirado():
+                messages.error(request, "Este código de ativação já expirou. Por favor, refaça o cadastro.")
+                codigo_obj.delete()
+                return redirect('accounts:cadastro')
+            
+            # Se encontrou o código e está no prazo: Ativa o usuário!
+            usuario = codigo_obj.usuario
+            usuario.is_active = True
+            usuario.save()
+            
+            # Deleta o código do banco para que não possa ser usado de novo
+            codigo_obj.delete()
+            
+            # Limpa o ID da sessão, pois ele não é mais necessário
+            del request.session['usuario_verificacao_id']
+            
+            # REALIZA O LOGIN AUTOMÁTICO DO USUÁRIO 🎉
+            login(request, usuario)
+            
+            messages.success(request, f"E-mail verificado com sucesso! Bem-vindo(a), {usuario.nome_completo or usuario.username}!")
+            return redirect('mural:index')
+            
+        except CodigoVerificacao.DoesNotExist:
+            # Se o get() não encontrar o código digitado no banco
+            messages.error(request, "Código incorreto. Verifique o número enviado ao seu e-mail.")
+            
+    return render(request, 'accounts/verificar_codigo.html')
+# logout por POST pra evitar CSRF — só acessível pra usuários logados
 @login_required
 def logout_view(request):
     """ Finaliza a sessão ativa do usuário atual no navegador. """
