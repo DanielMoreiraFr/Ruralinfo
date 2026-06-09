@@ -72,7 +72,7 @@ class CodigoConvite(models.Model):
     Controla e armazena os tokens de convite gerados para permitir o cadastro de novas contas ADMIN.
     """
 
-    # Gera um identificador único universal (UUID) aleatório e impossível de ser editado
+    # Gera um UUID aleatório e impossível de ser editado
     codigo = models.UUIDField(
         verbose_name='Código',
         default=uuid.uuid4,
