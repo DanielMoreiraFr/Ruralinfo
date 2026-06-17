@@ -360,7 +360,6 @@ ruralinfo/
 
 ## Imagens do projeto
 
-```
 <img src="assets/Mural.png" width="700">
 <img src="assets/Novo_aviso.png" width="700">
 <img src="assets/Sugestoes.png" width="700">
@@ -369,8 +368,6 @@ ruralinfo/
 <img src="assets/Lugar_lista.png" width="700">
 <img src="assets/Lugar_detalhe1.png" width="700">
 <img src="assets/Lugar_detalhe2.png" width="700">
-
-```
 
 ---
 
