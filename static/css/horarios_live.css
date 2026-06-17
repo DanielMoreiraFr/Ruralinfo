@@ -90,9 +90,11 @@
    próximo horário em cada linha
    -------------------------------------- */
 .tabela-horarios td.proximo-ponto {
-    color: var(--amarelo) !important;
+    color: #1e1e1e !important;
+    background-color: var(--amarelo) !important;
     font-weight: 700;
     position: relative;
+    box-shadow: 0 0 8px rgba(244, 196, 48, 0.5);
 }
 
 /* --------------------------------------------------------------------------
