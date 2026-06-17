@@ -138,10 +138,6 @@ def toggle_publicado(request, pk):
     return redirect('mural:index')
 
 
-def horarios(request):
-    """ Renderiza a página estática informativa com os horários de ônibus da UFRPE. """
-    return render(request, 'mural/horarios.html')
-
 
 @login_required
 def sugestao_nova(request):

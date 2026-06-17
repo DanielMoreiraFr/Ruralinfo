@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'accounts',
     'mural',
     'locais',
+    'circular',
 ]
 
 MIDDLEWARE = [

@@ -7,11 +7,12 @@ from django.shortcuts import redirect
 
 
 urlpatterns = [
-    path('admin/',     admin.site.urls),
-    path('accounts/',  include('accounts.urls', namespace='accounts')),
-    path('mural/',     include('mural.urls',    namespace='mural')),
-    path('',           lambda r: redirect('mural:index'), name='home'), # lambda simplfica o redirect
+    path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('mural/', include('mural.urls', namespace='mural')),
+    path('', lambda r: redirect('mural:index'), name='home'), # lambda simplfica o redirect
     path('locais/', include('locais.urls', namespace='locais')),
+    path('circular/', include('circular.urls', namespace= 'circular')),
 ]
 
 

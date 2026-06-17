@@ -10,7 +10,6 @@ urlpatterns = [
     path('<int:pk>/editar/', views.editar, name='editar'),
     path('<int:pk>/deletar/', views.deletar, name='deletar'),
     path('<int:pk>/toggle/', views.toggle_publicado, name='toggle'),
-    path('horarios/', views.horarios, name='horarios'),
 
     # Sugestões
     path('sugestoes/nova/', views.sugestao_nova, name='sugestao_nova'),
