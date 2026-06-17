@@ -31,6 +31,8 @@
     {% endif %}
 </div>
 
+{% include 'circular/_banner_ao_vivo.html' %}
+
 <div class="categoria-filter-container" style="margin-bottom: 2rem; display: flex; gap: 0.6rem; flex-wrap: wrap;">
     <a href="{% url 'mural:index' %}" class="btn btn-sm {% if not categoria_ativa %}btn-ruralinfo{% else %}btn-outline-light{% endif %}" style="border-radius: 20px; font-size: 0.85rem; padding: 0.4rem 1rem;">
         Todos
