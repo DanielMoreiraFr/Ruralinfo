@@ -1,10 +1,3 @@
-Aqui está o arquivo `README.md` completamente atualizado e reestruturado para a entrega da **3VA**.
-
-Foram adicionados todos os novos conceitos de arquitetura (API centralizada, componentização com parciais, manipulação dinâmica do DOM) e as melhorias visuais refinadas a partir do feedback de design, elevando o nível técnico da documentação do sistema.
-
----
-
-```markdown
 <p align="center">
     <strong>Nome da Aplicação:</strong> Ruralinfo<br>
     <strong>Integrantes:</strong> <a href="https://github.com/DanielMoreiraFr">Daniel Moreira</a>, <a href="https://github.com/kauefreitasR">Kaue Freitas</a><br>
@@ -71,7 +64,6 @@ python src/main.py
 
 ```
 
----
 
 # VERSÃO 2VA — Release 2.0
 
