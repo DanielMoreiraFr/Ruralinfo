@@ -30,7 +30,7 @@ HORARIOS_CIRCULAR = [
 
 def horarios(request):
     """ Renderiza a página estática informativa com os horários de ônibus da UFRPE. """
-    return render(request, 'mural/horarios.html')
+    return render(request, 'circular/horarios.html')
 
 
 # transforma os horarios de string para minutos em int para facilitar a localização e comparação
