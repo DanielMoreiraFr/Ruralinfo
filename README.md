@@ -27,7 +27,7 @@ Circular Rural e contribua com sugestões de pauta para a administração.
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" width="20"> **VSCode** | Ambiente de desenvolvimento integrado (IDE) |
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" width="20"> **Git** | Sistema de controle de versão distribuído |
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="20"> **GitHub** | Plataforma de hospedagem de código e colaboração entre a equipe |
-| <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/diagramsnet.svg" width="20"> **Draw.io** | Criação e modelagem dos diagramas arquiteturais e fluxogramas de processos do sistema |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/drawio/drawio-original.svg" width="20"> **Draw.io** | Criação e modelagem dos diagramas arquiteturais e fluxogramas de processos do sistema |
 
 ## Bibliotecas Utilizadas
 
