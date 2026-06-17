@@ -17,25 +17,26 @@ Circular Rural e contribua com sugestões de pauta para a administração.
 
 ---
 
-## Ferramentas Utilizadas
+## Frameworks e Ferramentas
 
 | Ferramenta | Descrição |
 |---|---|
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="20"> **Python 3.11+** | Linguagem de programação principal |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/django/django-plain.svg" width="20"> **Django 5.x / 6.x** | Framework web principal (MTV) |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg" width="20"> **SQLite** | Banco de dados relacional via ORM do Django |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" width="20"> **VSCode** | IDE de desenvolvimento |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" width="20"> **Git** | Versionamento de código |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="20"> **GitHub** | Repositório e cooperação remota |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="20"> **Python 3.11+** | Linguagem de programação principal do ecossistema |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/django/django-plain.svg" width="20"> **Django 5.x / 6.x** | Framework web principal utilizado para o desenvolvimento da arquitetura MTV |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg" width="20"> **SQLite** | Banco de dados relacional leve, integrado e gerenciado via Django ORM |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" width="20"> **VSCode** | Ambiente de desenvolvimento integrado (IDE) |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" width="20"> **Git** | Sistema de controle de versão distribuído |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="20"> **GitHub** | Plataforma de hospedagem de código e colaboração entre a equipe |
+| <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/diagramsnet.svg" width="20"> **Draw.io** | Criação e modelagem dos diagramas arquiteturais e fluxogramas de processos do sistema |
 
 ## Bibliotecas Utilizadas
 
 | Biblioteca | Descrição |
 |---|---|
-| **Django** | Framework principal: ORM, autenticação, roteamento e templates |
 | **Pillow** | Processamento de imagens para `ImageField` nos models de avisos e locais |
 | **django-widget-tweaks** | Aplicação de classes CSS nos campos de formulário nos templates |
 | **python-dotenv** | Leitura de variáveis de ambiente do arquivo `.env` |
+| **pytz** | Manipulação de fusos horários mundiais, garantindo a precisão do horário local (`America/Recife`) |
 
 ---
 
