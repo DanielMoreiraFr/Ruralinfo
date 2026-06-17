@@ -11,7 +11,7 @@ from .models import Usuario, CodigoConvite
 
 
 # =============================================================================
-# VALIDADORES REUTILIZÁVEIS
+# UTILS DE VALIDAÇÃO
 # =============================================================================
 
 def validar_email_ufrpe(email: str) -> str:

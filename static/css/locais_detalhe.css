@@ -22,7 +22,9 @@
     color: var(--texto-claro);
     line-height: 1.7;
     font-size: 0.95rem;
-    max-width: 780px;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 #imagem-principal {
