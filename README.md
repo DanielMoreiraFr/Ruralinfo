@@ -358,6 +358,22 @@ ruralinfo/
 
 ---
 
+## Imagens do projeto
+
+```
+<img src="assets/Mural.png" width="700">
+<img src="assets/Novo_aviso.png" width="700">
+<img src="assets/Sugestoes.png" width="700">
+<img src="assets/Perfil.png" width="700">
+<img src="assets/Horarios.png" width="700">
+<img src="assets/Lugar_lista.png" width="700">
+<img src="assets/Lugar_detalhe1.png" width="700">
+<img src="assets/Lugar_detalhe2.png" width="700">
+
+```
+
+---
+
 ## Link para os Fluxogramas do Projeto
 
 [📁 Google Drive — Diagramas e Fluxogramas](https://drive.google.com/drive/folders/1mM4qqK3J-SPdMHgQSI99EP3JTfQxVX9q?usp=drive_link)
