@@ -376,3 +376,7 @@ ruralinfo/
 ## Link para os Fluxogramas do Projeto
 
 [📁 Google Drive — Diagramas e Fluxogramas](https://drive.google.com/drive/folders/1mM4qqK3J-SPdMHgQSI99EP3JTfQxVX9q?usp=drive_link)
+
+## Link para o Artigo do Projeto
+
+[📰 Artigo - Ruralinfo](https://www.overleaf.com/read/xjgrnddmyxpp#7bf8b0)
