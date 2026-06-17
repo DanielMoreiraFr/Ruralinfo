@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/horarios.css' %}">
+<link rel="stylesheet" href="{% static 'css/horarios_live.css'%}">
 
 <div class="mb-4">
     <h4 class="fw-bold mb-1" style="color: var(--amarelo);">
@@ -18,6 +19,27 @@
     </p>
     <br>
 
+</div>
+
+<div class="live-banner">
+ 
+    <!-- Indicador LIVE pulsante -->
+    <div class="live-badge">
+        <span class="live-dot"></span>
+        Ao Vivo
+    </div>
+ 
+    <!-- Relógio atualizado pelo JS -->
+    <div class="live-relogio" id="live-hora">--:--</div>
+ 
+    <div class="live-divisor"></div>
+ 
+    <!-- Informações da próxima saída -->
+    <div class="live-info">
+        <span class="live-proxima" id="live-proxima">Calculando...</span>
+        <span class="live-tempo"   id="live-tempo"></span>
+    </div>
+ 
 </div>
 
 <!-- ===================== VOLTA 1 ===================== -->
@@ -187,4 +209,8 @@
 </div>
 
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/horarios_live.js' %}"></script>
 {% endblock %}
