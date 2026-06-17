@@ -1,3 +1,10 @@
+Aqui está o arquivo `README.md` completamente atualizado e reestruturado para a entrega da **3VA**.
+
+Foram adicionados todos os novos conceitos de arquitetura (API centralizada, componentização com parciais, manipulação dinâmica do DOM) e as melhorias visuais refinadas a partir do feedback de design, elevando o nível técnico da documentação do sistema.
+
+---
+
+```markdown
 <p align="center">
     <strong>Nome da Aplicação:</strong> Ruralinfo<br>
     <strong>Integrantes:</strong> <a href="https://github.com/DanielMoreiraFr">Daniel Moreira</a>, <a href="https://github.com/kauefreitasR">Kaue Freitas</a><br>
@@ -116,10 +123,7 @@ e o sistema de autenticação foi completamente reconstruído com segurança rea
 
 ## Contexto
 
-A terceira versão expande o Ruralinfo de um simples mural de avisos para uma **plataforma informativa
-completa do campus**. O foco é engajar a comunidade com conteúdo interativo — avaliações, comentários,
-galeria de fotos dos espaços do campus — e criar um canal direto entre alunos e administração
-por meio do sistema de sugestões de pauta.
+A terceira versão expande o Ruralinfo de um simples mural de avisos para uma **plataforma informativa completa do campus**. O foco é engajar a comunidade com conteúdo interativo — avaliações, comentários, galeria de fotos dos espaços do campus —, criar um canal direto entre alunos e administração por meio do sistema de sugestões de pauta, e introduzir um **mecanismo inteligente de rastreamento assíncrono para o transporte interno da UFRPE**.
 
 ## Funcionalidades Implementadas
 
@@ -144,10 +148,14 @@ por meio do sistema de sugestões de pauta.
 * **35 — Negar e Arquivar:** Sugestão negada é arquivada com data para futura limpeza automática.
 * **36 — Aba de Arquivadas:** Admin acessa histórico de sugestões negadas separadamente.
 
-### 🚌 Horários do Circular Rural
+### 🚌 Sistema Ao Vivo do Circular Rural (Destaque Tecnológico)
 
 * **37 — Tabela de Horários:** Consulta dos horários do Circular Rural com dois sentidos — Zootecnia (Início) e Zootecnia (Fim).
-* **38 — Scroll Horizontal:** Tabela navegável com coluna de ponto fixada para facilitar a leitura.
+* **38 — Scroll Horizontal:** Tabela navegável com coluna de ponto fixada para facilitar a leitura em dispositivos móveis.
+* **39 — API de Monitoramento Temporal Centralizada:** Criação do endpoint `/circular/api/ao-vivo/` que injeta o fuso de `America/Recife` e converte strings de horários da tabela em minutos inteiros absolutos. O backend implementa um algoritmo de busca com limite infinito (`float('inf')`) para determinar com precisão o menor delta de tempo até a próxima viagem.
+* **40 — Componentização DRY com Template Partials:** Isolamento do banner dinâmico no arquivo reaproveitável `circular/_banner_ao_vivo.html`. Utilizando inclusão nativa do Django (`{% include %}`), o painel informativo foi acoplado simultaneamente à tela de horários e ao feed principal do Mural de Avisos sem redundância de código estrutural.
+* **41 — Ciclo de Vida Assíncrono e Sincronização de Matriz:** Motor em Vanilla JS estruturado com polling em segundo plano através de intervalos recursivos de 30 segundos. O script traduz as coordenadas da resposta JSON em seletores de nós do DOM (`linha_index + 1`, `coluna_index + 1`), compensando de forma exata as linhas de cabeçalhos e células estáticas do HTML.
+* **42 — Refinamento de UI Baseado em Design Review:** Otimização visual do status de operação através de uma pílula indicadora (`.live-badge`) com atenuação cromática opaca (`rgba`), bordas suavizadas e animação pulsante por quadros-chave (`@keyframes`). A célula vitoriosa do próximo horário recebe isolamento visual de alto contraste na tabela por meio de sombras projetadas (`box-shadow`) e inversão automática de cor do texto.
 
 ---
 
@@ -301,6 +309,12 @@ ruralinfo/
 │   ├── urls.py
 │   └── admin.py
 │
+├── circular/                     # horários do circular 
+│   ├── models.py                 
+│   ├── views.py                  # Posicionamento do Circular · API
+│   ├── urls.py
+│   └── admin.py
+
 ├── static/
 │   ├── css/
 │   │   ├── base.css              # navbar · sidebar · botões · alertas
@@ -310,7 +324,8 @@ ruralinfo/
 │   │   ├── locais_lista.css      # grid de locais
 │   │   ├── locais_detalhe.css    # galeria · lightbox · avaliação · comentários
 │   │   ├── locais_form.css       # formulário de local
-│   │   └── horarios.css          # tabela do circular
+│   │   ├── horarios.css          # tabela estrutural estilo excel do circular
+│   │   └── horarios_live.css     # estilos do banner, badge dinâmico e animações ao vivo
 │   └── js/
 │       ├── alerta.js             # auto-fechamento de mensagens
 │       ├── navbar.js             # dropdown e menu mobile
@@ -321,7 +336,8 @@ ruralinfo/
 │       ├── galeria.js            # thumbnails + lightbox
 │       ├── galeria_form.js       # slots dinâmicos de foto
 │       ├── estrelas.js           # avaliação interativa
-│       └── comentarios.js        # toggle de resposta inline
+│       ├── comentarios.js        # toggle de resposta inline
+│       └── horarios_live.js      # motor assíncrono de busca e polling do circular ao vivo
 │
 └── templates/
     ├── base.html
@@ -333,15 +349,17 @@ ruralinfo/
     │   ├── index.html
     │   ├── aviso_form.html
     │   ├── confirmar_delete.html
-    │   ├── horarios.html
     │   ├── sugestao_form.html
     │   ├── sugestoes_pendentes.html
     │   └── sugestoes_arquivadas.html
-    └── locais/
-        ├── lista.html
-        ├── detalhe.html
-        ├── form_local.html
-        └── confirmar_delete_local.html
+    ├── locais/
+    │   ├── lista.html
+    │   ├── detalhe.html
+    │   ├── form_local.html
+    │   └── confirmar_delete_local.html
+    └── circular/
+        ├── horarios.html
+        └── _banner_ao_vivo.html
 
 ```
 
@@ -350,4 +368,7 @@ ruralinfo/
 ## Link para os Fluxogramas do Projeto
 
 [📁 Google Drive — Diagramas e Fluxogramas](https://drive.google.com/drive/folders/1mM4qqK3J-SPdMHgQSI99EP3JTfQxVX9q?usp=drive_link)
- 
+
+```
+
+```
