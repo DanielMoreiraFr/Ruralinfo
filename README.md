@@ -144,10 +144,10 @@ A terceira versão expande o Ruralinfo de um simples mural de avisos para uma **
 
 * **37 — Tabela de Horários:** Consulta dos horários do Circular Rural com dois sentidos — Zootecnia (Início) e Zootecnia (Fim).
 * **38 — Scroll Horizontal:** Tabela navegável com coluna de ponto fixada para facilitar a leitura em dispositivos móveis.
-* **39 — API de Monitoramento: Criação de um endpoint que calcula dinamicamente o próximo horário de saída com base no fuso horário local (America/Recife).
-* **40 — Componentização do Banner: Isolamento do painel dinâmico em um template parcial reaproveitável, integrado simultaneamente na tela de horários e no feed do Mural de Avisos.
-* **41 — Atualização Assíncrona (Polling): Script em JavaScript que atualiza os dados do banner em segundo plano a cada 30 segundos e destaca automaticamente o horário ativo diretamente na tabela.
-* **42 — Refinamento de Interface (UI): Novo indicador visual animado para o status "Ao Vivo" e estilização de alto contraste para facilitar a leitura rápida dos próximos ônibus.
+* 39 — API de Monitoramento: Criação de um endpoint que calcula dinamicamente o próximo horário de saída com base no fuso horário local (America/Recife).
+* 40 — Componentização do Banner: Isolamento do painel dinâmico em um template parcial reaproveitável, integrado simultaneamente na tela de horários e no feed do Mural de Avisos.
+* 41 — Atualização Assíncrona (Polling): Script em JavaScript que atualiza os dados do banner em segundo plano a cada 30 segundos e destaca automaticamente o horário ativo diretamente na tabela.
+* 42 — Refinamento de Interface (UI): Novo indicador visual animado para o status "Ao Vivo" e estilização de alto contraste para facilitar a leitura rápida dos próximos ônibus.
 
 ---
 
