@@ -144,10 +144,10 @@ A terceira versão expande o Ruralinfo de um simples mural de avisos para uma **
 
 * **37 — Tabela de Horários:** Consulta dos horários do Circular Rural com dois sentidos — Zootecnia (Início) e Zootecnia (Fim).
 * **38 — Scroll Horizontal:** Tabela navegável com coluna de ponto fixada para facilitar a leitura em dispositivos móveis.
-* **39 — API de Monitoramento Temporal Centralizada:** Criação do endpoint `/circular/api/ao-vivo/` que injeta o fuso de `America/Recife` e converte strings de horários da tabela em minutos inteiros absolutos. O backend implementa um algoritmo de busca com limite infinito (`float('inf')`) para determinar com precisão o menor delta de tempo até a próxima viagem.
-* **40 — Componentização DRY com Template Partials:** Isolamento do banner dinâmico no arquivo reaproveitável `circular/_banner_ao_vivo.html`. Utilizando inclusão nativa do Django (`{% include %}`), o painel informativo foi acoplado simultaneamente à tela de horários e ao feed principal do Mural de Avisos sem redundância de código estrutural.
-* **41 — Ciclo de Vida Assíncrono e Sincronização de Matriz:** Motor em Vanilla JS estruturado com polling em segundo plano através de intervalos recursivos de 30 segundos. O script traduz as coordenadas da resposta JSON em seletores de nós do DOM (`linha_index + 1`, `coluna_index + 1`), compensando de forma exata as linhas de cabeçalhos e células estáticas do HTML.
-* **42 — Refinamento de UI Baseado em Design Review:** Otimização visual do status de operação através de uma pílula indicadora (`.live-badge`) com atenuação cromática opaca (`rgba`), bordas suavizadas e animação pulsante por quadros-chave (`@keyframes`). A célula vitoriosa do próximo horário recebe isolamento visual de alto contraste na tabela por meio de sombras projetadas (`box-shadow`) e inversão automática de cor do texto.
+* **39 — API de Monitoramento: Criação de um endpoint que calcula dinamicamente o próximo horário de saída com base no fuso horário local (America/Recife).
+* **40 — Componentização do Banner: Isolamento do painel dinâmico em um template parcial reaproveitável, integrado simultaneamente na tela de horários e no feed do Mural de Avisos.
+* **41 — Atualização Assíncrona (Polling): Script em JavaScript que atualiza os dados do banner em segundo plano a cada 30 segundos e destaca automaticamente o horário ativo diretamente na tabela.
+* **42 — Refinamento de Interface (UI): Novo indicador visual animado para o status "Ao Vivo" e estilização de alto contraste para facilitar a leitura rápida dos próximos ônibus.
 
 ---
 
